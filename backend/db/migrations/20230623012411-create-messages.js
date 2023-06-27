@@ -38,7 +38,10 @@ module.exports = {
       },
       message: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        validate: {
+          len: [1, Infinity]
+        }
       },
       createdAt: {
         allowNull: false,

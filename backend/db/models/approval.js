@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     bookId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Books',
         key: 'id',
@@ -33,53 +33,53 @@ module.exports = (sequelize, DataTypes) => {
     },
     title: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [1, 30]
       }
     },
     subtitle: {
       allowNull: true,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
     },
     authors: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [1, 100]
       }
     },
     pdfLink: {
       allowNull: true,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
     },
     thumbnail: {
       allowNull: true,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
     },
     pageCount: {
       allowNull: true,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
     },
     publishYear: {
       allowNull: true,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
     },
     synopsis: {
       allowNull: false,
-      type: sequelize.TEXT,
+      type: DataTypes.TEXT,
       validate: {
-        len: [20, 2000]
+        len: [20, Infinity]
       }
     },
     status: {
       allowNull: false,
-      type: sequelize.ENUM('pending', 'approved', 'rejected'),
+      type: DataTypes.ENUM('pending', 'approved', 'rejected'),
       defaultValue: 'pending'
     },
     reason: {
       allowNull: false,
-      type: sequelize.TEXT
+      type: DataTypes.TEXT
     },
     createdAt: {
       allowNull: false,

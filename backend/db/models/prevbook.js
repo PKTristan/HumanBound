@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     circleId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Circles',
         key: 'id',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     bookId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Books',
         key: 'id',

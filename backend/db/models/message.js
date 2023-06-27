@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     circleId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Circles',
         key: 'id',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Users',
         key: 'id',
@@ -44,9 +44,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     message: {
       allowNull: false,
-      type: sequelize.TEXT,
+      type: DataTypes.TEXT,
       validate: {
-        len: [1, 2000]
+        len: [1, Infinity]
       }
     },
     createdAt: {

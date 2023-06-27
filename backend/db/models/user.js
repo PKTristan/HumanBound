@@ -23,48 +23,48 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     firstName: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [1, 20]
       }
     },
     lastName: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [1, 20]
       }
     },
     email: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       unique: true
     },
     username: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [1, 20]
       }
     },
     password: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [7, 25]
       }
     },
     avi: {
       allowNull: true,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
     },
     admin: {
       allowNull: false,
-      type: sequelize.BOOLEAN,
+      type: DataTypes.BOOLEAN,
       defaultValue: false
     },
     createdAt: {

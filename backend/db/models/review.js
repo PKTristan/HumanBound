@@ -21,11 +21,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     bookId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Books',
         key: 'id',
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     userId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Users',
         key: 'id',
@@ -45,9 +45,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     review: {
       allowNull: false,
-      type: sequelize.TEXT,
+      type: DataTypes.TEXT,
       validate: {
-        len: [10, 2000]
+        len: [10, Infinity]
       }
     },
     createdAt: {

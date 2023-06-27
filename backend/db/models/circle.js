@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     creator: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Users',
         key: 'id',
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     currentBook: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Books',
         key: 'id',
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       allowNull: false,
-      type: sequelize.STRING,
+      type: DataTypes.STRING,
       validate: {
         len: [1, 50]
       }

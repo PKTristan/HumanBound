@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     userId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Users',
         key: 'id',
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     circleId: {
       allowNull: false,
-      type: sequelize.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
         model: 'Circles',
         key: 'id',
@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       allowNull: false,
-      type: sequelize.ENUM('pending', 'member', 'host'),
+      type: DataTypes.ENUM('pending', 'member', 'host'),
     },
     createdAt: {
       allowNull: false,

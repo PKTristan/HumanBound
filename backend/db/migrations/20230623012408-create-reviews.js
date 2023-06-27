@@ -38,7 +38,10 @@ module.exports = {
       },
       review: {
         allowNull: false,
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        validate: {
+          len: [10, Infinity]
+        }
       },
       createdAt: {
         allowNull: false,
