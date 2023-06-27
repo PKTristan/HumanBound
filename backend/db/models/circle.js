@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Circle.belongsTo(models.User, { foreignKey: 'creatorId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-      Circle.hasOne(models.Book, { foreignKey: 'currentBook', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+      Circle.belongsTo(models.Book, { foreignKey: 'currentBook', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       Circle.belongsToMany(models.User, { through: 'Member', foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       Circle.hasMany(models.Message, { foreignKey: 'circleId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       Circle.hasMany(models.PrevBook, { foreignKey: 'circleId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });

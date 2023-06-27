@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Book.hasMany(models.Approval, { foreignKey: 'bookId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
-      Book.belongsToMany(models.Circle, { foreignKey: 'currentBook', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+      Book.hasMany(models.Circle, { foreignKey: 'currentBook', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       Book.hasMany(models.PrevBook, { foreignKey: 'bookId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       Book.hasMany(models.Review, { foreignKey: 'bookId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
     }
