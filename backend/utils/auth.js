@@ -18,6 +18,7 @@ const setTokenCookie = (res, user) => {
         firstName: user.firstName,
         lastName: user.lastName
     };
+    
     const token = jwt.sign(
         { data: safeUser },
         secret,

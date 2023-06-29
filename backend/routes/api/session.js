@@ -75,7 +75,7 @@ router.get('/', async (req, res, next) => {
         return res.json({ user: null });
     }
 
-    res.json({ user: safeUser });
+    res.json({ user });
 });
 
 module.exports = router;
