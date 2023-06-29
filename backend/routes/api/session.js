@@ -67,28 +67,13 @@ router.delete('/', (req, res) => {
 
 
 //get current user
-router.get('/', restoreUser, requireAuth, async (req, res, next) => {
-    const { id } = req.user;
-
-    const user = await User.findByPk(id);
+router.get('/', async (req, res, next) => {
+    const { user } = req;
 
 
     if (!user) {
-        const err = new Error('User not found');
-        err.status = 404;
-        err.title = 'User not found';
-        err.errors = { error: 'User not found' };
-        return next(err);
+        return res.json({ user: null });
     }
-
-    const safeUser = {
-        id: user.id,
-        avi: user.avi,
-        email: user.email,
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName
-    };
 
     res.json({ user: safeUser });
 });
