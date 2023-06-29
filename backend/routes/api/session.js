@@ -75,7 +75,16 @@ router.get('/', async (req, res, next) => {
         return res.json({ user: null });
     }
 
-    res.json({ user });
+    const safeUser = {
+        id: user.id,
+        avi: user.avi,
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName
+    };
+
+    res.json({ user: safeUser });
 });
 
 module.exports = router;
