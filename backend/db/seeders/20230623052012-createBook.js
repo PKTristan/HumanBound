@@ -7,6 +7,8 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // schema in options
 };
 
+options.tableName = 'Books';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -19,7 +21,7 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('Books', [
+    await queryInterface.bulkInsert(options, [
       {
         title: 'The Second Sex',
         authors: 'Simone de Beauvoir',
@@ -55,7 +57,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
-    ])
+    ], {})
   },
 
   async down (queryInterface, Sequelize) {
@@ -65,6 +67,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-     await queryInterface.bulkDelete('Books', null, options);
+     await queryInterface.bulkDelete(options, null, {});
   }
 };

@@ -7,6 +7,8 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // schema in options
 };
 
+options.tableName = 'Replies';
+
 module.exports = {
   async up(queryInterface, Sequelize) {
     /**
@@ -18,7 +20,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Replies', [
+    await queryInterface.bulkInsert(options, [
       {
         reviewId: 1,
         userId: 1,
@@ -33,7 +35,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ], options);
+    ], {});
   },
 
   async down(queryInterface, Sequelize) {
@@ -43,6 +45,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Replies', null, options);
+    await queryInterface.bulkDelete(options, null, {});
   }
 };

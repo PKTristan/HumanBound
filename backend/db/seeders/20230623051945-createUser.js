@@ -9,9 +9,11 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // schema in options
 };
 
+options.tableName = 'Users';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Users', [
+    await queryInterface.bulkInsert(options, [
       {
         firstName: 'John',
         lastName: 'Doe',
@@ -35,10 +37,10 @@ module.exports = {
         updatedAt: new Date()
       },
       // Add more user seed data as needed
-    ], options);
+    ], {});
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Users', null, options);
+    await queryInterface.bulkDelete(options, null, {});
   }
 };
