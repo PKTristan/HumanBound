@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
 
-const { Book } = require('../../db/models');
+const { Book, User, Review } = require('../../db/models');
 
 
 
@@ -54,6 +54,34 @@ router.get('/', async (req, res, next) => {
     }
 
     return res.json({ books });
+});
+
+
+
+//get book details by id
+router.get('/:id', async (req, res, next) => {
+    const { id } = req.params;
+
+    const book = await Book.findByPk(id, {
+        include: {
+            model: Review,
+            attributes: [ 'id', 'userId', 'review'],
+            include: {
+                model: User,
+                attributes: ['username'],
+            }
+        }
+    }).catch(err => next(err));
+
+    if (!book) {
+        const err = new Error('No book found');
+        err.title = 'No book found';
+        err.status = 404;
+        err.errors = { book: 'No book found' };
+        return next(err);
+    }
+
+    return res.json({ book });
 });
 
 
