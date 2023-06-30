@@ -7,6 +7,8 @@ if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA; // schema in options
 };
 
+options.tableName = 'PrevBooks';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -19,7 +21,7 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('PrevBooks', [
+    await queryInterface.bulkInsert(options, [
       {
         circleId: 1,
         bookId: 2,
@@ -38,7 +40,7 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ], options);
+    ], {});
   },
 
   async down (queryInterface, Sequelize) {
@@ -48,6 +50,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('PrevBooks', null, options);
+    await queryInterface.bulkDelete(options, null, {});
   }
 };
