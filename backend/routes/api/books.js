@@ -212,9 +212,9 @@ router.put('/:id', requireAuth, validateBook, async (req, res, next) => {
 router.delete('/:id', requireAuth, async (req, res, next) => {
     const { id } = req.params;
 
-    await Book.destroy({ where: { id } }).catch(err => next(err));
+    const deleted = await Book.destroy({ where: { id } }).catch(err => next(err));
 
-    return res.json({ delete: 'successful' });
+    return res.json({ deleted: (deleted) ? 'successful' : 'unsuccessful' });
 });
 
 

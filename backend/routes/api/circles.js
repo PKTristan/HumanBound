@@ -237,6 +237,18 @@ router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, ne
     }
 
     return res.json({ update: "unsuccessful" });
-})
+});
+
+
+//delete a circle
+router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    const deleted = await Circle.destroy({
+        where: { id }
+    }).catch(err=> next(err));
+
+    return res.json({ deleted: (deleted) ? "successful" : "unsuccessful" });
+});
 
 module.exports = router;
