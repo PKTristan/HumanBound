@@ -187,7 +187,7 @@ router.put('/:id', requireAuth, validateBook, async (req, res, next) => {
                 attributes: ['id', 'userId', 'review'],
                 include: {
                     model: User,
-                    attributes: ['username'],
+                    attributes: ['id', 'username'],
                 }
             }
         }).catch(err => next(err));
