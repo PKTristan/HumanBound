@@ -65,7 +65,7 @@ router.get('/mine', restoreUser, requireAuth, async (req, res, next) => {
 
 
 //get by id
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', restoreUser, requireAuth, async (req, res, next) => {
     const { id } = req.params;
 
     const circle = await Circle.findByPk(id, {
@@ -101,6 +101,45 @@ router.get('/:id', async (req, res, next) => {
         err.errors = { circle: 'No circle found' };
         return next(err);
     }
+
+    return res.json({ circle });
+});
+
+
+const validateCircle = [
+    check('name')
+        .exists({ checkFalsy: true })
+        .isString()
+        .isLength({ min: 1, max: 50 })
+        .withMessage('Circle name must be between 1 and 50 characters.'),
+    check('currentBook')
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Current book must be an integer.'),
+    handleValidationErrors
+];
+
+//create a circle
+router.post('/', restoreUser, requireAuth, validateCircle, async (req, res, next) => {
+    const { name, currentBook } = req.body;
+    const { id } = req.user;
+
+    const book = await Book.findByPk(currentBook);
+
+    if (!book) {
+        const err = new Error('Not a valid book choice');
+        err.title = 'Not a valid book choice';
+        err.status = 404;
+        err.errors = { book: 'Not a valid book choice' };
+        return next(err);
+    }
+
+    const circle = await Circle.create({
+        creator: id,
+        name,
+        currentBook
+    }).catch(err => next(err));
+
 
     return res.json({ circle });
 });
