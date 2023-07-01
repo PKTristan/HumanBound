@@ -209,5 +209,13 @@ router.put('/:id', requireAuth, validateBook, async (req, res, next) => {
     return res.json({update: 'unsuccessful'});
 });
 
+router.delete('/:id', requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    await Book.destroy({ where: { id } }).catch(err => next(err));
+
+    return res.json({ delete: 'successful' });
+});
+
 
 module.exports = router;
