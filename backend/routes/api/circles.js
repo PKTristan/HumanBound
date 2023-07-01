@@ -119,6 +119,7 @@ const validateCircle = [
     handleValidationErrors
 ];
 
+
 //create a circle
 router.post('/', restoreUser, requireAuth, validateCircle, async (req, res, next) => {
     const { name, currentBook } = req.body;
@@ -143,5 +144,99 @@ router.post('/', restoreUser, requireAuth, validateCircle, async (req, res, next
 
     return res.json({ circle });
 });
+
+
+//if the book is updated then it adds a new current book
+const addPrevBook = async(circleId, currentBook, next) => {
+    const circle = await Circle.findByPk(circleId).catch(err => next(err));
+
+    if (!circle) {
+        const err = new Error('No circle found');
+        err.title = 'No circle found';
+        err.status = 404;
+        err.errors = { circle: 'No circle found' };
+        return next(err);
+    }
+
+
+    if (circle.currentBook !== currentBook) {
+        const prevBook = await PrevBook.create({
+            circleId,
+            bookId: circle.currentBook
+        }).catch(err => next(err));
+
+        if (!prevBook) {
+            const err = new Error('No prev book found');
+            err.title = 'No prev book found';
+            err.status = 404;
+            err.errors = { prevBook: 'No prev book found' };
+            return next(err);
+        }
+    }
+}
+
+
+//update a circle
+router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, next) => {
+    const { id } = req.params;
+    const { name, currentBook } = req.body;
+
+    const book = await Book.findByPk(currentBook);
+
+    if (!book) {
+        const err = new Error('Not a valid book choice');
+        err.title = 'Not a valid book choice';
+        err.status = 404;
+        err.errors = { book: 'Not a valid book choice' };
+        return next(err);
+    };
+
+    await addPrevBook(id, currentBook, next).catch(err => next(err));
+
+    const [updated] = await Circle.update({
+        name,
+        currentBook
+    }, { where: { id } }).catch(err => next(err));
+
+    if(updated) {
+        const circle = await Circle.findByPk(id, {
+            include: [
+                {
+                    model: User,
+                    attributes: ['id', 'username']
+                },
+                {
+                    model: Book
+                },
+                {
+                    model: PrevBook,
+                    include: {
+                        model: Book,
+                        attributes: ['id', 'title', 'thumbnail']
+                    }
+                },
+                {
+                    model: Message,
+                    include: {
+                        model: User,
+                        attributes: ['id', 'username']
+                    }
+                }
+            ]
+        }).catch(err => next(err));
+
+        if (!circle) {
+            const err = new Error('No circle found');
+            err.title = 'No circle found';
+            err.status = 404;
+            err.errors = { circle: 'No circle found' };
+            return next(err);
+        }
+
+        return res.json({ circle });
+    }
+
+    return res.json({ update: "unsuccessful" });
+})
 
 module.exports = router;
