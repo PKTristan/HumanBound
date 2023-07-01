@@ -98,8 +98,7 @@ const validateBook = [
         .withMessage('Please provide a title.'),
     check('authors')
         .exists({ checkFalsy: true })
-        .isArray()
-        .notEmpty()
+        .custom(value => Array.isArray(value) && value.length > 0)
         .withMessage('Please provide 1 or multiple authors in an array.'),
     check('synopsis')
         .exists({ checkFalsy: true })
