@@ -69,7 +69,7 @@ router.get('/:id', async (req, res, next) => {
     const book = await Book.findByPk(id, {
         include: {
             model: Review,
-            attributes: [ 'id', 'userId', 'review'],
+            attributes: ['id', 'userId', 'review'],
             include: {
                 model: User,
                 attributes: ['username'],
@@ -85,6 +85,10 @@ router.get('/:id', async (req, res, next) => {
         return next(err);
     }
 
+
+    book.authors = book.authors.split(',');
+
+
     return res.json({ book });
 });
 
@@ -94,7 +98,7 @@ const validateBook = [
     check('title')
         .exists({ checkFalsy: true })
         .isString()
-        .isLength({min: 1, max: 30})
+        .isLength({ min: 1, max: 30 })
         .withMessage('Please provide a title.'),
     check('authors')
         .exists({ checkFalsy: true })
@@ -154,6 +158,55 @@ router.post('/', requireAuth, validateBook, async (req, res, next) => {
     }).catch(err => next(err));
 
     return res.json({ book });
+});
+
+
+//edit book details
+router.put('/:id', requireAuth, validateBook, async (req, res, next) => {
+    const { id } = req.params;
+
+    const { title, subtitle, authors, pdfLink, thumbnail, pageCount, publishYear, synopsis } = req.body;
+
+    const authStr = authors.join(',');
+
+    const [updated] = await Book.update({
+        title,
+        subtitle,
+        authors: authStr,
+        pdfLink,
+        thumbnail,
+        pageCount,
+        publishYear,
+        synopsis
+    }, { where: { id } }).catch(err => next(err));
+
+    if (updated) {
+        const book = await Book.findByPk(id, {
+            include: {
+                model: Review,
+                attributes: ['id', 'userId', 'review'],
+                include: {
+                    model: User,
+                    attributes: ['username'],
+                }
+            }
+        }).catch(err => next(err));
+
+        if (!book) {
+            const err = new Error('No book found');
+            err.title = 'No book found';
+            err.status = 404;
+            err.errors = { book: 'No book found' };
+            return next(err);
+        }
+
+
+        book.authors = book.authors.split(',');
+
+        return res.json({ book });
+    }
+
+    return res.json({update: 'unsuccessful'});
 });
 
 
