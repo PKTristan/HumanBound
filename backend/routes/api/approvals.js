@@ -123,4 +123,39 @@ router.post('/', restoreUser, requireAuth, validateApproval, async (req, res, ne
 });
 
 
+
+//approve an approval for a book
+router.put('/:id/approve', restoreUser, requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    const [updated] = await Approval.update(
+        {
+            status: 'approved'
+        },
+        { where: { id } }
+    ).catch(err => next(err));
+
+    return res.json({updated: (updated) ? 'succesfully approved' : 'failed to approve'});
+});
+
+
+
+//deny an approval for a book
+router.put('/:id/deny', restoreUser, requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    const [updated] = await Approval.update(
+        {
+            status: 'rejected'
+        },
+        {where: {id}}
+    ).catch(err => next(err));
+
+    return res.json({updated: (updated) ? 'succesfully rejected' : 'failed to rejected'});
+});
+
+
+
+
+
 module.exports = router;
