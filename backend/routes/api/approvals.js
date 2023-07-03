@@ -23,6 +23,11 @@ const validateApproval = [
         .isString()
         .isLength({ min: 20, max: Infinity })
         .withMessage('Please provide a synopsis/summary of at least 20 words long.'),
+    check('reason')
+        .exists({ checkFalsy: true })
+        .isString()
+        .isLength({ min: 20, max: Infinity })
+        .withMessage('Please provide a reason for the approval.'),
 
     // Optional fields
     check('subtitle')
@@ -91,6 +96,30 @@ router.get('/', restoreUser, requireAuth, async (req, res, next) => {
 
 
     return res.json({approvals});
+});
+
+
+
+//create an approval for a book
+router.post('/', restoreUser, requireAuth, validateApproval, async (req, res, next) => {
+   const body = req.body;
+
+   body.status = 'pending';
+   body.authors = body.authors.join(',');
+
+   const approval = await Approval.create(body).catch(err => next(err));
+
+   if (!approval) {
+       const err = new Error('No approval found');
+       err.title = 'No approval found';
+       err.status = 404;
+       err.errors = { approval: 'No approval found' };
+       return next(err);
+   }
+
+   approval.authors = approval.authors.split(',');
+
+   return res.json({approval});
 });
 
 
