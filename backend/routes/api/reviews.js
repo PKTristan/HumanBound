@@ -4,7 +4,7 @@ const router = express.Router();
 const { restoreUser, requireAuth } = require('../../utils/auth');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { Op } = require('sequelize');
+const { Op, Sequelize } = require('sequelize');
 
 const { Review, User, Reply } = require('../../db/models');
 
@@ -21,12 +21,19 @@ router.get('/', async (req, res, next) => {
             },
             {
                 model: Reply,
-                attributes: ['id', 'reply']
+                attributes: [],
+                required: false // Include replies even if there are none
             }
         ],
         where: {
             bookId: id
-        }
+        },
+        attributes: {
+            include: [
+                [Sequelize.literal('(SELECT COUNT(*) FROM `Replies` WHERE `Replies`.`reviewId` = `Review`.`id`)'), 'replyCount']
+            ]
+        },
+        group: ['Review.id', 'User.id'] // Group by review and user to avoid duplicate rows
     }).catch(err => next(err));
 
     if (!reviews || !reviews.length) {
