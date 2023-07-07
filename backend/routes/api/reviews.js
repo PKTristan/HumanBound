@@ -139,4 +139,20 @@ router.put('/:id', restoreUser, requireAuth, validateReview, async (req, res, ne
 });
 
 
+//delete a review
+router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    const deleted = await Review.destroy({
+        where: {
+            id
+        }
+    }).catch(err => next(err));
+
+
+    return res.json({ deleted: (deleted) ? 'successfully deleted' : 'failed to delete' });
+});
+
+
+
 module.exports = router;
