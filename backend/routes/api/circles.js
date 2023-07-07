@@ -2,11 +2,16 @@ const express = require('express')
 const router = express.Router();
 
 const { restoreUser, requireAuth } = require('../../utils/auth');
+const { addId } = require('../../utils/reference.js');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
+const messagesRouter = require('./messages.js');
 
 const { Circle, User, Book, Message, PrevBook } = require('../../db/models');
+
+
+router.use('/:id/messages', addId, messagesRouter);
 
 
 //get all circles
