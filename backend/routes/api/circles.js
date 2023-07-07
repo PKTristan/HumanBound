@@ -88,7 +88,7 @@ router.get('/:id', restoreUser, requireAuth, async (req, res, next) => {
                 model: Message,
                 include: {
                     model: User,
-                    attributes: ['id', 'username']
+                    attributes: ['id', 'username', 'avi']
                 }
             }
         ]
