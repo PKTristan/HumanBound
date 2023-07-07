@@ -8,6 +8,7 @@ const { Op } = require('sequelize');
 
 const { Book, User, Review } = require('../../db/models');
 
+const reviewRouter = require('./reviews.js');
 
 
 function getLikeOperator() {
@@ -18,6 +19,12 @@ function getLikeOperator() {
     return isPostgres ? Op.iLike : Op.like;
 }
 
+const addId = (req, res, next) => {
+    req.body.id = req.params.id;
+    next();
+}
+
+router.use('/:id/reviews', addId, reviewRouter);
 
 router.get('/', async (req, res, next) => {
     const { author, title } = req.query;
