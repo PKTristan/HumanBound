@@ -118,4 +118,25 @@ router.post('/', restoreUser, requireAuth, validateReview, async (req, res, next
 });
 
 
+//edit the review posted by the user
+router.put('/:id', restoreUser, requireAuth, validateReview, async (req, res, next) => {
+    const { id } = req.params;
+    const { review } = req.body;
+
+    const [updated] = await Review.update(
+        {
+            review
+        },
+        {
+            where: {
+                id
+            }
+        }
+    ).catch(err => next(err));
+
+
+    return res.json({ update: (updated) ? 'successfully updated' : 'failed to update' });
+});
+
+
 module.exports = router;
