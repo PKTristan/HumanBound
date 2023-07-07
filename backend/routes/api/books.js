@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 
 const { restoreUser, requireAuth } = require('../../utils/auth');
+const { addId } = require('../../utils/reference.js');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
@@ -19,10 +20,6 @@ function getLikeOperator() {
     return isPostgres ? Op.iLike : Op.like;
 }
 
-const addId = (req, res, next) => {
-    req.body.id = req.params.id;
-    next();
-}
 
 router.use('/:id/reviews', addId, reviewRouter);
 

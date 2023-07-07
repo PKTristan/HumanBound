@@ -6,6 +6,7 @@ const booksRouter = require('./books.js');
 const circleRouter = require('./circles.js');
 const approvalsRouter = require('./approvals.js');
 const reviewsRouter = require('./reviews.js');
+const repliesRouter = require('./replies.js');
 
 router.use(restoreUser);
 
@@ -20,6 +21,8 @@ router.use('/circles', circleRouter);
 router.use('/approvals', approvalsRouter);
 
 router.use('/reviews', reviewsRouter);
+
+router.use('/replies', repliesRouter);
 
 
 router.post('/test', function (req, res) {

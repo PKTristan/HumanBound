@@ -2,12 +2,16 @@ const express = require('express')
 const router = express.Router();
 
 const { restoreUser, requireAuth } = require('../../utils/auth');
+const { addId } = require('../../utils/reference.js');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op, Sequelize } = require('sequelize');
 
 const { Review, User, Reply } = require('../../db/models');
 
+const replyRouter = require('./replies.js');
+
+router.use('/:id/replies', addId, replyRouter);
 
 // get all reviews
 router.get('/', async (req, res, next) => {
