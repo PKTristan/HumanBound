@@ -7,11 +7,14 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
 const messagesRouter = require('./messages.js');
+const membersRouter = require('./members.js');
 
 const { Circle, User, Book, Message, PrevBook } = require('../../db/models');
 
 
 router.use('/:id/messages', addId, messagesRouter);
+
+router.use('/:id/members', addId, membersRouter);
 
 
 //get all circles

@@ -8,6 +8,7 @@ const approvalsRouter = require('./approvals.js');
 const reviewsRouter = require('./reviews.js');
 const repliesRouter = require('./replies.js');
 const messagesRouter = require('./messages.js');
+const membersRouter = require('./members.js');
 
 router.use(restoreUser);
 
@@ -26,6 +27,8 @@ router.use('/reviews', reviewsRouter);
 router.use('/replies', repliesRouter);
 
 router.use('/messages', messagesRouter);
+
+router.use('/members', membersRouter);
 
 
 router.post('/test', function (req, res) {
