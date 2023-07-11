@@ -16,6 +16,57 @@ router.use('/:id/messages', addId, messagesRouter);
 router.use('/:id/members', addId, membersRouter);
 
 
+const editPermission = async (req, res, next) => {
+    const { id } = req.params;
+    const { id: userId, admin } = req.user;
+
+    const [member] = await Member.findAll({ where: { circleId: id, userId } }).catch(err => next(err));
+
+    if (!member) {
+        const err = new Error('No member found');
+        err.title = 'No member found';
+        err.status = 404;
+        err.errors = { member: 'No member found' };
+        return next(err);
+    };
+
+    if (member.status !== 'host' && !admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 403;
+        err.errors = { member: 'Unauthorized' };
+        return next(err);
+    };
+
+    return next();
+}
+
+const deletePermission = async (req, res, next) => {
+    const { id } = req.params;
+    const { id: userId, admin } = req.user;
+
+    const circle = await Circle.findByPk(id).catch(err => next(err));
+
+    if (!circle) {
+        const err = new Error('No circle found');
+        err.title = 'No circle found';
+        err.status = 404;
+        err.errors = { circle: 'No circle found' };
+        return next(err);
+    }
+
+    if (circle.creator !== userId && !admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 403;
+        err.errors = { circle: 'Unauthorized' };
+        return next(err);
+    }
+
+    return next();
+}
+
+
 //get all circles
 router.get('/', async (req, res, next) => {
     const circles = await Circle.findAll({
@@ -206,7 +257,7 @@ const addPrevBook = async (circleId, currentBook, next) => {
 
 
 //update a circle
-router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, next) => {
+router.put('/:id', restoreUser, requireAuth, editPermission, validateCircle, async (req, res, next) => {
     const { id } = req.params;
     const { name, currentBook } = req.body;
 
@@ -271,7 +322,7 @@ router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, ne
 
 
 //delete a circle
-router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
+router.delete('/:id', restoreUser, requireAuth, deletePermission, async (req, res, next) => {
     const { id } = req.params;
 
     const deleted = await Circle.destroy({

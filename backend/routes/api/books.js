@@ -20,6 +20,20 @@ function getLikeOperator() {
     return isPostgres ? Op.iLike : Op.like;
 }
 
+const valPermission = async (req, res, next) => {
+    const { admin } = req.user;
+
+    if (!admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 401;
+        err.errors = { admin: 'Unauthorized' };
+        return next(err);
+    }
+
+    return next();
+};
+
 
 router.use('/:id/reviews', addId, reviewRouter);
 
@@ -166,7 +180,7 @@ router.post('/', requireAuth, validateBook, async (req, res, next) => {
 
 
 //edit book details
-router.put('/:id', requireAuth, validateBook, async (req, res, next) => {
+router.put('/:id', requireAuth, valPermission, validateBook, async (req, res, next) => {
     const { id } = req.params;
 
     const { title, subtitle, authors, pdfLink, thumbnail, pageCount, publishYear, synopsis } = req.body;
@@ -213,7 +227,7 @@ router.put('/:id', requireAuth, validateBook, async (req, res, next) => {
     return res.json({update: 'unsuccessful'});
 });
 
-router.delete('/:id', requireAuth, async (req, res, next) => {
+router.delete('/:id', restoreUser, requireAuth, valPermission, async (req, res, next) => {
     const { id } = req.params;
 
     const deleted = await Book.destroy({ where: { id } }).catch(err => next(err));
