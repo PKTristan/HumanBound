@@ -9,7 +9,7 @@ const { Op } = require('sequelize');
 const messagesRouter = require('./messages.js');
 const membersRouter = require('./members.js');
 
-const { Circle, User, Book, Message, PrevBook } = require('../../db/models');
+const { Circle, User, Book, Message, PrevBook, Member } = require('../../db/models');
 
 
 router.use('/:id/messages', addId, messagesRouter);
@@ -143,19 +143,30 @@ router.post('/', restoreUser, requireAuth, validateCircle, async (req, res, next
         return next(err);
     }
 
-    const circle = await Circle.create({
-        creator: id,
-        name,
-        currentBook
-    }).catch(err => next(err));
+    try {
+        const circle = await Circle.create({
+            creator: id,
+            name,
+            currentBook
+        });
+
+        const membership = await Member.create({
+            circleId: circle.id,
+            userId: id,
+            status: 'host'
+        });
 
 
-    return res.json({ circle });
+        return res.json({ circle, membership: membership ? membership.status : 'error with membership' });
+    }
+    catch (err) {
+        next(err)
+    };
 });
 
 
 //if the book is updated then it adds a new current book
-const addPrevBook = async(circleId, currentBook, next) => {
+const addPrevBook = async (circleId, currentBook, next) => {
     const circle = await Circle.findByPk(circleId).catch(err => next(err));
 
     if (!circle) {
@@ -206,7 +217,7 @@ router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, ne
         currentBook
     }, { where: { id } }).catch(err => next(err));
 
-    if(updated) {
+    if (updated) {
         const circle = await Circle.findByPk(id, {
             include: [
                 {
@@ -254,7 +265,7 @@ router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
 
     const deleted = await Circle.destroy({
         where: { id }
-    }).catch(err=> next(err));
+    }).catch(err => next(err));
 
     return res.json({ deleted: (deleted) ? "successful" : "unsuccessful" });
 });
