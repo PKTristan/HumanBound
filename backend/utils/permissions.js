@@ -5,6 +5,7 @@ const CIRCLES_ROUTE = '/api/circles';
 const APPROVALS_ROUTE = '/api/approvals';
 const MEMBERS_ROUTE = '/api/members';
 const MESSAGES_ROUTE = '/api/messages';
+const PREVBOOK_ROUTE = '/api/prev';
 
 const ADMIN = {
     admin: true,
@@ -43,4 +44,5 @@ const permissions = {
     [CIRCLES_ROUTE]: [['DELETE', OWNER], ['PUT', HOST]],
     [MEMBERS_ROUTE]: [['PUT', HOST], ['DELETE', OWNER]],
     [MESSAGES_ROUTE]: [['any', MEMBER]],
+    [PREVBOOK_ROUTE]: [['DELETE', HOST]]
 }

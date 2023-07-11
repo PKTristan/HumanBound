@@ -13,6 +13,34 @@ const replyRouter = require('./replies.js');
 
 router.use('/:id/replies', addId, replyRouter);
 
+
+const valPermission = async(req, res, next) => {
+    const { id } = req.params;
+    const { id: userId, admin } = req.user;
+
+    const review = await Review.findByPk(id).catch(err => next(err));
+
+    if (!review) {
+        const err = new Error('No review found');
+        err.title = 'No review found';
+        err.status = 404;
+        err.errors = { review: 'No review found' };
+        return next(err);
+    };
+
+    if ((review.userId !== userId) && !admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 403;
+        err.errors = { review: 'Unauthorized' };
+        return next(err);
+    }
+
+
+    return next();
+}
+
+
 // get all reviews
 router.get('/', async (req, res, next) => {
     const { id } = req.body;
@@ -123,7 +151,7 @@ router.post('/', restoreUser, requireAuth, validateReview, async (req, res, next
 
 
 //edit the review posted by the user
-router.put('/:id', restoreUser, requireAuth, validateReview, async (req, res, next) => {
+router.put('/:id', restoreUser, requireAuth, valPermission, validateReview, async (req, res, next) => {
     const { id } = req.params;
     const { review } = req.body;
 
@@ -144,7 +172,7 @@ router.put('/:id', restoreUser, requireAuth, validateReview, async (req, res, ne
 
 
 //delete a review
-router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
+router.delete('/:id', restoreUser, requireAuth, valPermission, async (req, res, next) => {
     const { id } = req.params;
 
     const deleted = await Review.destroy({
