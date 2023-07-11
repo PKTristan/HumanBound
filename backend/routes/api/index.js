@@ -9,6 +9,7 @@ const reviewsRouter = require('./reviews.js');
 const repliesRouter = require('./replies.js');
 const messagesRouter = require('./messages.js');
 const membersRouter = require('./members.js');
+const prevBooksRouter = require('./prevBooks.js');
 
 router.use(restoreUser);
 
@@ -29,6 +30,8 @@ router.use('/replies', repliesRouter);
 router.use('/messages', messagesRouter);
 
 router.use('/members', membersRouter);
+
+router.use('/prev', prevBooksRouter);
 
 
 router.post('/test', function (req, res) {
