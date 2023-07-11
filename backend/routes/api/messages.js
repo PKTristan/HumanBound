@@ -7,7 +7,45 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
 
-const { Message } = require('../../db/models');
+const { Message, Circle, Member } = require('../../db/models');
+
+const editDelPermissions = async (req, res, next) => {
+    const { id } = req.params;
+    const { id: userId, admin } = req.user;
+
+
+    const message = await Message.findByPk(id).catch(err => next(err));
+
+    if (!message) {
+        const err = new Error('No message found');
+        err.title = 'No message found';
+        err.status = 404;
+        err.errors = { message: 'No message found' };
+        return next(err);
+    }
+
+    const { circleId } = message;
+    const circle = await Circle.findByPk(circleId).catch(err => next(err));
+
+    if (!circle) {
+        const err = new Error('No circle found');
+        err.title = 'No circle found';
+        err.status = 404;
+        err.errors = { circle: 'No circle found' };
+        return next(err);
+    }
+
+    if (circle.creator !== userId && message.userId !== userId && !admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 403;
+        err.errors = { message: 'Unauthorized' };
+        return next(err);
+    }
+
+
+    return next();
+}
 
 const validateMessage = [
     check('message')
@@ -22,7 +60,22 @@ const validateMessage = [
 //post a message in a circle
 router.post('/', restoreUser, requireAuth, validateMessage, async (req, res, next) => {
     const { id: circleId, message } = req.body;
-    const { id: userId } = req.user;
+    const { id: userId, admin } = req.user;
+
+    const [member] = await Member.findAll({
+        where: {
+            userId,
+            circleId
+        }
+    }).catch(err => next(err));
+
+    if (!admin && (!member || member.status === 'pending')) {
+        const err = new Error('Member not found');
+        err.title = 'Member not found';
+        err.status = 404;
+        err.errors = { member: 'non members cant post in this circle' };
+        return next(err);
+    }
 
     const messageData = await Message.create({
         userId,
@@ -44,7 +97,7 @@ router.post('/', restoreUser, requireAuth, validateMessage, async (req, res, nex
 
 
 //edit a message user sent
-router.put('/:id', restoreUser, requireAuth, validateMessage, async (req, res, next) => {
+router.put('/:id', restoreUser, requireAuth, editDelPermissions, validateMessage, async (req, res, next) => {
     const { id } = req.params;
     const { message } = req.body;
 
@@ -65,7 +118,7 @@ router.put('/:id', restoreUser, requireAuth, validateMessage, async (req, res, n
 
 
 //delete a message
-router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
+router.delete('/:id', restoreUser, requireAuth, editDelPermissions, async (req, res, next) => {
     const { id } = req.params;
 
     const deleted = await Message.destroy({
