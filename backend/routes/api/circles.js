@@ -75,6 +75,17 @@ router.get('/mine', restoreUser, requireAuth, async (req, res, next) => {
 //get by id
 router.get('/:id', restoreUser, requireAuth, async (req, res, next) => {
     const { id } = req.params;
+    const { id: userId, admin } = req.user;
+
+    const [member] = await Member.findAll({ where: { circleId: id,  userId } }).catch(err => next(err));
+
+    if (!admin && (!member || member.status === 'pending')) {
+        const err = new Error('Member not found');
+        err.title = 'Member not found';
+        err.status = 404;
+        err.errors = { member: 'Member not found' };
+        return next(err);
+    };
 
     const circle = await Circle.findByPk(id, {
         include: [

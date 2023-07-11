@@ -11,6 +11,33 @@ const { Op, Sequelize } = require('sequelize');
 const { Review, User, Reply } = require('../../db/models');
 
 
+//permission for eDITING AND DELETING a review
+const valPermission = async(req, res, next) => {
+    const { id } = req.params;
+    const { id: userId, admin } = req.user;
+
+    const reply = await Reply.findByPk(id).catch(err => next(err));
+
+    if (!reply) {
+        const err = new Error('No reply found');
+        err.title = 'No reply found';
+        err.status = 404;
+        err.errors = { reply: 'No reply found' };
+        return next(err);
+    }
+
+    if ((reply.userId !== userId) && !admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 403;
+        err.errors = { review: 'Unauthorized' };
+        return next(err);
+    }
+
+    return next();
+
+}
+
 
 //get all replies to a review
 router.get('/', async (req, res, next) => {
@@ -79,7 +106,7 @@ router.post('/', restoreUser, requireAuth, validateReply, async (req, res, next)
 
 
 //edit a reply to a review
-router.put('/:id', restoreUser, requireAuth, validateReply, async (req, res, next) => {
+router.put('/:id', restoreUser, requireAuth, valPermission, validateReply, async (req, res, next) => {
     const { id } = req.params;
     const { reply } = req.body;
 
@@ -110,7 +137,7 @@ router.put('/:id', restoreUser, requireAuth, validateReply, async (req, res, nex
 
 
 //delete a reply to a review
-router.delete('/:id', restoreUser, requireAuth, async (req, res, next) => {
+router.delete('/:id', restoreUser, requireAuth, valPermission, async (req, res, next) => {
     const { id } = req.params;
 
     const deleted = await Reply.destroy({
