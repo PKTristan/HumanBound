@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasMany(models.Circle, { foreignKey: 'creatorId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
+      User.hasMany(models.Circle, { foreignKey: 'creator', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       User.belongsToMany(models.Circle, { through: 'Member', foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       User.hasMany(models.Message, { foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
       User.hasMany(models.Reply, { foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'CASCADE' });
