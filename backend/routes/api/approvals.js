@@ -59,9 +59,24 @@ const validateApproval = [
 ];
 
 
+const valPermission = async(req, res, next) => {
+    const { admin } = req.user;
+
+    if (!admin) {
+        const err = new Error('Unauthorized');
+        err.title = 'Unauthorized';
+        err.status = 401;
+        err.errors = { admin: 'Unauthorized' };
+        return next(err);
+    }
+
+    return next();
+};
+
+
 
 //get all approvals
-router.get('/', restoreUser, requireAuth, async (req, res, next) => {
+router.get('/', restoreUser, requireAuth, valPermission, async (req, res, next) => {
 
     //get the pending approvals first
     const pending = await Approval.findAll({
@@ -125,7 +140,7 @@ router.post('/', restoreUser, requireAuth, validateApproval, async (req, res, ne
 
 
 //approve an approval for a book
-router.put('/:id/approve', restoreUser, requireAuth, async (req, res, next) => {
+router.put('/:id/approve', restoreUser, requireAuth, valPermission, async (req, res, next) => {
     const { id } = req.params;
 
     const [updated] = await Approval.update(
@@ -141,7 +156,7 @@ router.put('/:id/approve', restoreUser, requireAuth, async (req, res, next) => {
 
 
 //deny an approval for a book
-router.put('/:id/deny', restoreUser, requireAuth, async (req, res, next) => {
+router.put('/:id/deny', restoreUser, requireAuth, valPermission, async (req, res, next) => {
     const { id } = req.params;
 
     const [updated] = await Approval.update(
