@@ -5,7 +5,6 @@ const { restoreUser, requireAuth } = require('../../utils/auth');
 const { addId } = require('../../utils/reference.js');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { Op } = require('sequelize');
 const messagesRouter = require('./messages.js');
 const membersRouter = require('./members.js');
 
@@ -132,7 +131,7 @@ const validateCircle = [
         .isLength({ min: 1, max: 50 })
         .withMessage('Circle name must be between 1 and 50 characters.'),
     check('currentBook')
-        .exists({ checkFalsy: true })
+        .optional()
         .isInt()
         .withMessage('Current book must be an integer.'),
     handleValidationErrors
@@ -146,7 +145,7 @@ router.post('/', restoreUser, requireAuth, validateCircle, async (req, res, next
 
     const book = await Book.findByPk(currentBook);
 
-    if (!book) {
+    if (currentBook &&!book) {
         const err = new Error('Not a valid book choice');
         err.title = 'Not a valid book choice';
         err.status = 404;
@@ -213,7 +212,7 @@ router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, ne
 
     const book = await Book.findByPk(currentBook);
 
-    if (!book) {
+    if (currentBook && !book) {
         const err = new Error('Not a valid book choice');
         err.title = 'Not a valid book choice';
         err.status = 404;
@@ -221,7 +220,8 @@ router.put('/:id', restoreUser, requireAuth, validateCircle, async (req, res, ne
         return next(err);
     };
 
-    await addPrevBook(id, currentBook, next).catch(err => next(err));
+    if (currentBook)
+        await addPrevBook(id, currentBook, next).catch(err => next(err));
 
     const [updated] = await Circle.update({
         name,

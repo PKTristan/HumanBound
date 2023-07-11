@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     currentBook: {
-      allowNull: false,
+      allowNull: true,
       type: DataTypes.INTEGER,
       references: {
         model: 'Books',
