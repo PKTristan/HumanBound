@@ -63,7 +63,7 @@ router.post('/', validateLogin, async (req, res, next) => {
 //log out
 router.delete('/', (req, res) => {
     res.clearCookie('token');
-    return res.json({ message: 'success' });
+    return res.json({ message: 'successfully logged out' });
 });
 
 
