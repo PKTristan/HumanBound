@@ -113,6 +113,7 @@ export const logout = () => async(dispatch) => {
 //state selectors
 export const selUser = (state) => state.user.session;
 export const selErr = (state) => state.user.errors;
+export const selMsg = (state) => state.user.messages;
 
 
 

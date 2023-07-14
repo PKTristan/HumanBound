@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 
-export default function LoginForm() {
+export default function LoginForm({params: {ref}}) {
     const dispatch = useDispatch();
     const history = useHistory();
     const [credential, setCredential] = useState("");
@@ -70,7 +70,7 @@ export default function LoginForm() {
 
 
     return (
-        <div className="login-wrapper">
+        <div className="login-wrapper" ref={ref}>
             <h1>Login</h1>
             <form className="login-form" onSubmit={handleSubmit}>
                 <ul>
@@ -79,8 +79,8 @@ export default function LoginForm() {
                 <input type="text" className="credential" placeholder="Username or Email" onChange={handleChange} value={credential} />
                 <input type="password" className="password" placeholder="Password" onChange={handleChange} value={password} />
                 <button type="submit" className="login-btn" >Log In</button>
-                <button type="button" className="demo-btn" onClick={handleDemo2} >Demo User {"(non-admin)"}</button>
-                <button type="button" className="demo-btn" onClick={handleDemo1} >Demo User {"(admin)"}</button>
+                <button type="button" className="demo-btn" onClick={handleDemo1} >Demo User {"(non-admin)"}</button>
+                <button type="button" className="demo-btn" onClick={handleDemo2} >Demo User {"(admin)"}</button>
             </form>
         </div>
     )
