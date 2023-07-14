@@ -36,15 +36,20 @@ const NavBar = () => {
         return () => document.removeEventListener("mousedown", clickOutside);
     }, [ref, dropdown, setDropdown]);
 
+    useEffect(() => {
+        setDropdown(false);
+
+    }, [currUser, setDropdown]);
+
     return (
         <div className="navbar">
 
-            <div className="prof-btn">
+            <div className="prof-btn" ref={ref}>
                 <button type="button" className='prof-btn' onClick={icon}>
                     <i className="fa-solid fa-user" />
                 </button>
                 { dropdown &&
-                <div className='prof-dropdown' ref={ref}>
+                <div className='prof-dropdown'>
                     {currUser && (<>
                         <p>Hello, {currUser.username}</p>
                         <p>{currUser.firstName} {currUser.lastName}</p>
