@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux';
 import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 import NavBar from './components/NavBar';
 import { useEffect } from 'react';
 import * as userActions from './store/user';

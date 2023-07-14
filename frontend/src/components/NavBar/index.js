@@ -7,6 +7,7 @@ import { useRef, useState, useEffect } from "react";
 import InterimModal from "../Modal";
 import LoginForm from "../LoginForm";
 import Logout from "../Logout";
+import SignupForm from "../SignupForm";
 
 
 const NavBar = () => {
@@ -63,7 +64,8 @@ const NavBar = () => {
                         <p>Welcome!</p>
                         <p>Please sign up or login</p>
 
-                        <InterimModal Component={LoginForm} btnLabel="Login" btnClass='navbar-btn'params={{ref}}/>
+                        <InterimModal Component={LoginForm} btnLabel="Login" btnClass='navbar-btn' params={{ref}} />
+                        <InterimModal Component={SignupForm} btnLabel='Sign Up' btnClass='navbar-btn' params={{ref}} />
                     </>)}
 
                 </div>}
