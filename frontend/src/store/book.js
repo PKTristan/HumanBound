@@ -46,7 +46,6 @@ export const getBooks = ({ author, title }) => async (dispatch) => {
             queryParams.append('title', title);
 
         url += `/?${queryParams.toString()}`;
-        console.log(url);
     }
 
     const response = await csrfFetch(url).catch(async (res) => {
@@ -59,8 +58,28 @@ export const getBooks = ({ author, title }) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-
+        dispatch(clearErr());
         dispatch(loadBooks(data));
+    }
+
+    return response;
+}
+
+
+//get book by id
+export const getBook = (id) => async (dispatch) => {
+    const response = await csrfFetch(`/api/books/${id}`).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+            const err = Object.values(data.errors);
+            dispatch(loadErr(err));
+        }
+    });
+
+    if (response && response.ok) {
+        const data = await response.json();
+        dispatch(clearErr());
+        dispatch(loadBook(data.book));
     }
 
     return response;
@@ -80,6 +99,15 @@ const booksReducer = (state=initialState, action) => {
     switch (action.type) {
         case LOAD_BOOKS:
             return {...mutState, list: action.books};
+
+        case LOAD_BOOK:
+            return {...mutState, details: action.book};
+
+        case LOAD_ERR:
+            return {...mutState, errors: action.err};
+
+        case CLEAR_ERR:
+            return {...mutState, errors: null};
 
         default:
             return mutState;
