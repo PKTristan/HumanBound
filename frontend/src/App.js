@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import * as userActions from './store/user';
 import Modal from "react-modal";
 import BookForm from './components/BookForm';
+import BookList from './components/BookList';
 
 const { Route, Switch } = require('react-router-dom');
 
@@ -24,7 +25,7 @@ function App() {
       <NavBar />
       <Switch>
         <Route exact path="/"  >
-    
+          <BookList />
         </Route>
       </Switch>
     </div>
