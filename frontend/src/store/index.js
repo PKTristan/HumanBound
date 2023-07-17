@@ -4,13 +4,15 @@ import userReducer from "./user";
 import booksReducer from "./book";
 import approvalsReducer from "./approval";
 import reviewsReducer from "./review";
+import repliesReducer from "./reply";
 
 const rootReducer = combineReducers({
   // add reducer functions here
   user: userReducer,
   book: booksReducer,
   approval: approvalsReducer,
-  review: reviewsReducer
+  review: reviewsReducer,
+  reply: repliesReducer
 });
 
 let enhancer;
