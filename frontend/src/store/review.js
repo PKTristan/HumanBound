@@ -28,7 +28,7 @@ const loadMsg = (msg) => ({
     msg
 });
 
-const clearMsg = () => ({ type: CLEAR_MSG });
+export const clearMsg = () => ({ type: CLEAR_MSG });
 
 
 export const getReview = (id) => async (dispatch) => {
@@ -42,7 +42,7 @@ export const getReview = (id) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-        dispatch(loadReview(data));
+        dispatch(loadReview(data.review));
     }
 
     return response;
@@ -82,7 +82,7 @@ export const updateReview = (review) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-        dispatch(loadReview(data));
+        dispatch(loadMsg(data));
     }
 
     return response;
@@ -109,7 +109,7 @@ export const deleteReview = (id) => async (dispatch) => {
 }
 
 // selectors
-export const selReviews = (state) => state.review.details
+export const selReview = (state) => state.review.details;
 export const selErr = (state) => state.review.error;
 export const selMsg = (state) => state.review.message;
 

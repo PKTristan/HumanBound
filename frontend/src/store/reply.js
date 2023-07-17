@@ -6,7 +6,7 @@ const LOAD_ERR = 'replies/LOAD_ERR';
 const CLEAR_ERR = 'replies/CLEAR_ERR';
 
 
-const loadMsg = (mag) => ({
+const loadMsg = (msg) => ({
     type: LOAD_MSG,
     msg
 });
@@ -24,7 +24,7 @@ const clearErr = () => ({ type: CLEAR_ERR });
 export const createReply = (reply, reviewId) => async (dispatch) => {
     const response = await csrfFetch(`/api/reviews/${reviewId}/replies`, {
         method: 'POST',
-        body: JSON.stringify(reply)
+        body: JSON.stringify({reply})
     }).catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
@@ -42,7 +42,7 @@ export const createReply = (reply, reviewId) => async (dispatch) => {
     return response;
 }
 
-export const editReply = ({id, reply}) = async (dispatch) => {
+export const editReply = (id, reply) =>async (dispatch) => {
     const response = await csrfFetch(`/api/replies/${id}`, {
         method: 'PUT',
         body: JSON.stringify({reply})
@@ -85,8 +85,8 @@ export const deleteReply = (id) => async (dispatch) => {
 
 
 // selectors
-const selMsg = (state) => state.reply.message;
-const selErr = (state) => state.reply.errors;
+export const selMsg = (state) => state.reply.message;
+export const selErr = (state) => state.reply.errors;
 
 const initialState = { message: null, errors: null };
 
@@ -101,7 +101,7 @@ const repliesReducer = (state=initialState, action) => {
             return {...mutState, errors: action.err};
 
         case CLEAR_MSG:
-            return {...mutState, messages: null};
+            return {...mutState, message: null};
 
         case CLEAR_ERR:
             return {...mutState, errors: null};

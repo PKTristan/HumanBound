@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as approvalActions from "../../store/approval";
 import * as bookActions from "../../store/book";
 import * as userActions from "../../store/user";
+import * as reviewActions from "../../store/review";
+import * as replyActions from "../../store/reply";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { isValidUrl } from "../BookForm";
@@ -18,6 +20,10 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
     const appMsg = useSelector(approvalActions.selMsg);
     const user = useSelector(userActions.selUser);
     const book = useSelector(bookActions.selBook);
+    const replyErr = useSelector(replyActions.selErr);
+    const replyMsg = useSelector(replyActions.selMsg);
+    const reviewErr = useSelector(reviewActions.selErr);
+    const reviewMsg = useSelector(reviewActions.selMsg);
 
     const [reason, setReason] = useState('');
     const [errors, setErrors] = useState([]);
@@ -25,30 +31,36 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
     const handleYes = (e) => {
         e.preventDefault();
 
-        let mutBook = book ? {
-            bookId: book.id,
-            title: book.title,
-            subtitle: book.subtitle,
-            authors: book.authors,
-            publishYear: book.publishYear,
-            pageCount: book.pageCount,
-            synopsis: book.synopsis,
-            thumbnail: book.thumbnail,
-            reason: 'DELETE' + reason
-        } : {};
-
-        if (book.pdfLink && isValidUrl(book.pdfLink)) {
-            mutBook.pdfLink = book.pdfLink;
-        }
-
-
         if (itemName === 'book') {
+            let mutBook = book ? {
+                bookId: book.id,
+                title: book.title,
+                subtitle: book.subtitle,
+                authors: book.authors,
+                publishYear: book.publishYear,
+                pageCount: book.pageCount,
+                synopsis: book.synopsis,
+                thumbnail: book.thumbnail,
+                reason: 'DELETE' + reason
+            } : {};
+
+            if (book.pdfLink && isValidUrl(book.pdfLink)) {
+                mutBook.pdfLink = book.pdfLink;
+            }
+
+
             if (user && user.admin) {
                 dispatch(bookActions.deleteBook(id));
             }
             else {
                 dispatch(approvalActions.requestApproval(mutBook));
             }
+        }
+        else if (itemName === 'reply') {
+            dispatch(replyActions.deleteReply(id));
+        }
+        else if (itemName === 'review') {
+            dispatch(reviewActions.deleteReview(id));
         }
 
     };
@@ -71,7 +83,15 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
         if (appErr && appErr.length) {
             setErrors(appErr);
         }
-    }, [bookErr, appErr, setErrors]);
+
+        if (reviewErr && reviewErr.length) {
+            setErrors(reviewErr);
+        }
+
+        if (replyErr && replyErr.length) {
+            setErrors(replyErr);
+        }
+    }, [bookErr, appErr, reviewErr, replyErr, setErrors]);
 
     useEffect(() => {
         if (bookMsg && bookMsg.length) {
@@ -85,7 +105,15 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
             alert(appMsg);
             dispatch(approvalActions.clearMsg());
         }
-    }, [bookMsg, appMsg, history]);
+
+        if (reviewMsg && reviewMsg.length) {
+            setIsOpen(false);
+        }
+
+        if (replyMsg && replyMsg.length) {
+            setIsOpen(false);
+        }
+    }, [bookMsg, appMsg, reviewMsg, replyMsg, history]);
 
 
     return (
@@ -103,6 +131,17 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
                     <button className='no-delete' onClick={handleNo}>No (Keep {itemName})</button>
 
                 </>)
+            }
+
+            {
+                (itemName === 'reply' || itemName === 'review') && (
+                    <>
+                        <p>Are you sure you want to remove this {itemName}?</p>
+                        <button className='yes-delete' onClick={handleYes}>Yes (Delete {itemName})</button>
+                        <button className='no-delete' onClick={handleNo}>No (Keep {itemName})</button>
+
+                    </>
+                )
             }
         </div>
     );
