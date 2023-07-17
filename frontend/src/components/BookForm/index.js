@@ -10,22 +10,23 @@ import * as userActions from '../../store/user';
 export { isValidUrl } from '../../helpers';
 
 
-const BookForm = ({params: {ref, isEdit}}) => {
+const BookForm = ({params: {ref, isEdit, book: info}}) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(userActions.selUser);
     const book = useSelector(bookActions.selBook);
     const appErr = useSelector(approvalActions.selErr);
     const bookErr = useSelector(bookActions.selErr);
+    const appMsg = useSelector(approvalActions.selMsg);
 
-    const [title, setTitle] = useState('');
-    const [subtitle, setSubtitle] = useState('');
-    const [authors, setAuthors] = useState('');
-    const [pdfLink, setPdfLink] = useState('');
-    const [thumbnail, setThumbnail] = useState('');
-    const [pageCount, setPageCount] = useState(0);
-    const [publishYear, setPublishYear] = useState(1000);
-    const [synopsis, setSynopsis] = useState('');
+    const [title, setTitle] = useState(info ? info.title : '');
+    const [subtitle, setSubtitle] = useState(info ? info.subtitle : '');
+    const [authors, setAuthors] = useState(info ? info.authors.join(', ') : '');
+    const [pdfLink, setPdfLink] = useState(info ? info.pdfLink : '');
+    const [thumbnail, setThumbnail] = useState(info ? info.thumbnail : '');
+    const [pageCount, setPageCount] = useState(info ? info.pageCount : 0);
+    const [publishYear, setPublishYear] = useState(info ? info.publishYear : 1000);
+    const [synopsis, setSynopsis] = useState(info ? info.synopsis : '');
     const [reason, setReason] = useState('');
     const [googleBooks, setGoogleBooks] = useState([]);
     const [errors, setErrors] = useState([]);
@@ -227,8 +228,23 @@ const BookForm = ({params: {ref, isEdit}}) => {
         }
     }, [bookErr, appErr, setErrors]);
 
+    useEffect(() => {
+        if (book) {
+            const {id} = book;
+            dispatch(bookActions.clearBook());
+            history.push(`/books/${id}`);
+        }
+    }, [book]);
+
+    useEffect(() => {
+        if (appMsg) {
+            alert(appMsg);
+            history.push(`/books/${info.id}`);
+        }
+    }, [appMsg]);
+
     return (
-        <div className='book-form-wrapper'>
+        <div className='book-form-wrapper' ref={ref}>
             <h1>{(isEdit) ? "Notice a discrepency?" : "Add a Book to Our Library!"}</h1>
             <form onSubmit={handleSubmit}>
                 <ul>
