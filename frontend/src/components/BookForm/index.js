@@ -10,7 +10,7 @@ import * as userActions from '../../store/user';
 export { isValidUrl } from '../../helpers';
 
 
-const BookForm = ({params: {ref, isEdit, book: info}}) => {
+const BookForm = ({params: {ref, isEdit, book: info}, setIsOpen}) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(userActions.selUser);
@@ -22,8 +22,8 @@ const BookForm = ({params: {ref, isEdit, book: info}}) => {
     const [title, setTitle] = useState(info ? info.title : '');
     const [subtitle, setSubtitle] = useState(info ? info.subtitle : '');
     const [authors, setAuthors] = useState(info ? info.authors.join(', ') : '');
-    const [pdfLink, setPdfLink] = useState(info ? info.pdfLink : '');
-    const [thumbnail, setThumbnail] = useState(info ? info.thumbnail : '');
+    const [pdfLink, setPdfLink] = useState(info ? info.pdfLink || '' : '');
+    const [thumbnail, setThumbnail] = useState(info ? info.thumbnail || '' : '');
     const [pageCount, setPageCount] = useState(info ? info.pageCount : 0);
     const [publishYear, setPublishYear] = useState(info ? info.publishYear : 1000);
     const [synopsis, setSynopsis] = useState(info ? info.synopsis : '');
@@ -62,7 +62,8 @@ const BookForm = ({params: {ref, isEdit, book: info}}) => {
 
 
         if (isEdit) {
-            newBook.reason = reason;
+            newBook.reason = 'EDIT' + reason;
+            newBook.bookId = book.id;
 
             if (user.admin) {
                 dispatch(bookActions.editBook({newBook, id: book.id}));
@@ -231,7 +232,6 @@ const BookForm = ({params: {ref, isEdit, book: info}}) => {
     useEffect(() => {
         if (book) {
             const {id} = book;
-            dispatch(bookActions.clearBook());
             history.push(`/books/${id}`);
         }
     }, [book]);
@@ -239,7 +239,8 @@ const BookForm = ({params: {ref, isEdit, book: info}}) => {
     useEffect(() => {
         if (appMsg) {
             alert(appMsg);
-            history.push(`/books/${info.id}`);
+            setIsOpen(false);
+            dispatch(approvalActions.clearMsg());
         }
     }, [appMsg]);
 

@@ -1,5 +1,5 @@
-import {useSelector, useDispatch } from "react-redux";
-import {useHistory, useParams, NavLink} from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useParams, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as bookActions from "../../store/book";
 import InterimModal from "../Modal";
@@ -9,15 +9,19 @@ import Delete from "../Delete";
 
 const BookDetails = () => {
     const dispatch = useDispatch();
-    const {id} = useParams();
+    const { id } = useParams();
     const book = useSelector(bookActions.selBook);
+
+    const [isModal, setIsModal] = useState(false);
 
 
     useEffect(() => {
         dispatch(bookActions.getBook(id));
 
         return () => {
-            dispatch(bookActions.clearBook());
+            if (!isModal) {
+                dispatch(bookActions.clearBook());
+            }
         }
     }, [dispatch, id]);
 
@@ -26,8 +30,10 @@ const BookDetails = () => {
         <div className='book-details'>
             <div className="book-details-nav">
                 <NavLink to="/books">Back</NavLink>
-                <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book }} />
-                <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
+                <div className="interim-modal" onMouseEnter={() => setIsModal(true)} onMouseLeave={() => setIsModal(false)}>
+                    <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book }} />
+                    <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
+                </div>
             </div>
             <div className="top-half" >
                 <div className="thumbnail"><img src={book.thumbnail} alt={book.title} /></div>
@@ -55,7 +61,7 @@ const BookDetails = () => {
                 </div>
             </div>
         </div>
-    ) :  null;
+    ) : null;
 }
 
 export default BookDetails;

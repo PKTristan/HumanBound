@@ -38,7 +38,7 @@ export const clearBooks = () => ({ type: CLEAR_BOOKS });
 
 export const clearBook = () => ({ type: CLEAR_BOOK });
 
-const clearMsg = () => ({ type: CLEAR_MSG });
+export const clearMsg = () => ({ type: CLEAR_MSG });
 
 
 export const getBooks = ({ author, title }) => async (dispatch) => {
