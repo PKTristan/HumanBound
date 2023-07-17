@@ -3,12 +3,14 @@ import thunk from "redux-thunk";
 import userReducer from "./user";
 import booksReducer from "./book";
 import approvalsReducer from "./approval";
+import reviewsReducer from "./review";
 
 const rootReducer = combineReducers({
   // add reducer functions here
   user: userReducer,
   book: booksReducer,
-  approval: approvalsReducer
+  approval: approvalsReducer,
+  review: reviewsReducer
 });
 
 let enhancer;
