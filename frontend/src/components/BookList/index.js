@@ -40,6 +40,9 @@ const BookList = () => {
 
     useEffect(() => {
         dispatch(bookActions.getBooks({}));
+        return () => {
+            dispatch(bookActions.clearBooks());
+        }
     }, [dispatch]);
 
     useEffect(() => {
