@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams, NavLink } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as bookActions from "../../store/book";
+import * as userActions from "../../store/user";
 import InterimModal from "../Modal";
 import BookForm from "../BookForm";
 import Delete from "../Delete";
@@ -11,6 +12,7 @@ const BookDetails = () => {
     const dispatch = useDispatch();
     const { id } = useParams();
     const book = useSelector(bookActions.selBook);
+    const user = useSelector(userActions.selUser);
 
     const [isModal, setIsModal] = useState(false);
 
@@ -30,10 +32,16 @@ const BookDetails = () => {
         <div className='book-details'>
             <div className="book-details-nav">
                 <NavLink to="/books">Back</NavLink>
-                <div className="interim-modal" onMouseEnter={() => setIsModal(true)} onMouseLeave={() => setIsModal(false)}>
-                    <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book }} />
-                    <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
-                </div>
+                {
+                    user ? (
+                        <>
+                            <div className="interim-modal" onMouseEnter={() => setIsModal(true)} onMouseLeave={() => setIsModal(false)}>
+                                <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book }} />
+                                <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
+                            </div>
+                        </>
+                    ) : null
+                }
             </div>
             <div className="top-half" >
                 <div className="thumbnail"><img src={book.thumbnail} alt={book.title} /></div>
