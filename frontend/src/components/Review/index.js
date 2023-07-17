@@ -5,14 +5,15 @@ import * as replyActions from '../../store/reply';
 import * as userActions from '../../store/user';
 import InterimModal from '../Modal';
 import Delete from '../Delete';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 
 
-const Review = ({ params: { id } }) => {
+const Review = () => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const { id } = useParams();
     const textareaRef = useRef(null);
     const user = useSelector(userActions.selUser);
     const review = useSelector(reviewActions.selReview);
@@ -98,7 +99,7 @@ const Review = ({ params: { id } }) => {
 
     useEffect(() => {
         if (reviewMsg === 'successfully deleted') {
-            history.push('/');
+            history.push(`/books/${review.bookId}`);
         }
         else {
             dispatch(replyActions.clearMsg());
@@ -144,6 +145,7 @@ const Review = ({ params: { id } }) => {
         <div className="review-wrapper">
             {review && (
                 <div className="review">
+                    <NavLink to={`/books/${review.bookId}`}>Back</NavLink>
                     <img src={review.User.avi} alt={review.User.username} />
                     <h3>@{review.User.username}</h3>
                     {(user && (user.id === review.userId || user.admin)) ? (

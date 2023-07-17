@@ -14,14 +14,14 @@ const loadReview = (review) => ({
     review
 });
 
-const clearReview = () => ({ type: CLEAR_REVIEW });
+export const clearReview = () => ({ type: CLEAR_REVIEW });
 
 const loadErr = (err) => ({
     type: LOAD_ERR,
     err
 });
 
-const clearErr = () => ({ type: CLEAR_ERR });
+export const clearErr = () => ({ type: CLEAR_ERR });
 
 const loadMsg = (msg) => ({
     type: LOAD_MSG,
@@ -48,10 +48,10 @@ export const getReview = (id) => async (dispatch) => {
     return response;
 }
 
-export const createReview = (review) => async (dispatch) => {
-    const response = await csrfFetch(`/api/reviews`, {
+export const createReview = (review, id) => async (dispatch) => {
+    const response = await csrfFetch(`/api/books/${id}/reviews`, {
         method: 'POST',
-        body: JSON.stringify(review)
+        body: JSON.stringify({review})
     }).catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {

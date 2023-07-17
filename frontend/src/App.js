@@ -26,8 +26,8 @@ function App() {
     <div className="app">
       <NavBar />
       <Switch>
-        <Route exact path='/reviews/3'>
-          <Review params={{id: 3}}/>
+        <Route exact path='/reviews/:id'>
+          <Review />
         </Route>
         <Route exact path="/books"  >
           <BookList />
