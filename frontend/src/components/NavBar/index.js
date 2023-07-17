@@ -1,5 +1,5 @@
 //frontend components navbar
-
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import * as userActions from "../../store/user";
@@ -8,9 +8,11 @@ import InterimModal from "../Modal";
 import LoginForm from "../LoginForm";
 import Logout from "../Logout";
 import SignupForm from "../SignupForm";
+import BookForm from "../BookForm";
 
 
 const NavBar = () => {
+    const history = useHistory();
     const ref = useRef();
     const currUser = useSelector(userActions.selUser);
 
@@ -22,6 +24,11 @@ const NavBar = () => {
 
         setDropdown(!dropdown);
     };
+
+    const handleBooks = (e) => {
+        e.preventDefault();
+        history.push('/books');
+    }
 
     useEffect(() => {
         if (!dropdown) return;
@@ -45,6 +52,8 @@ const NavBar = () => {
     return (
         <div className="navbar">
 
+            <button type='button' className='navbar-btn' onClick={handleBooks}>Books</button>
+
             <div className="prof-btn" ref={ref}>
                 <button type="button" className='prof-btn' onClick={icon}>
                     <i className="fa-solid fa-user" />
@@ -56,6 +65,7 @@ const NavBar = () => {
                         <p>{currUser.firstName} {currUser.lastName}</p>
                         <p>{currUser.email}</p>
 
+                        <InterimModal Component={BookForm} btnLabel={'Add Book'} btnClass={'navbar=btn'} params={{ref, isEdit: false}} />
                         <InterimModal Component={Logout} btnLabel={"Logout"} btnClass='navbar-btn' params={{ref}} />
                         </>
                     )}
@@ -70,6 +80,7 @@ const NavBar = () => {
 
                 </div>}
             </div>
+
         </div>
     )
 }

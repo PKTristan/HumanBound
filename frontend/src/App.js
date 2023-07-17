@@ -5,6 +5,9 @@ import NavBar from './components/NavBar';
 import { useEffect } from 'react';
 import * as userActions from './store/user';
 import Modal from "react-modal";
+import BookForm from './components/BookForm';
+import BookList from './components/BookList';
+import BookDetails from './components/BookDetails';
 
 const { Route, Switch } = require('react-router-dom');
 
@@ -22,8 +25,11 @@ function App() {
     <div className="app">
       <NavBar />
       <Switch>
-        <Route exact path="/login"  >
-          <LoginForm />
+        <Route exact path="/books"  >
+          <BookList />
+        </Route>
+        <Route exact path='/books/:id' >
+          <BookDetails />
         </Route>
       </Switch>
     </div>

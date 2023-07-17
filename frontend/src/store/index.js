@@ -1,10 +1,14 @@
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import userReducer from "./user";
+import booksReducer from "./book";
+import approvalsReducer from "./approval";
 
 const rootReducer = combineReducers({
   // add reducer functions here
-  user: userReducer
+  user: userReducer,
+  book: booksReducer,
+  approval: approvalsReducer
 });
 
 let enhancer;

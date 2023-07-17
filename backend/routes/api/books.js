@@ -116,12 +116,12 @@ const validateBook = [
     check('title')
         .exists({ checkFalsy: true })
         .isString()
-        .isLength({ min: 1, max: 30 })
-        .withMessage('Please provide a title.'),
+        .isLength({ min: 1, max: 50 })
+        .withMessage('Please provide a title of max 50 characters.'),
     check('authors')
         .exists({ checkFalsy: true })
         .custom(value => Array.isArray(value) && value.length > 0)
-        .withMessage('Please provide 1 or multiple authors in an array.'),
+        .withMessage('Please provide 1 or multiple authors.'),
     check('synopsis')
         .exists({ checkFalsy: true })
         .isString()
@@ -146,12 +146,12 @@ const validateBook = [
         .withMessage('Please provide a valid thumbnail URL.'),
     check('pageCount')
         .optional()
-        .isInt({ min: 1 })
-        .withMessage('Page count must be a positive integer.'),
+        .isInt({ min: 0 })
+        .withMessage('Page count must be zero or greater.'),
     check('publishYear')
         .optional()
-        .isInt({ min: 1900, max: new Date().getFullYear() })
-        .withMessage('Publish year must be a valid year.'),
+        .isInt({ min: 1000, max: new Date().getFullYear() })
+        .withMessage('Publish year must be a valid year after 1000.'),
 
 
     handleValidationErrors

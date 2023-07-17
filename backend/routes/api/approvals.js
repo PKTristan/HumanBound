@@ -12,7 +12,7 @@ const validateApproval = [
     check('title')
         .exists({ checkFalsy: true })
         .isString()
-        .isLength({ min: 1, max: 30 })
+        .isLength({ min: 1, max: 50 })
         .withMessage('Please provide a title.'),
     check('authors')
         .exists({ checkFalsy: true })
@@ -26,7 +26,7 @@ const validateApproval = [
     check('reason')
         .exists({ checkFalsy: true })
         .isString()
-        .isLength({ min: 20, max: Infinity })
+        .isLength({ min: 3, max: Infinity })
         .withMessage('Please provide a reason for the approval.'),
 
     // Optional fields
@@ -47,11 +47,11 @@ const validateApproval = [
         .withMessage('Please provide a valid thumbnail URL.'),
     check('pageCount')
         .optional()
-        .isInt({ min: 1 })
+        .isInt({ min: 0 })
         .withMessage('Page count must be a positive integer.'),
     check('publishYear')
         .optional()
-        .isInt({ min: 1900, max: new Date().getFullYear() })
+        .isInt({ min: 1000, max: new Date().getFullYear() })
         .withMessage('Publish year must be a valid year.'),
 
 
