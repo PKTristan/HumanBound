@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import * as bookActions from "../../store/book";
 import InterimModal from "../Modal";
 import BookForm from "../BookForm";
+import Delete from "../Delete";
 
 
 const BookDetails = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const {id} = useParams();
     const book = useSelector(bookActions.selBook);
 
@@ -27,7 +27,7 @@ const BookDetails = () => {
             <div className="book-details-nav">
                 <NavLink to="/books">Back</NavLink>
                 <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book }} />
-                <button type="button" className="btn-details">Delete</button>
+                <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
             </div>
             <div className="top-half" >
                 <div className="thumbnail"><img src={book.thumbnail} alt={book.title} /></div>
