@@ -12,6 +12,12 @@ const InterimModal = ({ Component, btnLabel, btnClass, isHidden, params }) => {
     const handleClose = (e) => {
         e.preventDefault();
         setIsOpen(false);
+
+    }
+
+    const handleMouseDown = (e) => {
+        e.preventDefault();
+
     }
 
     const style = {

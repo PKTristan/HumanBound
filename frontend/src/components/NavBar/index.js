@@ -52,7 +52,9 @@ const NavBar = () => {
     return (
         <div className="navbar">
 
-            <button type='button' className='navbar-btn' onClick={handleBooks}>Books</button>
+            {
+                currUser ? (<button type='button' className='navbar-btn' onClick={handleBooks}>Books</button>) : null
+            }
 
             <div className="prof-btn" ref={ref}>
                 <button type="button" className='prof-btn' onClick={icon}>
