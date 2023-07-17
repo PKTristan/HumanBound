@@ -170,9 +170,10 @@ export const deleteBook = (id) => async (dispatch) => {
 }
 
 //selectors
-const selBooks = (state) => state.book.list;
-const selBook = (state) => state.book.details;
-const selErr = (state) => state.book.errors;
+export const selBooks = (state) => state.book.list;
+export const selBook = (state) => state.book.details;
+export const selErr = (state) => state.book.errors;
+export const selMsg = (state) => state.book.message;
 
 
 const initialState = { list: null, details: null, errors: null, message: null };

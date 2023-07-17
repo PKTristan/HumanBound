@@ -8,6 +8,7 @@ import InterimModal from "../Modal";
 import LoginForm from "../LoginForm";
 import Logout from "../Logout";
 import SignupForm from "../SignupForm";
+import BookForm from "../BookForm";
 
 
 const NavBar = () => {
@@ -56,6 +57,7 @@ const NavBar = () => {
                         <p>{currUser.firstName} {currUser.lastName}</p>
                         <p>{currUser.email}</p>
 
+                        <InterimModal Component={BookForm} btnLabel={'Add Book'} btnClass={'navbar=btn'} params={{ref, isEdit: false}} />
                         <InterimModal Component={Logout} btnLabel={"Logout"} btnClass='navbar-btn' params={{ref}} />
                         </>
                     )}

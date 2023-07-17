@@ -146,13 +146,13 @@ const SignupForm = ({params: {ref}}) => {
                 <ul>
                     {(errors && errors.length) ? errors.map((error, i) => (<li key={i}>{error}</li>)) : null}
                 </ul>
-                <input type="text" className="firstName" placeholder="First Name" onChange={handleChange} />
-                <input type="text" className="lastName" placeholder='Last Name' onChange={handleChange} />
-                <input type="email" className="email" placeholder="Email" onChange={handleChange} />
-                <input type="text" className="username" placeholder="Username" onChange={handleChange} />
-                <input type="password" className="password" placeholder="Password" onChange={handleChange} />
-                <input type="password" className="confirmation" placeholder='Confirm Password' onChange={handleChange} />
-                <input type="url" className="avi" placeholder="Avatar Image URL" />
+                <input type="text" className="firstName" placeholder="First Name" onChange={handleChange} value={firstName} />
+                <input type="text" className="lastName" placeholder='Last Name' onChange={handleChange} value={lastName} />
+                <input type="email" className="email" placeholder="Email" onChange={handleChange} value={email} />
+                <input type="text" className="username" placeholder="Username" onChange={handleChange} value={username} />
+                <input type="password" className="password" placeholder="Password" onChange={handleChange} value={password} />
+                <input type="password" className="confirmation" placeholder='Confirm Password' onChange={handleChange} value={confirm} />
+                <input type="url" className="avi" placeholder="Avatar Image URL" onChange={handleChange} value={avi} />
                 <button type="submit" className="signup-btn">Sign Up</button>
             </form>
         </div>
