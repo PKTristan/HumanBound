@@ -50,3 +50,79 @@ export const getCircles = () => async (dispatch) => {
 
     return response;
 }
+
+export const getCircle = (id) => async (dispatch) => {
+    const response = csrfFetch(`/api/circles/${id}`).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+            const err = Object.values(data.errors);
+            dispatch(loadErr(err));
+        }
+    });
+
+    if (response && response.ok) {
+        const data = await response.json();
+        dispatch(loadCircle(data));
+    }
+
+    return response;
+}
+
+export const createCircle = (circle) => async (dispatch) => {
+    const response = await csrfFetch('/api/circles', {
+        method: 'POST',
+        body: JSON.stringify(circle)
+    }).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+            const err = Object.values(data.errors);
+            dispatch(loadErr(err));
+        }
+    });
+
+    if (response && response.ok) {
+        const data = await response.json();
+        dispatch(loadCircle(data));
+    }
+
+    return response;
+}
+
+export const updateCircle = (circle) => async (dispatch) => {
+    const response = await csrfFetch(`/api/circles/${circle.id}`, {
+        method: 'PUT',
+        body: JSON.stringify(circle)
+    }).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+            const err = Object.values(data.errors);
+            dispatch(loadErr(err));
+        }
+    });
+
+    if (response && response.ok) {
+        const data = await response.json();
+        dispatch(loadCircle(data));
+    }
+
+    return response;
+}
+
+export const deleteCircle = (id) => async (dispatch) => {
+    const response = await csrfFetch(`/api/circles/${id}`, {
+        method: 'DELETE'
+    }).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+            const err = Object.values(data.errors);
+            dispatch(loadErr(err));
+        }
+    });
+
+    if (response && response.ok) {
+        const data = await response.json();
+        dispatch(clearCircle());
+    }
+
+    return response;
+}
