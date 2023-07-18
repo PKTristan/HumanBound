@@ -1,1 +1,30 @@
-/* TODO Add site wide styles */
+
+.app {
+    display: flex;
+}
+
+.navbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 0 0 auto;
+    width: auto;
+    height: 98vh;
+    /* Adjust the width of the navbar as needed */
+    background-color: #f7a4f0;
+    padding: 10px;
+}
+
+.content {
+    flex: 1 1 auto;
+    padding: 10px;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}

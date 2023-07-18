@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import BookForm from './components/BookForm';
 import BookList from './components/BookList';
 import BookDetails from './components/BookDetails';
+import Review from './components/Review';
 
 const { Route, Switch } = require('react-router-dom');
 
@@ -25,6 +26,9 @@ function App() {
     <div className="app">
       <NavBar />
       <Switch>
+        <Route exact path='/reviews/:id'>
+          <Review />
+        </Route>
         <Route exact path="/books"  >
           <BookList />
         </Route>

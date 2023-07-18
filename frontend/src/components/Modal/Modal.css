@@ -1,0 +1,84 @@
+.ReactModal__Overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.modal {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.modal h1, p {
+    text-align: center;
+}
+
+.modal button {
+    font-size: 16pt;
+    color: white;
+    background-color: #f7a4f0;
+    border: 2px solid black;
+    box-shadow: 3px 3px 1px black;
+}
+
+button:hover {
+    background-color: #999999;
+}
+
+.exit-modal {
+    position: absolute;
+    top: 0.75;
+    right: 0.75rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgb(112 112 112/1);
+    cursor: pointer;
+    border: 0;
+}
+
+.modal input {
+    display: block;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    background-color: #c2eaea;
+    border-radius: 5px;
+    border: none;
+}
+
+.modal textarea {
+    display: block;
+    width: 100%;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    background-color: #c2eaea;
+    border-radius: 5px;
+    border: none;
+}
+
+.modal input::placeholder {
+    color: #666;
+}
+
+.modal form,
+.modal .delete-container,
+.modal .logout-confirmation {
+    display: flex;
+    flex-direction: column;
+}
+
+
+ul {
+    padding-left: 0;
+}

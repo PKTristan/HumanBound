@@ -40,10 +40,10 @@ const valPermission = async(req, res, next) => {
 
 
 //get all replies to a review
-router.get('/', async (req, res, next) => {
-    const { id } = req.body;
+router.get('/:id', async (req, res, next) => {
+    const { id } = req.params;
 
-    const replies = await Reply.findAll({
+    const replies = await Reply.findByPk(id, {
         include: [
             {
                 model: User,
