@@ -50,7 +50,7 @@ export const getApprovals = () => async (dispatch) => {
         const data = await response.json();
         dispatch(clearErr());
         dispatch(clearMsg());
-        dispatch(loadApprovals(data));
+        dispatch(loadApprovals(data.approvals));
     }
 
     return response;

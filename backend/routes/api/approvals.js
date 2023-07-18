@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
 
-const { Approval } = require('../../db/models');
+const { Approval, Book } = require('../../db/models');
 
 const validateApproval = [
     check('title')
@@ -83,6 +83,9 @@ router.get('/', restoreUser, requireAuth, valPermission, async (req, res, next) 
         where: {
             status: 'pending'
         },
+        include: {
+            model: Book
+        },
         order: [
             ['createdAt', 'ASC']
         ]
@@ -95,6 +98,9 @@ router.get('/', restoreUser, requireAuth, valPermission, async (req, res, next) 
                 [Op.not]: 'pending'
             }
         },
+        include: {
+            model: Book
+        },
         order: [
             ['createdAt', 'DESC']
         ]
@@ -104,6 +110,8 @@ router.get('/', restoreUser, requireAuth, valPermission, async (req, res, next) 
     //split the authors
     pending.forEach(approval => approval.authors = approval.authors.split(','));
     rest.forEach(approval => approval.authors = approval.authors.split(','));
+    pending.forEach(approval => approval.Book.authors = approval.Book.authors.split(','));
+    rest.forEach(approval => approval.Book.authors = approval.Book.authors.split(','));
 
     //combine into an object
     const approvals = {pending: [...pending], acknowledged: [...rest] };

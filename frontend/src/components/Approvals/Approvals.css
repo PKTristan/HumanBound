@@ -1,0 +1,39 @@
+.new-approvals,
+.old-approvals {
+    overflow: scroll;
+    max-height: 265px;
+    border: 1px solid #f7a4f0;
+}
+
+.approval-img {
+    width: 30vw;
+}
+
+.app-images,
+.app-titles {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.app-synopsis {
+    display: flex;
+    justify-content: space-between;
+}
+
+.app-synopsis h5 {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+}
+
+.app-synopsis h5:nth-child(1),
+.app-synopsis h5:nth-child(3) {
+    flex: 0.5;
+}
+
+.app-card {
+    border: 1px solid #f7a4f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

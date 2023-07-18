@@ -127,7 +127,7 @@ const Review = () => {
     }, [replies]);
 
     useEffect(() => {
-        if (replyErr && replyErr[0] === 'no reply found' || reviewErr && reviewErr[0] === 'No review found') {
+        if ((replyErr && replyErr[0] === 'no reply found') || (reviewErr && reviewErr[0] === 'No review found')) {
             history.push('/');
         }
         else if (reviewErr) {

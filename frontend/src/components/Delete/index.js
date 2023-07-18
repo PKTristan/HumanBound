@@ -126,7 +126,7 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
                     <ul>
                         {errors.map(err => <li key={err}>{err}</li>)}
                     </ul>
-                    <input type="text" className="reason" value={reason} onChange={handleChange} />
+                    <input type="text" className="reason" value={reason} placeholder="Reason for deleting" onChange={handleChange} />
                     <button className='yes-delete' onClick={handleYes}>Yes (Delete {itemName})</button>
                     <button className='no-delete' onClick={handleNo}>No (Keep {itemName})</button>
 

@@ -1,5 +1,6 @@
 import Modal from "react-modal";
 import { useState } from "react";
+import './Modal.css';
 
 const InterimModal = ({ Component, btnLabel, btnClass, isHidden, params }) => {
     const [isOpen, setIsOpen] = useState(false);
