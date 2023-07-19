@@ -62,13 +62,12 @@ const BookForm = ({params: {ref, isEdit, book: info}, setIsOpen}) => {
 
 
         if (isEdit) {
-            newBook.reason = 'EDIT' + reason;
-            newBook.bookId = book.id;
-
             if (user.admin) {
                 dispatch(bookActions.editBook({newBook, id: book.id}));
             }
             else {
+                newBook.reason = 'EDIT' + reason;
+                newBook.bookId = book.id;
                 dispatch(approvalActions.requestApproval(newBook));
             }
         }
