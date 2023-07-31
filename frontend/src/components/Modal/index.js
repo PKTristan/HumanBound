@@ -16,11 +16,6 @@ const InterimModal = ({ Component, btnLabel, btnClass, isHidden, params }) => {
 
     }
 
-    const handleMouseDown = (e) => {
-        e.preventDefault();
-
-    }
-
     const style = {
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)'

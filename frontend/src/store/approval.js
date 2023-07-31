@@ -72,8 +72,12 @@ export const requestApproval = (approval) => async (dispatch) => {
 
 
     if (response && response.ok) {
-        // const data = response.json();
-        dispatch(loadMsg('Approval request successful. Check on the book later to see if the changes were made, for further questions please ask an admin, janesmith@email.com'));
+        const {emails} = await response.json();
+        const email = emails.reduce((acc, email) => {
+            return `${acc}, ${email}`;
+        });
+        
+        dispatch(loadMsg(`Approval request successful. Check on the book later to see if the changes were made, for further questions please ask an admin: ${email}`));
     }
 
     return response;

@@ -106,12 +106,16 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
             dispatch(approvalActions.clearMsg());
         }
 
-        if (reviewMsg && reviewMsg.length) {
+        if (reviewMsg && reviewMsg.length && (reviewMsg !== 'No review found')) {
             setIsOpen(false);
+            dispatch(reviewActions.clearMsg());
+            alert(reviewMsg);
         }
 
         if (replyMsg && replyMsg.length) {
             setIsOpen(false);
+            alert(replyMsg);
+            dispatch(replyActions.clearMsg());
         }
     }, [bookMsg, appMsg, reviewMsg, replyMsg, history]);
 
