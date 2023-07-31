@@ -2,8 +2,8 @@ import Modal from "react-modal";
 import { useState } from "react";
 import './Modal.css';
 
-const InterimModal = ({ Component, btnLabel, btnClass, isHidden, params }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const InterimModal = ({ Component, btnLabel, btnClass, isHidden, onClose=null, setOpen=false, params }) => {
+    const [isOpen, setIsOpen] = useState(setOpen);
 
     const handleOpen = (e) => {
         e.preventDefault();
@@ -12,6 +12,9 @@ const InterimModal = ({ Component, btnLabel, btnClass, isHidden, params }) => {
 
     const handleClose = (e) => {
         e.preventDefault();
+        if (onClose) {
+            onClose.forEach(fn => fn());
+        }
         setIsOpen(false);
 
     }
@@ -25,7 +28,7 @@ const InterimModal = ({ Component, btnLabel, btnClass, isHidden, params }) => {
 
     return (
         <>
-            <button className={btnClass || 'open-modal'} hidden={isHidden} onClick={handleOpen}>{btnLabel}</button>
+            <button className={btnClass || 'open-modal'} hidden={isHidden} onClick={handleOpen}>{btnLabel || 'Open Modal'}</button>
 
             <Modal isOpen={isOpen} className="modal" style={style}>
                 <button className="exit-modal" onClick={handleClose} >X</button>

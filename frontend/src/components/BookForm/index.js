@@ -10,7 +10,7 @@ import * as userActions from '../../store/user';
 export { isValidUrl } from '../../helpers';
 
 
-const BookForm = ({params: {ref, isEdit, book: info}, setIsOpen}) => {
+const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen}) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const user = useSelector(userActions.selUser);
@@ -237,9 +237,9 @@ const BookForm = ({params: {ref, isEdit, book: info}, setIsOpen}) => {
 
     useEffect(() => {
         if (appMsg) {
-            alert(appMsg);
-            setIsOpen(false);
+            setAppMessage(appMsg);
             dispatch(approvalActions.clearMsg());
+            setIsOpen(false);
         }
     }, [appMsg]);
 
