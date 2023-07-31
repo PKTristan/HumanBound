@@ -7,7 +7,6 @@ import * as reviewActions from "../../store/review";
 import InterimModal from "../Modal";
 import BookForm from "../BookForm";
 import Delete from "../Delete";
-import Review from "../Review";
 
 
 const BookDetails = () => {
@@ -60,11 +59,6 @@ const BookDetails = () => {
         }
     }, [dispatch, id]);
 
-    useEffect(() => {
-        if (reviewErr && reviewErr.length) {
-            alert(reviewErr);
-        }
-    }, [reviewErr]);
 
     useEffect(() => {
         if (reviewDet) {
@@ -72,6 +66,10 @@ const BookDetails = () => {
             dispatch(reviewActions.clearReview());
         }
     }, [reviewDet]);
+
+    useEffect(() => {
+        return () => dispatch(reviewActions.clearErr());
+    }, []);
 
     const clearAppMsg = () => setAppMessage('');
 
@@ -113,6 +111,9 @@ const BookDetails = () => {
                     {
                         user ? (
                             <div className="write-review">
+                                {reviewErr ? (
+                                    <li>{reviewErr}</li>
+                                ) : null}
                                 <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
                             </div>
                         ) : null
