@@ -110,15 +110,19 @@ const BookDetails = () => {
                 </div>
                 <div className="reviews">
                     <h3>Reviews:</h3>
-                    <div className="write-review">
-                        <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
-                    </div>
-                    {book.Reviews.map(review => (
+                    {
+                        user ? (
+                            <div className="write-review">
+                                <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
+                            </div>
+                        ) : null
+                    }
+                    {(book.Reviews.length > 0) ? book.Reviews.map(review => (
                         <div key={review.id} className="review" onClick={handleViewReview(review.id)}>
                             <h5>@{review.User.username}</h5>
                             <p>{review.review}</p>
                         </div>
-                    ))}
+                    )) : (<p>{(user) ? `Be the first to review ${book.title}!` : `Sign up or log in to be the first to review ${book.title}!` }</p>)}
                 </div>
             </div>
         </div>
