@@ -23,26 +23,26 @@ const Review = () => {
     const replyMsg = useSelector(replyActions.selMsg);
 
     const [replies, setReplies] = useState([]);
-    const [replyObj, setReplyObj] = useState({});
     const [newReply, setNewReply] = useState('');
     const [editReview, setEditReview] = useState('');
 
-    const handleDown = (id) => (e) => {
-        let mutObj = Object.assign(replyObj);
+    const handleDown = (idx) => (e) => {
+        let mutArr = Array.from(replies);
 
         if (e.key === 'Enter') {
             e.preventDefault();
             if (e.shiftKey) {
-                if (id) {
-                    mutObj[id] = mutObj[id] + '\n';
+                if (idx !== null) {
+                    mutArr[idx].reply = mutArr[idx].reply + '\n';
+                    setReplies(mutArr);
                 }
                 else {
                     setNewReply(`${newReply}\n`);
                 }
             }
             else {
-                if (id) {
-                    dispatch(replyActions.editReply(id, mutObj[id]));
+                if (idx !== null) {
+                    dispatch(replyActions.editReply(mutArr[idx].id, mutArr[idx].reply));
                 }
                 else {
                     dispatch(replyActions.createReply(newReply, review.id));
@@ -52,8 +52,9 @@ const Review = () => {
         }
         else if (e.key === 'Backspace') {
             e.preventDefault();
-            if (id) {
-                mutObj[id] = mutObj[id].slice(0, -1);
+            if (idx !== null) {
+                mutArr[idx].reply = mutArr[idx].reply.slice(0, -1);
+                setReplies(mutArr);
             }
             else {
                 setNewReply(newReply.slice(0, -1));
@@ -61,8 +62,9 @@ const Review = () => {
         }
         else if (e.key.length === 1) {
             e.preventDefault();
-            if (id) {
-                mutObj[id] = mutObj[id] + e.key;
+            if (idx !== null) {
+                mutArr[idx].reply = mutArr[idx].reply + e.key;
+                setReplies(mutArr);
             }
             else {
                 setNewReply(`${newReply}${e.key}`);
@@ -78,6 +80,7 @@ const Review = () => {
             }
             else {
                 dispatch(reviewActions.updateReview({id: review.id, review: editReview}));
+                dispatch(reviewActions.clearErr());
             }
         }
         else if (e.key === 'Backspace') {
@@ -92,57 +95,48 @@ const Review = () => {
         }
     }
 
-    const handleDelete = (id) => (e) => {
-        e.preventDefault();
-        dispatch(replyActions.deleteReply(id));
-    }
-
     useEffect(() => {
-        if (reviewMsg === 'successfully deleted') {
-            history.push(`/books/${review.bookId}`);
+        if (reviewErr && reviewErr[0] === 'No review found') {
+            dispatch(reviewActions.clearErr());
+            history.goBack();
         }
-        else {
-            dispatch(replyActions.clearMsg());
+
+        if (reviewMsg && reviewMsg.deleted === 'successfully deleted') {
             dispatch(reviewActions.clearMsg());
-            dispatch(reviewActions.getReview(id));
+            history.goBack();
         }
-    }, [id, replyMsg, reviewMsg]);
+    }, [reviewErr, history, reviewMsg]);
 
     useEffect(() => {
         if (review && review.Replies) {
             setReplies(review.Replies);
             setEditReview(review.review);
         }
-    }, [review]);
+    }, [review, setReplies]);
 
     useEffect(() => {
-        if (replies && replies.length) {
-            let mutObj = {};
-            replies.forEach(reply => {
-                mutObj[reply.id] = reply.reply;
-            });
-
-            setReplyObj(mutObj);
-        }
-    }, [replies]);
-
-    useEffect(() => {
-        if ((replyErr && replyErr[0] === 'no reply found') || (reviewErr && reviewErr[0] === 'No review found')) {
-            history.push('/');
-        }
-        else if (reviewErr) {
-            alert(reviewErr);
-            dispatch(reviewActions.clearMsg());
-        }
-        else if (replyErr) {
-            alert(replyErr);
+        if (replyMsg) {
             dispatch(replyActions.clearMsg());
         }
-    }, [reviewErr, replyErr]);
+
+        dispatch(reviewActions.getReview(id));
+    }, [id, replyMsg]);
+
+    const clearReplyErr = () => dispatch(replyActions.clearErr());
 
 
     return (
         <div className="review-wrapper">
+            {
+                (replyErr) ? (
+                    <InterimModal
+                        Component={() => (<li>{replyErr}</li>)}
+                        isHidden={true}
+                        setOpen={true}
+                        onClose={[clearReplyErr]}
+                    />
+                ) : null
+            }
             {review && (
                 <div className="review">
                     <NavLink to={`/books/${review.bookId}`}>Back</NavLink>
@@ -150,6 +144,9 @@ const Review = () => {
                     <h3>@{review.User.username}</h3>
                     {(user && (user.id === review.userId || user.admin)) ? (
                         <div className='review-edit'>
+                            {
+                                reviewErr ? (<li>{reviewErr}</li>) : null
+                            }
                             <textarea
                                 ref={textareaRef}
                                 className={'editReview'}
@@ -174,7 +171,7 @@ const Review = () => {
             )}
 
             {(replies.length) ?
-                replies.map((reply) => (
+                replies.map((reply, idx) => (
                     <div key={reply.id} className="reply">
                         <img src={reply.User.avi} alt={reply.User.username} />
                         <h4>@{reply.User.username}</h4>
@@ -183,8 +180,8 @@ const Review = () => {
                                 <textarea
                                     ref={textareaRef}
                                     className={'editReply'}
-                                    value={replyObj[reply.id]}
-                                    onKeyDown={handleDown(reply.id)}
+                                    value={reply.reply}
+                                    onKeyDown={handleDown(idx)}
                                     onChange={(e) => e.preventDefault()}
                                 />
                                 <InterimModal Component={Delete} btnClass={'reply-delete'} btnLabel='Delete' params={{ id: reply.id, itemName: 'reply' }} />
