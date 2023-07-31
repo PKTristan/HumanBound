@@ -20,6 +20,7 @@ const BookDetails = () => {
     const reviewDet = useSelector(reviewActions.selReview);
 
     const [isModal, setIsModal] = useState(false);
+    const [appMessage, setAppMessage] = useState('');
     const [review, setReview] = useState('');
 
     const handleDownReview = (e) => {
@@ -72,6 +73,8 @@ const BookDetails = () => {
         }
     }, [reviewDet]);
 
+    const clearAppMsg = () => setAppMessage('');
+
 
     return book ? (
         <div className='book-details'>
@@ -81,13 +84,15 @@ const BookDetails = () => {
                     user ? (
                         <>
                             <div className="interim-modal" onMouseEnter={() => setIsModal(true)} onMouseLeave={() => setIsModal(false)}>
-                                <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book }} />
+                                <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book, setAppMessage }} />
                                 <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
+                                {(appMessage && appMessage.length) && <InterimModal Component={() => (<h3>{appMessage}</h3>)} isHidden={true} setOpen={true} onClose={[clearAppMsg]} />}
                             </div>
                         </>
                     ) : null
                 }
             </div>
+
             <div className="top-half" >
                 <div className="thumbnail"><img src={book.thumbnail} alt={book.title} /></div>
                 <div className="details" >

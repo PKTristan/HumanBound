@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
 
-const { Approval, Book } = require('../../db/models');
+const { Approval, Book, User } = require('../../db/models');
 
 const validateApproval = [
     check('title')
@@ -142,7 +142,25 @@ router.post('/', restoreUser, requireAuth, validateApproval, async (req, res, ne
 
    approval.authors = approval.authors.split(',');
 
-   return res.json({approval});
+   const admins = await User.findAll({
+       where: {
+           admin: true
+       }
+   }).catch(err => next(err));
+
+   if(!admins) {
+       const err = new Error('No admins found');
+       err.title = 'No admins found';
+       err.status = 404;
+       err.errors = { users: 'No admins found' };
+       return next(err);
+   }
+
+   let emails = []
+
+   emails = admins.map(user => user.email);
+
+   return res.json({approval, emails});
 });
 
 
