@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as reviewActions from '../../store/review';
 import * as replyActions from '../../store/reply';
@@ -14,7 +14,9 @@ const Review = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { id } = useParams();
-    const textareaRef = useRef(null);
+    const replyTextareaRefs = useRef([]);
+    const reviewTextareaRef = useRef(null);
+    const newReplyTextareaRef = useRef(null);
     const user = useSelector(userActions.selUser);
     const review = useSelector(reviewActions.selReview);
     const reviewErr = useSelector(reviewActions.selErr);
@@ -29,8 +31,16 @@ const Review = () => {
     const [elementFocused, setElementFocused] = useState(null);
 
 
+    useEffect(() => {
+        replyTextareaRefs.current = new Array(replies.length)
+            .fill(null)
+            .map(() => React.createRef());
+    }, [replies]);
+
+
     const handleDown = (idx) => (e) => {
         let mutArr = Array.from(replies);
+        console.log(e)
 
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -46,10 +56,12 @@ const Review = () => {
             else {
                 if (idx !== null) {
                     dispatch(replyActions.editReply(mutArr[idx].id, mutArr[idx].reply));
+                    replyTextareaRefs.current[idx].current.blur();
                 }
                 else {
                     dispatch(replyActions.createReply(newReply, review.id));
                     setNewReply('');
+                    newReplyTextareaRef.current.blur();
                 }
             }
         }
@@ -84,6 +96,7 @@ const Review = () => {
             else {
                 dispatch(reviewActions.updateReview({id: review.id, review: editReview}));
                 dispatch(reviewActions.clearErr());
+                reviewTextareaRef.current.blur();
             }
         }
         else if (e.key === 'Backspace') {
@@ -168,7 +181,7 @@ const Review = () => {
                                 reviewErr ? (<li>{reviewErr}</li>) : null
                             }
                             <textarea
-                                ref={textareaRef}
+                                ref={reviewTextareaRef}
                                 className={'editReview'}
                                 value={editReview}
                                 onKeyDown={handleDownReview}
@@ -180,7 +193,7 @@ const Review = () => {
                         <p>{review.review}</p>
                     )}
                     <textarea
-                        ref={textareaRef}
+                        ref={newReplyTextareaRef}
                         className='newReply'
                         placeholder='Add a reply. (Press enter to update, and shift + enter to add new line.)'
                         value={newReply}
@@ -198,7 +211,7 @@ const Review = () => {
                         {(user && (user.id === reply.userId || user.admin)) ? (
                             <div className='reply-edit'>
                                 <textarea
-                                    ref={textareaRef}
+                                    ref={replyTextareaRefs.current[idx]}
                                     className={'editReply'}
                                     value={reply.reply}
                                     onKeyDown={handleDown(idx)}
