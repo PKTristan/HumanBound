@@ -6,7 +6,7 @@ import * as userActions from '../../store/user';
 import InterimModal from '../Modal';
 import Delete from '../Delete';
 import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
-
+import './Review.css';
 
 
 
@@ -25,6 +25,9 @@ const Review = () => {
     const [replies, setReplies] = useState([]);
     const [newReply, setNewReply] = useState('');
     const [editReview, setEditReview] = useState('');
+    const [isHovering, setIsHovering] = useState(false);
+    const [elementFocused, setElementFocused] = useState(null);
+
 
     const handleDown = (idx) => (e) => {
         let mutArr = Array.from(replies);
@@ -122,6 +125,23 @@ const Review = () => {
         dispatch(reviewActions.getReview(id));
     }, [id, replyMsg]);
 
+
+    const onEnter = (elId) => (e) => {
+        e.preventDefault();
+        setElementFocused(elId);
+        setIsHovering(true);
+    };
+
+    const onLeave = (e) => {
+        e.preventDefault();
+        setElementFocused(null);
+        setIsHovering(false);
+    };
+
+    const isHidden = (elId) => {
+        return !((isHovering) && (elId === elementFocused));
+    };
+
     const clearReplyErr = () => dispatch(replyActions.clearErr());
 
 
@@ -143,7 +163,7 @@ const Review = () => {
                     <img src={review.User.avi} alt={review.User.username} />
                     <h3>@{review.User.username}</h3>
                     {(user && (user.id === review.userId || user.admin)) ? (
-                        <div className='review-edit'>
+                        <div className='review-edit' onMouseEnter={onEnter(review.id * -1)} onMouseLeave={onLeave}>
                             {
                                 reviewErr ? (<li>{reviewErr}</li>) : null
                             }
@@ -154,7 +174,7 @@ const Review = () => {
                                 onKeyDown={handleDownReview}
                                 onChange={(e) => e.preventDefault()}
                             />
-                            <InterimModal Component={Delete} btnClass={'review-delete'} btnLabel='Delete' params={{ id: review.id, itemName: 'review' }} />
+                            <InterimModal Component={Delete} btnClass={'review-delete'} isHidden={isHidden(review.id * -1)} btnLabel='Delete' params={{ id: review.id, itemName: 'review' }} />
                         </div>
                     ) : (
                         <p>{review.review}</p>
@@ -172,7 +192,7 @@ const Review = () => {
 
             {(replies.length) ?
                 replies.map((reply, idx) => (
-                    <div key={reply.id} className="reply">
+                    <div key={reply.id} className="reply" onMouseEnter={onEnter(reply.id)} onMouseLeave={onLeave} >
                         <img src={reply.User.avi} alt={reply.User.username} />
                         <h4>@{reply.User.username}</h4>
                         {(user && (user.id === reply.userId || user.admin)) ? (
@@ -184,7 +204,7 @@ const Review = () => {
                                     onKeyDown={handleDown(idx)}
                                     onChange={(e) => e.preventDefault()}
                                 />
-                                <InterimModal Component={Delete} btnClass={'reply-delete'} btnLabel='Delete' params={{ id: reply.id, itemName: 'reply' }} />
+                                <InterimModal Component={Delete} btnClass={'reply-delete'} isHidden={isHidden(reply.id)} btnLabel='Delete' params={{ id: reply.id, itemName: 'reply' }} />
                             </div>
                         ) : (
                             <p>{reply.reply}</p>

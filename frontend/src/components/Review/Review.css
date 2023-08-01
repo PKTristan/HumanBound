@@ -1,0 +1,36 @@
+/* Styling for the textareas in their default state (no hover or focus) */
+.editReview,
+.editReply {
+    border: none;
+    /* Remove the default textarea border */
+    resize: none;
+    /* Disable textarea resizing */
+    background-color: transparent;
+    /* Make the background transparent */
+    font-size: 16px;
+    /* Set the desired font size */
+    padding: 0;
+    /* Remove any padding to avoid extra spacing */
+}
+
+/* Styling for the textareas when hovered */
+.editReview:hover,
+.editReply:hover {
+    border: 1px solid #ccc;
+    /* Add a border when hovered */
+    background-color: #f5f5f5;
+    /* Add a light background color when hovered */
+}
+
+/* Styling for the textareas when in focus */
+.editReview:focus,
+.editReply:focus {
+    border: 1px solid #5c9ce6;
+    /* Add a border when in focus */
+    background-color: #fff;
+    /* Change the background color when in focus */
+    outline: none;
+    /* Remove the default focus outline */
+    box-shadow: 0 0 5px #5c9ce6;
+    /* Add a subtle box shadow when in focus */
+}

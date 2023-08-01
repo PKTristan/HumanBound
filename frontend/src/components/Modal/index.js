@@ -28,7 +28,7 @@ const InterimModal = ({ Component, btnLabel, btnClass, isHidden, onClose=null, s
 
     return (
         <>
-            <button className={btnClass || 'open-modal'} hidden={isHidden} onClick={handleOpen}>{btnLabel || 'Open Modal'}</button>
+            <button className={btnClass || 'open-modal'} hidden={isHidden || false} onClick={handleOpen}>{btnLabel || 'Open Modal'}</button>
 
             <Modal isOpen={isOpen} className="modal" style={style}>
                 <button className="exit-modal" onClick={handleClose} >X</button>
