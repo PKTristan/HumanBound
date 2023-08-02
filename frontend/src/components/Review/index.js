@@ -31,16 +31,8 @@ const Review = () => {
     const [elementFocused, setElementFocused] = useState(null);
 
 
-    useEffect(() => {
-        replyTextareaRefs.current = new Array(replies.length)
-            .fill(null)
-            .map(() => React.createRef());
-    }, [replies]);
-
-
     const handleDown = (idx) => (e) => {
         let mutArr = Array.from(replies);
-        console.log(e)
 
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -55,34 +47,14 @@ const Review = () => {
             }
             else {
                 if (idx !== null) {
+                    if (mutArr[idx].reply.length > 9) replyTextareaRefs.current[idx].current.blur();
                     dispatch(replyActions.editReply(mutArr[idx].id, mutArr[idx].reply));
-                    replyTextareaRefs.current[idx].current.blur();
                 }
                 else {
+                    if (newReply.length > 9) newReplyTextareaRef.current.blur();
                     dispatch(replyActions.createReply(newReply, review.id));
                     setNewReply('');
-                    newReplyTextareaRef.current.blur();
                 }
-            }
-        }
-        else if (e.key === 'Backspace') {
-            e.preventDefault();
-            if (idx !== null) {
-                mutArr[idx].reply = mutArr[idx].reply.slice(0, -1);
-                setReplies(mutArr);
-            }
-            else {
-                setNewReply(newReply.slice(0, -1));
-            }
-        }
-        else if (e.key.length === 1) {
-            e.preventDefault();
-            if (idx !== null) {
-                mutArr[idx].reply = mutArr[idx].reply + e.key;
-                setReplies(mutArr);
-            }
-            else {
-                setNewReply(`${newReply}${e.key}`);
             }
         }
     }
@@ -94,9 +66,9 @@ const Review = () => {
                 setEditReview(`${editReview}\n`);
             }
             else {
+                if (editReview.length > 9) reviewTextareaRef.current.blur();
                 dispatch(reviewActions.updateReview({id: review.id, review: editReview}));
                 dispatch(reviewActions.clearErr());
-                reviewTextareaRef.current.blur();
             }
         }
         else if (e.key === 'Backspace') {
@@ -127,6 +99,9 @@ const Review = () => {
         if (review && review.Replies) {
             setReplies(review.Replies);
             setEditReview(review.review);
+            replyTextareaRefs.current = new Array(review.Replies.length)
+                .fill(null)
+                .map(() => React.createRef());
         }
     }, [review, setReplies]);
 
@@ -156,6 +131,26 @@ const Review = () => {
     };
 
     const clearReplyErr = () => dispatch(replyActions.clearErr());
+    const resetEdit = (e) => {
+        if (review && review.Replies) {
+            setReplies(review.Replies);
+            setEditReview(review.review);
+        }
+    };
+
+    const handleChange = (idx) => (e) => {
+        e.preventDefault();
+
+        if (idx !== null) {
+            let mutArr = Array.from(replies);
+            mutArr[idx].reply = e.target.value;
+
+            setReplies(mutArr);
+        }
+        else {
+            setNewReply(e.target.value);
+        }
+    }
 
 
     return (
@@ -181,6 +176,7 @@ const Review = () => {
                                 reviewErr ? (<li>{reviewErr}</li>) : null
                             }
                             <textarea
+                                onBlur={resetEdit}
                                 ref={reviewTextareaRef}
                                 className={'editReview'}
                                 value={editReview}
@@ -198,7 +194,7 @@ const Review = () => {
                         placeholder='Add a reply. (Press enter to update, and shift + enter to add new line.)'
                         value={newReply}
                         onKeyDown={handleDown(null)}
-                        onChange={(e) => e.preventDefault()}
+                        onChange={handleChange(null)}
                     />
                 </div>
             )}
@@ -211,11 +207,12 @@ const Review = () => {
                         {(user && (user.id === reply.userId || user.admin)) ? (
                             <div className='reply-edit'>
                                 <textarea
+                                    onBlur={resetEdit}
                                     ref={replyTextareaRefs.current[idx]}
                                     className={'editReply'}
                                     value={reply.reply}
                                     onKeyDown={handleDown(idx)}
-                                    onChange={(e) => e.preventDefault()}
+                                    onChange={handleChange(idx)}
                                 />
                                 <InterimModal Component={Delete} btnClass={'reply-delete'} isHidden={isHidden(reply.id)} btnLabel='Delete' params={{ id: reply.id, itemName: 'reply' }} />
                             </div>
