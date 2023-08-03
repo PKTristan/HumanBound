@@ -17,6 +17,7 @@ const BookDetails = () => {
     const user = useSelector(userActions.selUser);
     const reviewErr = useSelector(reviewActions.selErr);
     const reviewDet = useSelector(reviewActions.selReview);
+    const bookMsg = useSelector(bookActions.selMsg);
 
     const [isModal, setIsModal] = useState(false);
     const [appMessage, setAppMessage] = useState('');
@@ -70,6 +71,13 @@ const BookDetails = () => {
     useEffect(() => {
         return () => dispatch(reviewActions.clearErr());
     }, []);
+
+    useEffect(() => {
+        if (bookMsg && bookMsg.deleted) {
+            dispatch(bookActions.clearMsg());
+            history.push('/books');
+        }
+    }, [bookMsg]);
 
     const clearAppMsg = () => setAppMessage('');
 

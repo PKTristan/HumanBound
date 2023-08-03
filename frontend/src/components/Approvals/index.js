@@ -47,6 +47,7 @@ const Approvals = ({ params: { ref } }) => {
             dispatch(approvalActions.approve(approval.id));
         }
 
+        dispatch(bookActions.getBooks({}));
         dispatch(approvalActions.getApprovals());
     }
 
@@ -132,13 +133,17 @@ const Approvals = ({ params: { ref } }) => {
                                     <img className="approval-img" src={difference.thumbnails.appThumbnail} alt="thumbnail" />
                                     <h5> -{'>'} </h5>
                                     <img className="approval-img" src={difference.thumbnails.bookThumbnail} alt="thumbnail" />
-                                </div>) : null}
+                                </div>) : (<div className='app-images'>
+                                    <img className="approval-img" src={approval.Book.thumbnail} alt="thumbnail" />
+                                </div>)}
 
                                 {(difference.titles) ? (<div className="app-titles">
                                     <h4>Title: {difference.titles.bookTitle}</h4>
                                     <h5> -{'>'} </h5>
                                     <h4>{difference.titles.appTitle}</h4>
-                                </div>) : null}
+                                </div>) : (<div className="app-titles">
+                                    <h4>Title: {approval.Book.title}</h4>
+                                </div>) }
 
                                 {(difference.subtitles) ? (<div className="app-subtitles">
                                     <h5>Subtitle: {difference.subtitles.bookSubtitle + ' -> ' + difference.subtitles.appSubtitle}</h5>
@@ -198,13 +203,17 @@ const Approvals = ({ params: { ref } }) => {
                                     <img className="approval-img" src={difference.thumbnails.appThumbnail} alt="thumbnail" />
                                     <h5> -{'>'} </h5>
                                     <img className="approval-img" src={difference.thumbnails.bookThumbnail} alt="thumbnail" />
-                                </div>) : null}
+                                </div>) : (<div className='app-images'>
+                                    <img className="approval-img" src={approval.Book.thumbnail} alt="thumbnail" />
+                                </div>)}
 
                                 {(difference.titles) ? (<div className="app-titles">
                                     <h4>Title: {difference.titles.bookTitle}</h4>
-                                    <h5>-{'>'}</h5>
+                                    <h5> -{'>'} </h5>
                                     <h4>{difference.titles.appTitle}</h4>
-                                </div>) : null}
+                                </div>) : (<div className="app-titles">
+                                    <h4>Title: {approval.Book.title}</h4>
+                                </div>)}
 
                                 {(difference.subtitles) ? (<div className="app-subtitles">
                                     <h5>Subtitle: {difference.subtitles.bookSubtitle + ' -> ' + difference.subtitles.appSubtitle}</h5>
