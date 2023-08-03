@@ -55,7 +55,7 @@ const NavBar = () => {
         <div className="navbar">
 
             <div className="navbar-buttons" >
-                <button type='button' className='navbar-btn' onClick={icon} title="Home"><i className="fa-solid fa-house" /></button>
+                <button type='button' className='navbar-btn' onClick={() => { history.push('/'); }} title="Home"><i className="fa-solid fa-house" /></button>
                 <button type='button' className='navbar-btn' onClick={handleBooks} title="Books"><i className="fa-solid fa-book" /></button>
             </div>
 
