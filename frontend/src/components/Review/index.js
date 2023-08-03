@@ -158,7 +158,9 @@ const Review = () => {
             {
                 (replyErr) ? (
                     <InterimModal
-                        Component={() => (<li>{replyErr}</li>)}
+                        Component={() => (<ul>{
+                            replyErr.map(err => <li>{(err === 'Authentication required') ? 'Please log in or sign up.' : err}</li>)}
+                            </ul>)}
                         isHidden={true}
                         setOpen={true}
                         onClose={[clearReplyErr]}

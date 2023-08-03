@@ -8,7 +8,7 @@ import * as reviewActions from "../../store/review";
 import * as replyActions from "../../store/reply";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { isValidUrl } from "../BookForm";
+import { isValidUrl } from "../../helpers";
 
 
 const Delete = ({ params: { itemName, id, setAppMessage, setBookMessage }, setIsOpen }) => {
@@ -100,9 +100,10 @@ const Delete = ({ params: { itemName, id, setAppMessage, setBookMessage }, setIs
     }, [bookErr, appErr, reviewErr, replyErr, setErrors]);
 
     useEffect(() => {
-        if (bookMsg && bookMsg.length) {
+        if (bookMsg && bookMsg.deleted) {
             setIsOpen(false);
             dispatch(bookActions.clearMsg());
+            history.push('/books');
         }
 
         if (appMsg && appMsg.length) {
