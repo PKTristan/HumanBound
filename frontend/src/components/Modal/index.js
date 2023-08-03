@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import { useState } from "react";
 import './Modal.css';
 
-const InterimModal = ({ Component, btnLabel, btnClass, isHidden, onClose=null, setOpen=false, params }) => {
+const InterimModal = ({ Component, btnLabel, btnClass, btnTitle, isHidden, onClose=null, setOpen=false, params }) => {
     const [isOpen, setIsOpen] = useState(setOpen);
 
     const handleOpen = (e) => {
@@ -28,7 +28,7 @@ const InterimModal = ({ Component, btnLabel, btnClass, isHidden, onClose=null, s
 
     return (
         <>
-            <button className={btnClass || 'open-modal'} hidden={isHidden} onClick={handleOpen}>{btnLabel || 'Open Modal'}</button>
+            <button className={btnClass || 'open-modal'} hidden={isHidden || false} onClick={handleOpen} title={btnTitle || 'Open Modal'}>{btnLabel || 'Open Modal'}</button>
 
             <Modal isOpen={isOpen} className="modal" style={style}>
                 <button className="exit-modal" onClick={handleClose} >X</button>

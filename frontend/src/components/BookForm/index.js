@@ -1,20 +1,21 @@
 //Book form
 
 import { useState, useEffect} from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import * as approvalActions from '../../store/approval';
 import * as bookActions from '../../store/book';
 import * as userActions from '../../store/user';
-
-export { isValidUrl } from '../../helpers';
+import { isValidUrl } from '../../helpers';
+import './BookForm.css';
 
 
 const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen}) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const user = useSelector(userActions.selUser);
+    const bookMsg = useSelector(bookActions.selMsg);
     const book = useSelector(bookActions.selBook);
+    const user = useSelector(userActions.selUser);
     const appErr = useSelector(approvalActions.selErr);
     const bookErr = useSelector(bookActions.selErr);
     const appMsg = useSelector(approvalActions.selMsg);
@@ -63,7 +64,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
 
         if (isEdit) {
             if (user.admin) {
-                dispatch(bookActions.editBook({newBook, id: book.id}));
+                dispatch(bookActions.editBook({book: newBook, id: book.id}));
             }
             else {
                 newBook.reason = 'EDIT' + reason;
@@ -144,6 +145,10 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
     }
 
     const searchBook = async () => {
+        if (isEdit){
+            return false;
+        }
+
         const noCommas = authors.split(',').join('+');
         const authWithPlus = noCommas.split(' ').join('+');
         const titleWithPlus = title.split(' ').join('+');
@@ -189,15 +194,11 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         //set authors
         if (Array.isArray(bookAuthors))
             setAuthors(bookAuthors.join(', '));
-        else
-            console.log(bookAuthors);
+
 
         //set publish year
         if (typeof bookPublishYear === 'string') {
             setPublishYear(bookPublishYear.substring(0, 4));
-        }
-        else {
-            console.log(bookPublishYear);
         }
 
 
@@ -229,11 +230,13 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
     }, [bookErr, appErr, setErrors]);
 
     useEffect(() => {
-        if (book) {
-            const {id} = book;
+        if (bookMsg) {
+            const id = bookMsg;
+            setIsOpen(false);
             history.push(`/books/${id}`);
+            dispatch(bookActions.clearMsg());
         }
-    }, [book]);
+    }, [bookMsg]);
 
     useEffect(() => {
         if (appMsg) {
@@ -259,12 +262,12 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
                 <input type='number' className='publishYear' placeholder='Publish Year' onChange={handleChange} value={publishYear} />
                 <textarea className='synopsis' placeholder='Synopsis' onChange={handleChange} value={synopsis} />
                 {
-                    (isEdit) &&
+                    (isEdit && !user.admin) &&
                     (<input type='text' className='reason' placeholder='Reason for Change' onChange={handleChange} value={reason} />)
                 }
                 <button type='submit' className='submit-btn'>Submit</button>
 
-                {(googleBooks.length > 0) &&
+                {(googleBooks.length > 0 && !isEdit) &&
                     (
                         <div className='google-books'>
                             {googleBooks.map(book => (

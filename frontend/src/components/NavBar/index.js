@@ -54,13 +54,14 @@ const NavBar = () => {
     return (
         <div className="navbar">
 
-            <div className="navbar-btn" >
-                <button type='button' className='navbar-btn' onClick={handleBooks}><i className="fa-solid fa-book" /></button>
+            <div className="navbar-buttons" >
+                <button type='button' className='navbar-btn' onClick={icon} title="Home"><i className="fa-solid fa-house" /></button>
+                <button type='button' className='navbar-btn' onClick={handleBooks} title="Books"><i className="fa-solid fa-book" /></button>
             </div>
 
             <div className="prof-btn" ref={ref}>
-                <button type="button" className='prof-btn' onClick={icon}>
-                    <i className="fa-solid fa-user" />
+                <button type="button" className='prof-btn' onClick={icon} title='Profile Button'>
+                    <i className="fa-solid fa-bars" />
                 </button>
                 {dropdown &&
                     <div className='prof-dropdown'>
@@ -70,10 +71,10 @@ const NavBar = () => {
                             <p>{currUser.email}</p>
 
                             {(currUser && currUser.admin) ?
-                                (<InterimModal Component={Approvals} btnLabel={'Approvals'} btnClass={'navbar-btn'} params={{ ref }} />) : null
+                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={'Approvals'} btnClass={'navbar-btn'} params={{ ref }} />) : null
                             }
-                            <InterimModal Component={BookForm} btnLabel={'Add Book'} btnClass={'navbar=btn'} params={{ ref, isEdit: false }} />
-                            <InterimModal Component={Logout} btnLabel={"Logout"} btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar=btn'} params={{ ref, isEdit: false }} />
+                            <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
                         </>
                         )}
 
@@ -81,8 +82,8 @@ const NavBar = () => {
                             <p>Welcome!</p>
                             <p>Please sign up or login</p>
 
-                            <InterimModal Component={LoginForm} btnLabel="Login" btnClass='navbar-btn' params={{ ref }} />
-                            <InterimModal Component={SignupForm} btnLabel='Sign Up' btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={LoginForm} btnTitle='Login' btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={SignupForm} btnTitle="Sign up" btnLabel={(<i className="fa-solid fa-user-plus" />)} btnClass='navbar-btn' params={{ ref }} />
                         </>)}
 
                     </div>}

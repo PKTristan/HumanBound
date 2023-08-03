@@ -18,7 +18,7 @@ const loadErr = (err) => ({
     err
 });
 
-const clearErr = () => ({ type: CLEAR_ERR });
+export const clearErr = () => ({ type: CLEAR_ERR });
 
 
 export const createReply = (reply, reviewId) => async (dispatch) => {

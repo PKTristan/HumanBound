@@ -1,0 +1,6 @@
+.google-books {
+    margin-top: 20px;
+    overflow: scroll;
+    max-height: 400px;
+    border: 10px solid #f7a4f0;
+}

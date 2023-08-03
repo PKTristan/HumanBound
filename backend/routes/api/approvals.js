@@ -13,7 +13,7 @@ const validateApproval = [
         .exists({ checkFalsy: true })
         .isString()
         .isLength({ min: 1, max: 50 })
-        .withMessage('Please provide a title.'),
+        .withMessage('Please provide a title of max 50 characters.'),
     check('authors')
         .exists({ checkFalsy: true })
         .custom(value => Array.isArray(value) && value.length > 0)

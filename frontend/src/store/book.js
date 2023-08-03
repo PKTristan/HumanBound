@@ -114,8 +114,7 @@ export const createBook = (book) => async (dispatch) => {
     if (response && response.ok) {
         const data = await response.json();
         dispatch(clearErr());
-        dispatch(clearMsg());
-        dispatch(loadBook(data.book));
+        dispatch(loadMsg(data.book.id));
     }
 
     return response;
@@ -138,6 +137,7 @@ export const editBook = ({book, id}) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
+        dispatch(loadMsg(id));
         dispatch(getBook(id));
     }
 

@@ -7,7 +7,6 @@ import * as reviewActions from "../../store/review";
 import InterimModal from "../Modal";
 import BookForm from "../BookForm";
 import Delete from "../Delete";
-import Review from "../Review";
 
 
 const BookDetails = () => {
@@ -18,6 +17,7 @@ const BookDetails = () => {
     const user = useSelector(userActions.selUser);
     const reviewErr = useSelector(reviewActions.selErr);
     const reviewDet = useSelector(reviewActions.selReview);
+    const bookMsg = useSelector(bookActions.selMsg);
 
     const [isModal, setIsModal] = useState(false);
     const [appMessage, setAppMessage] = useState('');
@@ -60,11 +60,6 @@ const BookDetails = () => {
         }
     }, [dispatch, id]);
 
-    useEffect(() => {
-        if (reviewErr && reviewErr.length) {
-            alert(reviewErr);
-        }
-    }, [reviewErr]);
 
     useEffect(() => {
         if (reviewDet) {
@@ -72,6 +67,17 @@ const BookDetails = () => {
             dispatch(reviewActions.clearReview());
         }
     }, [reviewDet]);
+
+    useEffect(() => {
+        return () => dispatch(reviewActions.clearErr());
+    }, []);
+
+    useEffect(() => {
+        if (bookMsg && bookMsg.deleted) {
+            dispatch(bookActions.clearMsg());
+            history.push('/books');
+        }
+    }, [bookMsg]);
 
     const clearAppMsg = () => setAppMessage('');
 
@@ -85,7 +91,7 @@ const BookDetails = () => {
                         <>
                             <div className="interim-modal" onMouseEnter={() => setIsModal(true)} onMouseLeave={() => setIsModal(false)}>
                                 <InterimModal Component={BookForm} btnClass={'btn-details'} btnLabel={'Edit'} params={{ ref: null, isEdit: true, book, setAppMessage }} />
-                                <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book' }} />
+                                <InterimModal Component={Delete} btnClass={'btn-details'} btnLabel={'Delete'} params={{ id: book.id, itemName: 'book', setAppMessage }} />
                                 {(appMessage && appMessage.length) && <InterimModal Component={() => (<h3>{appMessage}</h3>)} isHidden={true} setOpen={true} onClose={[clearAppMsg]} />}
                             </div>
                         </>
@@ -110,15 +116,22 @@ const BookDetails = () => {
                 </div>
                 <div className="reviews">
                     <h3>Reviews:</h3>
-                    <div className="write-review">
-                        <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
-                    </div>
-                    {book.Reviews.map(review => (
+                    {
+                        user ? (
+                            <div className="write-review">
+                                {reviewErr ? (
+                                    <li>{reviewErr}</li>
+                                ) : null}
+                                <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
+                            </div>
+                        ) : null
+                    }
+                    {(book.Reviews.length > 0) ? book.Reviews.map(review => (
                         <div key={review.id} className="review" onClick={handleViewReview(review.id)}>
                             <h5>@{review.User.username}</h5>
                             <p>{review.review}</p>
                         </div>
-                    ))}
+                    )) : (<p>{(user) ? `Be the first to review ${book.title}!` : `Sign up or log in to be the first to review ${book.title}!` }</p>)}
                 </div>
             </div>
         </div>

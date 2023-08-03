@@ -8,10 +8,10 @@ import * as reviewActions from "../../store/review";
 import * as replyActions from "../../store/reply";
 import { useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { isValidUrl } from "../BookForm";
+import { isValidUrl } from "../../helpers";
 
 
-const Delete = ({ params: { itemName, id }, setIsOpen }) => {
+const Delete = ({ params: { itemName, id, setAppMessage, setBookMessage }, setIsOpen }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const bookErr = useSelector(bookActions.selErr);
@@ -35,14 +35,20 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
             let mutBook = book ? {
                 bookId: book.id,
                 title: book.title,
-                subtitle: book.subtitle,
                 authors: book.authors,
                 publishYear: book.publishYear,
                 pageCount: book.pageCount,
                 synopsis: book.synopsis,
-                thumbnail: book.thumbnail,
                 reason: 'DELETE' + reason
             } : {};
+
+            if (book.thumbnail && isValidUrl(book.thumbnail)) {
+                mutBook.thumbnail = book.thumbnail;
+            }
+
+            if (book.subtitle) {
+                mutBook.subtitle = book.subtitle;
+            }
 
             if (book.pdfLink && isValidUrl(book.pdfLink)) {
                 mutBook.pdfLink = book.pdfLink;
@@ -94,27 +100,25 @@ const Delete = ({ params: { itemName, id }, setIsOpen }) => {
     }, [bookErr, appErr, reviewErr, replyErr, setErrors]);
 
     useEffect(() => {
-        if (bookMsg && bookMsg.length) {
+        if (bookMsg && bookMsg.deleted) {
             setIsOpen(false);
-            alert(bookMsg);
             dispatch(bookActions.clearMsg());
+            history.push('/books');
         }
 
         if (appMsg && appMsg.length) {
             setIsOpen(false);
-            alert(appMsg);
+            setAppMessage(appMsg);
             dispatch(approvalActions.clearMsg());
         }
 
         if (reviewMsg && reviewMsg.length && (reviewMsg !== 'No review found')) {
             setIsOpen(false);
             dispatch(reviewActions.clearMsg());
-            alert(reviewMsg);
         }
 
         if (replyMsg && replyMsg.length) {
             setIsOpen(false);
-            alert(replyMsg);
             dispatch(replyActions.clearMsg());
         }
     }, [bookMsg, appMsg, reviewMsg, replyMsg, history]);
