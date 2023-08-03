@@ -1,6 +1,7 @@
 
 .app {
     display: flex;
+    max-height: 98.55vh;
 }
 
 .navbar {
@@ -9,10 +10,11 @@
     justify-content: space-between;
     flex: 0 0 auto;
     width: auto;
-    height: 98vh;
+    height: 98.55vh;
     /* Adjust the width of the navbar as needed */
     background-color: #f7a4f0;
     padding: 10px;
+    position: relative;
 }
 
 .content {
@@ -27,4 +29,8 @@ body,
     width: 100%;
     margin: 0;
     padding: 0;
+}
+
+i {
+    color: #8b0280;
 }
