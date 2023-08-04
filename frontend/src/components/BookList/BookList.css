@@ -1,0 +1,10 @@
+.books-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.books-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
