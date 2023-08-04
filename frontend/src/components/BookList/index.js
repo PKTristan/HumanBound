@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as bookActions from "../../store/book";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import './BookList.css';
 
 const BookList = () => {
     const dispatch = useDispatch();
@@ -57,10 +58,11 @@ const BookList = () => {
 
 
     return (
-        <div className="book-list" >
+        <div className="books-page" >
             <input type='text' className='title' placeholder="Search by title" onChange={handleChange} value={title} />
             <input type='text' className='author' placeholder="Search by author" onChange={handleChange} value={author} />
 
+            <div className='books-list' >
             {books.length > 0 ? books.map(book => (
                 <div className="book-card" onClick={handleClick(book.id)} key={book.id}>
                     <img src={book.thumbnail} alt={book.title} />
@@ -68,7 +70,8 @@ const BookList = () => {
                     <p className="book-author">{book.authors}</p>
                     <p className="book-description">{book.synopsis}</p>
                 </div>
-            )) : null}
+            )) : <h1>Hmm, it seems we ran out of books...</h1>}
+            </div>
         </div>
     )
 }
