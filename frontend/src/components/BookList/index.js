@@ -51,8 +51,10 @@ const BookList = () => {
 
     return (
         <div className="books-page" >
-            <input type='text' className='title' placeholder="Search by title" onChange={handleChange} value={title} />
-            <input type='text' className='author' placeholder="Search by author" onChange={handleChange} value={author} />
+            <h1>HumanBound Library</h1>
+
+            <input type='text' className='search title' placeholder="Search by title" onChange={handleChange} value={title} />
+            <input type='text' className='search author' placeholder="Search by author" onChange={handleChange} value={author} />
 
             <BookCard books={books} />
         </div>
