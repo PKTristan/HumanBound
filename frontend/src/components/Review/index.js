@@ -93,6 +93,11 @@ const Review = () => {
             dispatch(reviewActions.clearMsg());
             history.goBack();
         }
+
+        if (reviewMsg && reviewMsg.update === 'successfully updated') {
+            dispatch(reviewActions.clearMsg());
+            dispatch(reviewActions.getReview(id));
+        }
     }, [reviewErr, history, reviewMsg]);
 
     useEffect(() => {

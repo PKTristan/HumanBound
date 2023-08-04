@@ -33,7 +33,7 @@ const Approvals = ({ params: { ref } }) => {
                 authors: ((difference.authors) ? approval.authors : approval.Book.authors),
                 publishYear: ((difference.publishYears) ? approval.publishYear : approval.Book.publishYear),
                 pageCount: ((difference.pageCounts) ? approval.pageCount : approval.Book.pageCount),
-                synopsis: ((difference.synopsys) ? approval.synopsis : approval.Book.synopsis),
+                synopsis: ((difference.synopsis) ? approval.synopsis : approval.Book.synopsis),
                 pdfLink: ((difference.pdfLinks) ? approval.pdfLink : approval.Book.pdfLink),
                 thumbnail: ((difference.thumbnails) ? approval.thumbnail : approval.Book.thumbnail),
             };
