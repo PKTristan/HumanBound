@@ -16,7 +16,7 @@ import { setDefaultProfImg } from "../../helpers";
 
 const NavBar = () => {
     const history = useHistory();
-    const ref = useRef();
+    const ref = useRef(null);
     const currUser = useSelector(userActions.selUser);
 
 
