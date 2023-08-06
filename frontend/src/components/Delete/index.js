@@ -39,7 +39,7 @@ const Delete = ({ params: { itemName, id, setAppMessage, setBookMessage }, setIs
                 publishYear: book.publishYear,
                 pageCount: book.pageCount,
                 synopsis: book.synopsis,
-                reason: 'DELETE' + reason
+                reason: 'DELETE ' + reason
             } : {};
 
             if (book.thumbnail && isValidUrl(book.thumbnail)) {

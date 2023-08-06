@@ -40,16 +40,6 @@ p {
     border: 2px solid #8b0280;
 }
 
-.exit-modal {
-    position: absolute;
-    top: 0.75;
-    left: 0.75rem;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    color: rgb(112 112 112/1);
-    cursor: pointer;
-    border: 0;
-}
 
 .modal input {
     display: block;
@@ -75,6 +65,7 @@ p {
     border-radius: 5px;
     border: none;
     resize: none;
+    overflow-y: scroll;
 }
 
 .modal input::placeholder {
@@ -92,4 +83,26 @@ p {
 ul {
     padding-left: 0;
     margin: 2px 0px;
+}
+
+
+.exit-modal {
+    position: absolute;
+    top: 0px;
+    left: 5px;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    color: rgb(112 112 112/1);
+    cursor: pointer;
+    border: 0;
+}
+
+.app-buttons button {
+    color: #fad0f6;
+    background-color: #8b0280;
+    margin: 5px;
+}
+
+.app-buttons button:hover {
+    color: #8b0280;
 }
