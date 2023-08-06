@@ -110,6 +110,7 @@ const BookDetails = () => {
 
             <div className='book-details'>
                 <div className="top-half" >
+                    <div className='style1'><div className="style2"><div className="style3"></div></div></div>
                     <div className="thumbnail"><img src={book.thumbnail} alt={book.title} onError={setDefaultImg} /></div>
                     <div className="details" >
                         <h1>{book.title}</h1>
@@ -118,6 +119,7 @@ const BookDetails = () => {
                         <p>published in {book.publishYear}</p>
                         <p>{book.pageCount} pages</p>
                     </div>
+                    <div className='style1'><div className="style2"><div className="style3"></div></div></div>
                 </div>
                 <div className="bottom-half">
                     <div className="synopsis">

@@ -6,6 +6,13 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
+img,
+div,
+textarea,
+input {
+    border-radius: 5px;
+}
+
 .navbar {
     display: flex;
     flex-direction: column;
@@ -17,6 +24,8 @@
     background-color: #f7a4f0;
     padding: 0px 10px;
     position: relative;
+
+    border-radius: 0;
 }
 
 
@@ -33,6 +42,7 @@ body,
 i {
     color: #8b0280;
 }
+
 
 .user {
     display: flex;
