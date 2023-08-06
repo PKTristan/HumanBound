@@ -47,6 +47,12 @@ const BookDetails = () => {
         }
     }
 
+    useEffect(() => {
+        if (review.length > 9) {
+            dispatch(reviewActions.clearErr());
+        }
+    })
+
     const handleViewReview = (id) => (e) => {
         e.preventDefault();
         history.push(`/reviews/${id}`);
