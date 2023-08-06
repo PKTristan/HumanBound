@@ -32,7 +32,7 @@ const loadMsg = (msg) => ({
     msg
 });
 
-const clearErr = () => ({ type: CLEAR_ERR });
+export const clearErr = () => ({ type: CLEAR_ERR });
 
 export const clearBooks = () => ({ type: CLEAR_BOOKS });
 

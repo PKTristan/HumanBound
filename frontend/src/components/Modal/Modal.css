@@ -18,11 +18,21 @@
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
+    max-height: 90vh;
+    overflow-y: scroll;
+}
+
+.modal::-webkit-scrollbar {
+    width: 1px;
 }
 
 .modal h1,
 p {
     text-align: center;
+}
+
+.modal h1 {
+    margin-bottom: 5px;
 }
 
 .modal button {
@@ -60,12 +70,12 @@ p {
     padding: 0px;
     margin: 0px;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background-color: #c2eaea;
     border-radius: 5px;
     border: none;
     resize: none;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .modal input::placeholder {

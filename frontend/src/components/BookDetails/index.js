@@ -36,16 +36,13 @@ const BookDetails = () => {
                 setReview('');
             }
         }
-        else if (e.key === 'Backspace') {
-            e.preventDefault();
-            setReview(review.slice(0, -1));
-        }
-        else if (e.key.length === 1) {
-            e.preventDefault();
-
-            setReview(`${review}${e.key}`);
-        }
     }
+
+    useEffect(() => {
+        if (review.length > 9) {
+            dispatch(reviewActions.clearErr());
+        }
+    }, [review]);
 
     const handleViewReview = (id) => (e) => {
         e.preventDefault();
@@ -89,6 +86,12 @@ const BookDetails = () => {
     }
 
     const clearAppMsg = () => setAppMessage('');
+
+    const handleReviewChange = (e) => {
+        e.preventDefault();
+
+        setReview(e.target.value);
+    }
 
 
     return book ? (
@@ -134,7 +137,7 @@ const BookDetails = () => {
                                     {reviewErr ? (
                                         <li>{reviewErr}</li>
                                     ) : null}
-                                    <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
+                                    <textarea value={review} onChange={handleReviewChange} onKeyDown={handleDownReview} placeholder="Add a review." />
                                 </div>
                             ) : null
                         }

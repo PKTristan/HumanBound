@@ -5,7 +5,7 @@
 
 .navbar-btn,
 .prof-btn {
-    margin: 3px 0px;
+    margin: 8px 0px;
     border: none;
     padding: 5px;
     border-radius: 5px;
@@ -15,6 +15,9 @@
     background-color: #fad0f6;
 }
 
+.prof-btn {
+    margin-bottom: 15px;
+}
 
 .prof-dropdown {
     background-color: #f7a4f0;
@@ -46,4 +49,3 @@
     color:#fad0f6;
     background-color: #8b0280;
 }
-

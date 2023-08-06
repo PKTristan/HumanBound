@@ -66,7 +66,7 @@
 
 .style2 {
     flex: 1;
-    display:flex;
+    display: flex;
     margin: 40px;
     background-color: #f7a4f0;
 }
@@ -74,7 +74,7 @@
 .style3 {
     flex: 1;
     margin: 40px;
-    background-color:#fad0f6;
+    background-color: #fad0f6;
 }
 
 .thumbnail img {
@@ -106,14 +106,23 @@
 
 .synopsis {
     flex: 1;
+    display: flex;
+    flex-direction: column;
     margin: 20px;
-    overflow: hidden;
+    border: 1px solid #8b0280;
+    padding: 10px;
+}
+
+.synopsis p {
+    overflow-y: scroll;
 }
 
 .reviews {
     flex: 1;
     margin: 20px;
     overflow: hidden;
+    border: 1px solid #8b0280;
+    padding: 10px;
 }
 
 .write-review textarea {
@@ -140,12 +149,13 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 640px);
+    max-height: calc(100vh - 660px);
     overflow-y: scroll;
     border-radius: 5px;
 }
 
-.reviews-list::-webkit-scrollbar {
+.reviews-list::-webkit-scrollbar,
+.synopsis p::-webkit-scrollbar {
     width: 1px;
 }
 

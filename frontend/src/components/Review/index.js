@@ -33,12 +33,14 @@ const Review = () => {
 
     const handleDown = (idx) => (e) => {
         let mutArr = Array.from(replies);
+        let mutObj = Object.assign(mutArr[idx]);
 
         if (e.key === 'Enter') {
             e.preventDefault();
             if (e.shiftKey) {
                 if (idx !== null) {
-                    mutArr[idx].reply = mutArr[idx].reply + '\n';
+                    mutObj.reply = mutObj.reply + '\n';
+                    mutArr[idx] = mutObj
                     setReplies(mutArr);
                 }
                 else {
@@ -47,8 +49,8 @@ const Review = () => {
             }
             else {
                 if (idx !== null) {
-                    if (mutArr[idx].reply.length > 9) replyTextareaRefs.current[idx].current.blur();
-                    dispatch(replyActions.editReply(mutArr[idx].id, mutArr[idx].reply));
+                    if (mutObj.reply.length > 9) replyTextareaRefs.current[idx].current.blur();
+                    dispatch(replyActions.editReply(mutObj.id, mutObj.reply));
                 }
                 else {
                     if (newReply.length > 9) newReplyTextareaRef.current.blur();
@@ -71,16 +73,6 @@ const Review = () => {
                 dispatch(reviewActions.clearErr());
             }
         }
-        else if (e.key === 'Backspace') {
-            e.preventDefault();
-            setEditReview(editReview.slice(0, -1));
-        }
-        else if (e.key.length === 1) {
-            e.preventDefault();
-
-            setEditReview(`${editReview}${e.key}`);
-
-        }
     }
 
     useEffect(() => {
@@ -102,7 +94,8 @@ const Review = () => {
 
     useEffect(() => {
         if (review && review.Replies) {
-            setReplies(review.Replies);
+            let mutArr = Array.from(review.Replies);
+            setReplies(mutArr);
             setEditReview(review.review);
             replyTextareaRefs.current = new Array(review.Replies.length)
                 .fill(null)
@@ -136,11 +129,10 @@ const Review = () => {
     };
 
     const clearReplyErr = () => dispatch(replyActions.clearErr());
+
+
     const resetEdit = (e) => {
-        if (review && review.Replies) {
-            setReplies(review.Replies);
-            setEditReview(review.review);
-        }
+        dispatch(reviewActions.getReview(id));
     };
 
     const handleChange = (idx) => (e) => {
@@ -148,7 +140,9 @@ const Review = () => {
 
         if (idx !== null) {
             let mutArr = Array.from(replies);
-            mutArr[idx].reply = e.target.value;
+            let mutObj = Object.assign(mutArr[idx]);
+            mutObj.reply = e.target.value;
+            mutArr[idx] = mutObj;
 
             setReplies(mutArr);
         }
@@ -156,6 +150,18 @@ const Review = () => {
             setNewReply(e.target.value);
         }
     }
+
+    const handleRevChange = (e) => {
+        e.preventDefault();
+
+        setEditReview(e.target.value);
+    }
+
+    useEffect (() => {
+        if (editReview.length > 9) {
+            dispatch(reviewActions.clearErr());
+        }
+    }, [editReview]);
 
 
     return (
@@ -188,7 +194,7 @@ const Review = () => {
                                 className={'editReview'}
                                 value={editReview}
                                 onKeyDown={handleDownReview}
-                                onChange={(e) => e.preventDefault()}
+                                onChange={handleRevChange}
                             />
                             <InterimModal Component={Delete} btnClass={'review-delete'} isHidden={isHidden(review.id * -1)} btnLabel='Delete' params={{ id: review.id, itemName: 'review' }} />
                         </div>
