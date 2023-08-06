@@ -9,7 +9,8 @@
 img,
 div,
 textarea,
-input {
+input,
+button {
     border-radius: 5px;
 }
 
@@ -28,6 +29,11 @@ input {
     border-radius: 0;
 }
 
+
+ul {
+    list-style: none;
+    color: red;
+}
 
 
 html,
