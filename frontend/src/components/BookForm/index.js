@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as approvalActions from '../../store/approval';
 import * as bookActions from '../../store/book';
 import * as userActions from '../../store/user';
-import { isValidUrl } from '../../helpers';
+import { isValidUrl, setDefaultImg } from '../../helpers';
 import './BookForm.css';
 
 
@@ -271,10 +271,11 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
                     (
                         <div className='google-books'>
                             {googleBooks.map(book => (
-                                <div key={book.id} onClick={handleClick(book)}>
-                                    <img src={book.volumeInfo.imageLinks && ((book.volumeInfo.imageLinks.smallThumbnail) || (book.volumeInfo.imageLinks.thumbnail))} alt="book" />
-                                    <h5>{book.volumeInfo.title}</h5>
-                                    <p>{(Array.isArray(book.volumeInfo.authors)) ? book.volumeInfo.authors.join(', ') : book.volumeInfo.authors}</p>
+                                <div className='google-book' key={book.id} onClick={handleClick(book)}>
+                                    <img src={book.volumeInfo.imageLinks && ((book.volumeInfo.imageLinks.smallThumbnail) || (book.volumeInfo.imageLinks.thumbnail))} alt="book" onError={setDefaultImg} />
+                                    <h4 className='google-book-title' >{book.volumeInfo.title}</h4>
+                                    <p className='google-book-author' >{(Array.isArray(book.volumeInfo.authors)) ? book.volumeInfo.authors.join(', ') : (book.volumeInfo.authors) ? book.volumeInfo.authors : 'No authors found.'}</p>
+                                    <p className='google-book-description' >{(book.volumeInfo.description) ? book.volumeInfo.description : 'No description found.'}</p>
                                 </div>
                             ))}
                         </div>
