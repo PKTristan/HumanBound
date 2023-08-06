@@ -65,6 +65,7 @@ p {
     border-radius: 5px;
     border: none;
     resize: none;
+    overflow-y: scroll;
 }
 
 .modal input::placeholder {

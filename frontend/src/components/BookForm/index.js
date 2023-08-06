@@ -153,7 +153,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         const authWithPlus = noCommas.split(' ').join('+');
         const titleWithPlus = title.split(' ').join('+');
 
-        const googlyBookys = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${titleWithPlus}+inauthor:${authWithPlus}`);
+        const googlyBookys = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${titleWithPlus}+inauthor:${authWithPlus}&key=AIzaSyC9LTmu46eFT70VA15ezrGO5yi93Zg6o4I`);
 
         const data = await googlyBookys.json();
 
