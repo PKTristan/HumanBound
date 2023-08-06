@@ -29,9 +29,11 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
     const [publishYear, setPublishYear] = useState(info ? info.publishYear : 1000);
     const [synopsis, setSynopsis] = useState(info ? info.synopsis : '');
     const [reason, setReason] = useState('');
+    const [startIndex, setStartIndex] = useState(0);
     const [googleBooks, setGoogleBooks] = useState([]);
     const [errors, setErrors] = useState([]);
 
+    const maxResults = 40;
 
 
     const handleSubmit =(e) => {
@@ -88,6 +90,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         switch(className) {
             case "title":
                 setTitle(value);
+                setStartIndex(0);
                 searchBook();
 
                 if (value.length > 50) {
@@ -101,6 +104,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
 
             case "authors":
                 setAuthors(value);
+                setStartIndex(0);
                 searchBook();
 
                 if (value.length) {
@@ -153,7 +157,8 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         const authWithPlus = noCommas.split(' ').join('+');
         const titleWithPlus = title.split(' ').join('+');
 
-        const googlyBookys = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${titleWithPlus}+inauthor:${authWithPlus}&key=AIzaSyC9LTmu46eFT70VA15ezrGO5yi93Zg6o4I`);
+        const googlyBookys = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${titleWithPlus}+inauthor:${authWithPlus}
+                                            &startIndex=${startIndex}&maxResults=${maxResults}&key=AIzaSyC9LTmu46eFT70VA15ezrGO5yi93Zg6o4I`);
 
         const data = await googlyBookys.json();
 
@@ -246,11 +251,33 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         }
     }, [appMsg]);
 
+    const handleGNavButton = (e) => {
+        e.preventDefault();
+
+        const button = e.target.className.slice(6);
+
+
+        if (button === 'prev') {
+            let num = startIndex - maxResults;
+
+            if (num < 0) {
+                num = 0;
+            }
+
+            setStartIndex(num);
+        }
+        else if (button === 'next') {
+            setStartIndex(startIndex + maxResults);
+        }
+
+        searchBook();
+    }
+
     return (
         <div className='book-form-wrapper' ref={ref}>
             <h1>{(isEdit) ? "Notice a discrepency?" : "Add a Book to Our Library!"}</h1>
             <form onSubmit={handleSubmit}>
-                <ul>
+                <ul hidden={(errors && errors.length)}>
                     {(errors && errors.length) ? errors.map((error, i) => (<li key={i}>{error}</li>)) : null}
                 </ul>
                 <input type="text" className="title" placeholder="Title" onChange={handleChange} value={title} />
@@ -269,6 +296,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
 
                 {(googleBooks.length > 0 && !isEdit) &&
                     (
+                        <>
                         <div className='google-books'>
                             {googleBooks.map(book => (
                                 <div className='google-book' key={book.id} onClick={handleClick(book)}>
@@ -279,6 +307,11 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
                                 </div>
                             ))}
                         </div>
+                        <div className='google-nav-btns'>
+                            <button className='g-nav prev' hidden={startIndex === 0} onClick={handleGNavButton} >Previous</button>
+                            <button className='g-nav next' hidden={googleBooks.length < 40} onClick={handleGNavButton} >Next</button>
+                        </div>
+                        </>
                     )
                 }
             </form>
