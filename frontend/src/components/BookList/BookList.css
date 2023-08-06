@@ -1,10 +1,13 @@
 .books-page {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
-.books-list {
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
+.search {
+    width: 75%;
+    margin: 1px;
+    border: 1px solid #8b0280;
+    border-radius: 5px;
 }

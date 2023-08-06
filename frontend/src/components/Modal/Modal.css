@@ -20,26 +20,30 @@
     border-radius: 10px;
 }
 
-.modal h1, p {
+.modal h1,
+p {
     text-align: center;
 }
 
 .modal button {
     font-size: 16pt;
-    color: white;
+    color: #8b0280;;
     background-color: #f7a4f0;
-    border: 2px solid black;
-    box-shadow: 3px 3px 1px black;
+    border: none;
+    margin: 5px 0px;
 }
 
-button:hover {
-    background-color: #999999;
+.modal button:hover {
+    font-weight: bold;
+    background-color: #fad0f6;
+    box-shadow: 3px 3px 1px #8b0280;
+    border: 2px solid #8b0280;
 }
 
 .exit-modal {
     position: absolute;
     top: 0.75;
-    right: 0.75rem;
+    left: 0.75rem;
     font-size: 1.125rem;
     line-height: 1.75rem;
     color: rgb(112 112 112/1);
@@ -50,21 +54,27 @@ button:hover {
 .modal input {
     display: block;
     width: 100%;
+    padding: 0px;
+    margin: 0px;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background-color: #c2eaea;
     border-radius: 5px;
     border: none;
+    height: 30px;
 }
 
 .modal textarea {
     display: block;
     width: 100%;
+    padding: 0px;
+    margin: 0px;
     padding-bottom: 10px;
     margin-bottom: 20px;
     background-color: #c2eaea;
     border-radius: 5px;
     border: none;
+    resize: none;
 }
 
 .modal input::placeholder {
@@ -81,4 +91,5 @@ button:hover {
 
 ul {
     padding-left: 0;
+    margin: 2px 0px;
 }

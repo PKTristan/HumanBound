@@ -6,13 +6,44 @@
 .navbar-btn,
 .prof-btn {
     margin: 3px 0px;
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: #8b0280;
+    font-weight: bold;
+    font-size: small;
+    background-color: #fad0f6;
 }
+
 
 .prof-dropdown {
     background-color: #f7a4f0;
+    border: 2px solid #8b0280;
     position: absolute;
     bottom: 0;
     left: 100%;
     display: flex;
     flex-direction: column;
+    padding: 10px 20px;
+
 }
+.prof-dropdown p {
+    margin: 5px;
+    color: #8b0280;
+}
+
+.prof-dropdown img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+
+.navbar-btn:hover,
+.prof-btn:hover,
+.navbar-btn:hover i,
+.prof-btn:hover i {
+    color:#fad0f6;
+    background-color: #8b0280;
+}
+

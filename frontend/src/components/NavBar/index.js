@@ -11,6 +11,7 @@ import SignupForm from "../SignupForm";
 import BookForm from "../BookForm";
 import './NavBar.css';
 import Approvals from "../Approvals";
+import { setDefaultProfImg } from "../../helpers";
 
 
 const NavBar = () => {
@@ -59,21 +60,21 @@ const NavBar = () => {
                 <button type='button' className='navbar-btn' onClick={handleBooks} title="Books"><i className="fa-solid fa-book" /></button>
             </div>
 
-            <div className="prof-btn" ref={ref}>
+            <div className="prof-btn-div" ref={ref}>
                 <button type="button" className='prof-btn' onClick={icon} title='Profile Button'>
                     <i className="fa-solid fa-bars" />
                 </button>
                 {dropdown &&
                     <div className='prof-dropdown'>
                         {currUser && (<>
-                            <p>Hello, {currUser.username}</p>
-                            <p>{currUser.firstName} {currUser.lastName}</p>
-                            <p>{currUser.email}</p>
+                        <img src={currUser.avi} alt={currUser.username} onError={setDefaultProfImg} />
+                            <p>Hello, {currUser.firstName} {currUser.lastName}</p>
+                            <p>@{currUser.username}</p>
 
                             {(currUser && currUser.admin) ?
                                 (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={'Approvals'} btnClass={'navbar-btn'} params={{ ref }} />) : null
                             }
-                            <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar=btn'} params={{ ref, isEdit: false }} />
+                            <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar-btn'} params={{ ref, isEdit: false }} />
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
                         </>
                         )}

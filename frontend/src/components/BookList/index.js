@@ -1,31 +1,25 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as bookActions from "../../store/book";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import './BookList.css';
+import BookCard from "../BookCards";
 
 const BookList = () => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const list = useSelector(bookActions.selBooks);
 
     const [books, setBooks] = useState([]);
     const [author, setAuthor] = useState('');
     const [title, setTitle] = useState('');
 
-
-    const handleClick = (id) => (e) => {
-        e.preventDefault();
-
-        history.push(`/books/${id}`);
-    };
-
     const handleChange = (e) => {
         e.preventDefault();
-
+        console.log(e)
         const { className, value } = e.target;
 
-        switch(className) {
+        const name = className.slice(7);
+
+        switch(name) {
             case "title":
                 setTitle(value);
                 break;
@@ -59,19 +53,12 @@ const BookList = () => {
 
     return (
         <div className="books-page" >
-            <input type='text' className='title' placeholder="Search by title" onChange={handleChange} value={title} />
-            <input type='text' className='author' placeholder="Search by author" onChange={handleChange} value={author} />
+            <h1>HumanBound Library</h1>
 
-            <div className='books-list' >
-            {books.length > 0 ? books.map(book => (
-                <div className="book-card" onClick={handleClick(book.id)} key={book.id}>
-                    <img src={book.thumbnail} alt={book.title} />
-                    <h4 className="book-title">{book.title}</h4>
-                    <p className="book-author">{book.authors}</p>
-                    <p className="book-description">{book.synopsis}</p>
-                </div>
-            )) : <h1>Hmm, it seems we ran out of books...</h1>}
-            </div>
+            <input type='text' className='search title' placeholder="Search by title" onChange={handleChange} value={title} />
+            <input type='text' className='search author' placeholder="Search by author" onChange={handleChange} value={author} />
+
+            <BookCard books={books} />
         </div>
     )
 }

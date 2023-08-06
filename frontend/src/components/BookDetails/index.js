@@ -1,12 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams, NavLink } from "react-router-dom";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import * as bookActions from "../../store/book";
 import * as userActions from "../../store/user";
 import * as reviewActions from "../../store/review";
+import { setDefaultImg, setDefaultProfImg } from "../../helpers";
 import InterimModal from "../Modal";
 import BookForm from "../BookForm";
 import Delete from "../Delete";
+import './BookDetails.css';
 
 
 const BookDetails = () => {
@@ -79,13 +81,20 @@ const BookDetails = () => {
         }
     }, [bookMsg]);
 
+    const style = {
+        color: '#8b0280',
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        fontSize: 'small'
+    }
+
     const clearAppMsg = () => setAppMessage('');
 
 
     return book ? (
-        <div className='book-details'>
+        <div className='book-details-page'>
             <div className="book-details-nav">
-                <NavLink to="/books">Back</NavLink>
+                <NavLink to="/books" style={style} ><i class="fa-solid fa-arrow-left" />BOOKS LIST</NavLink>
                 {
                     user ? (
                         <>
@@ -99,39 +108,48 @@ const BookDetails = () => {
                 }
             </div>
 
-            <div className="top-half" >
-                <div className="thumbnail"><img src={book.thumbnail} alt={book.title} /></div>
-                <div className="details" >
-                    <h1>{book.title}</h1>
-                    <h2>{book.subtitle}</h2>
-                    <h4>by {book.authors.join(', ')}</h4>
-                    <p>{book.publishYear}</p>
-                    <p>{book.pageCount}</p>
+            <div className='book-details'>
+                <div className="top-half" >
+                    <div className='style1'><div className="style2"><div className="style3"></div></div></div>
+                    <div className="thumbnail"><img src={book.thumbnail} alt={book.title} onError={setDefaultImg} /></div>
+                    <div className="details" >
+                        <h1>{book.title}</h1>
+                        <h2>{book.subtitle}</h2>
+                        <h4>by {book.authors.join(', ')}</h4>
+                        <p>published in {book.publishYear}</p>
+                        <p>{book.pageCount} pages</p>
+                    </div>
+                    <div className='style1'><div className="style2"><div className="style3"></div></div></div>
                 </div>
-            </div>
-            <div className="bottom-half">
-                <div className="synopsis">
-                    <h3>Description:</h3>
-                    <p>{book.synopsis}</p>
-                </div>
-                <div className="reviews">
-                    <h3>Reviews:</h3>
-                    {
-                        user ? (
-                            <div className="write-review">
-                                {reviewErr ? (
-                                    <li>{reviewErr}</li>
-                                ) : null}
-                                <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
-                            </div>
-                        ) : null
-                    }
-                    {(book.Reviews.length > 0) ? book.Reviews.map(review => (
-                        <div key={review.id} className="review" onClick={handleViewReview(review.id)}>
-                            <h5>@{review.User.username}</h5>
-                            <p>{review.review}</p>
+                <div className="bottom-half">
+                    <div className="synopsis">
+                        <h3>Description:</h3>
+                        <p>{book.synopsis}</p>
+                    </div>
+                    <div className="reviews">
+                        <h3>Reviews:</h3>
+                        {
+                            user ? (
+                                <div className="write-review">
+                                    {reviewErr ? (
+                                        <li>{reviewErr}</li>
+                                    ) : null}
+                                    <textarea value={review} onChange={(e) => e.preventDefault()} onKeyDown={handleDownReview} placeholder="Add a review." />
+                                </div>
+                            ) : null
+                        }
+                        <div className="reviews-list">
+                            {(book.Reviews.length > 0) ? book.Reviews.map(review => (
+                                <div key={review.id} className="review" onClick={handleViewReview(review.id)}>
+                                    <div className='user'>
+                                        <img src={review.User.avi} alt={review.User.username} onError={setDefaultProfImg} />
+                                        <h5>@{review.User.username}</h5>
+                                    </div>
+                                    <p>{review.review}</p>
+                                </div>
+                            )) : (<p>{(user) ? `Be the first to review ${book.title}!` : `Sign up or log in to be the first to review ${book.title}!`}</p>)}
                         </div>
-                    )) : (<p>{(user) ? `Be the first to review ${book.title}!` : `Sign up or log in to be the first to review ${book.title}!` }</p>)}
+                    </div>
                 </div>
             </div>
         </div>
