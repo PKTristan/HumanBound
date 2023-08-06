@@ -273,11 +273,15 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         searchBook();
     }
 
+    useEffect(() => () => {
+        dispatch(bookActions.clearErr());
+    })
+
     return (
         <div className='book-form-wrapper' ref={ref}>
             <h1>{(isEdit) ? "Notice a discrepency?" : "Add a Book to Our Library!"}</h1>
             <form onSubmit={handleSubmit}>
-                <ul hidden={(errors && errors.length)}>
+                <ul hidden={!(errors && errors.length)}>
                     {(errors && errors.length) ? errors.map((error, i) => (<li key={i}>{error}</li>)) : null}
                 </ul>
                 <input type="text" className="title" placeholder="Title" onChange={handleChange} value={title} />
