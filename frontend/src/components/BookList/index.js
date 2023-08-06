@@ -14,10 +14,12 @@ const BookList = () => {
 
     const handleChange = (e) => {
         e.preventDefault();
-
+        console.log(e)
         const { className, value } = e.target;
 
-        switch(className) {
+        const name = className.slice(7);
+
+        switch(name) {
             case "title":
                 setTitle(value);
                 break;

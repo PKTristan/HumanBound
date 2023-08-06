@@ -43,3 +43,7 @@
     overflow-y: scroll;
 
 }
+
+.book-description::-webkit-scrollbar {
+    width: 1px;
+}

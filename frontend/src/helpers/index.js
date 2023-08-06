@@ -1,4 +1,5 @@
 import defaultImage from '../assets/no-book-found.png';
+import defaultProfImg from '../assets/user.png';
 
 export const isValidUrl = urlString => {
     try {
@@ -13,4 +14,10 @@ export const isValidUrl = urlString => {
 export const setDefaultImg = (e) => {
     e.target.onerror = null;
     e.target.src = defaultImage;
+}
+
+
+export const setDefaultProfImg = (e) => {
+    e.target.onerror = null;
+    e.target.src = defaultProfImg;
 }

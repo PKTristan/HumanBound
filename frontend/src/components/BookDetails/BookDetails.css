@@ -1,0 +1,131 @@
+.book-details-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+    background-color: #f7a4f0;
+    max-height: calc(100vh - 30px);
+}
+
+
+.book-details-nav {
+    display: flex;
+    flex-direction: row;
+    margin: 2px;
+    height: 25px;
+    align-items: center;
+}
+
+.interim-modal button {
+    margin-left: 10px;
+    color: #8b0280;
+    background-color: #f7a4f0;
+    border: none;
+    border-radius: 5px;
+}
+
+.interim-modal button:hover {
+    background-color: #fad0f6;
+    border: 2px solid #8b0280;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.top-half {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 5px;
+    border: 2px solid white;
+}
+
+
+.thumbnail {
+    margin: 5px;
+    background-color: #fad0f6;
+    border: 1px dotted #8b0280;
+    padding: 15px;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin: 5px;
+    padding: 0px 15px;
+    background-color: #fad0f6;
+    border: 1px dotted #8b0280;
+}
+
+.bottom-half {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    margin: 5px;
+    border: 2px solid white;
+    max-height: calc(100vh - 505px);
+}
+
+.synopsis {
+    flex: 1;
+    margin: 20px;
+    overflow: hidden;
+}
+
+.reviews {
+    flex: 1;
+    margin: 20px;
+    overflow: hidden;
+}
+
+.write-review textarea {
+    border: none;
+    background-color: transparent;
+    resize: none;
+    width: 99%;
+    height: 30px;
+}
+
+.write-review textarea:hover,
+.write-review textarea:focus {
+    border: 1px solid #8b0280;
+    background-color: #fad0f6;
+}
+
+
+.write-review textarea:focus {
+    height: 75px;
+}
+
+
+.reviews-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 640px);
+    overflow-y: scroll;
+}
+
+.reviews-list::-webkit-scrollbar {
+    width: 1px;
+}
+
+
+.review {
+    display: flex;
+    flex-direction: column;
+    background-color: #fad0f6;
+    padding: 5px;
+    border: 1px groove #8b0280;
+}
+
+.review:hover {
+    border: 2px groove #8b0280;
+    cursor: pointer;
+}

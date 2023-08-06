@@ -90,7 +90,7 @@ router.get('/:id', async (req, res, next) => {
             attributes: ['id', 'userId', 'review'],
             include: {
                 model: User,
-                attributes: ['username'],
+                attributes: ['id', 'username', 'avi'],
             }
         }
     }).catch(err => next(err));
@@ -205,7 +205,7 @@ router.put('/:id', requireAuth, valPermission, validateBook, async (req, res, ne
                 attributes: ['id', 'userId', 'review'],
                 include: {
                     model: User,
-                    attributes: ['id', 'username'],
+                    attributes: ['id', 'username', 'avi'],
                 }
             }
         }).catch(err => next(err));
