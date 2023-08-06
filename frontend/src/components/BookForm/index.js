@@ -67,7 +67,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
                 dispatch(bookActions.editBook({book: newBook, id: book.id}));
             }
             else {
-                newBook.reason = 'EDIT' + reason;
+                newBook.reason = 'EDIT ' + reason;
                 newBook.bookId = book.id;
                 dispatch(approvalActions.requestApproval(newBook));
             }

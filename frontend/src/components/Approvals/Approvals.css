@@ -1,18 +1,26 @@
-.new-approvals,
-.old-approvals {
-    overflow: scroll;
-    max-height: 265px;
-    border: 1px solid #f7a4f0;
+.approvals {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 80px);
 }
 
-.approval-img {
-    width: 30vw;
+.approvals h1 {
+    margin: 10px;
+}
+
+.new-approvals,
+.old-approvals {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: scroll;
+    border: 1px solid #f7a4f0;
 }
 
 .app-images,
 .app-titles {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
 }
 
 .app-synopsis {
@@ -32,8 +40,24 @@
 }
 
 .app-card {
-    border: 1px solid #f7a4f0;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 185px;
+    height: 400px;
+    margin: 10px;
+    border: 1px solid #8b0280;
+    background-color: #f7a4f0;
+    border-radius: 5px;
+    overflow-y: scroll;
+}
+
+
+.app-card::-webkit-scrollbar {
+    width: 1px;
+}
+
+
+.app-content {
+    width: 100%;
 }

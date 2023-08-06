@@ -1,7 +1,7 @@
 import * as approvalActions from '../../store/approval.js';
 import * as bookActions from '../../store/book.js';
 import * as userActions from '../../store/user.js';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import './Approvals.css';
@@ -10,6 +10,8 @@ import './Approvals.css';
 const Approvals = ({ params: { ref } }) => {
     const dispatch = useDispatch();
     const history = useHistory();
+    const newRefs = useRef([]);
+    const oldRefs = useRef([]);
 
     const approvals = useSelector(approvalActions.selApprovals);
     const user = useSelector(userActions.selUser);
@@ -115,8 +117,36 @@ const Approvals = ({ params: { ref } }) => {
         if (approvals) {
             setNewApprovals(approvals.pending);
             setOldApprovals(approvals.acknowledged);
+            newRefs.current = new Array(approvals.pending.length)
+                .fill(null)
+                .map(() => React.createRef());
+            oldRefs.current = new Array(approvals.acknowledged.length)
+                .fill(null)
+                .map(() => React.createRef());
         }
     }, [approvals, setNewApprovals, setOldApprovals]);
+
+
+    const appCardClick = (obj) => (e) => {
+        e.preventDefault();
+        let element = null;
+
+        if (obj.type === 'new') {
+            element = newRefs.current[obj.idx].current
+        }
+        else if (obj.type === 'old') {
+            element = oldRefs.current[obj.idx].current
+        }
+
+        if (element) {
+            if (element.style.width === '185px' || element.style.width === '') {
+                element.style.width = '100%';
+            }
+            else {
+                element.style.width = '185px';
+            }
+        }
+    }
 
 
     return (
@@ -124,12 +154,12 @@ const Approvals = ({ params: { ref } }) => {
             <h1>Pending Approvals</h1>
             <div className='new-approvals'>
                 {
-                    newApprovals && newApprovals.map(approval => {
+                    (newApprovals.length) ? newApprovals.map((approval, idx) => {
                         const difference = getDifferences(approval);
 
                         return (
-                            <div key={approval.id} className="app-card">
-                                {(difference.thumbnails) ? (<div className='app-images'>
+                            <div key={approval.id} className="app-card" onClick={appCardClick({idx, type: 'new'})} ref={newRefs.current[idx]} >
+                                {(difference.thumbnails) ? (<div className='app-images app-content'>
                                     <img className="approval-img" src={difference.thumbnails.appThumbnail} alt="thumbnail" />
                                     <h5> -{'>'} </h5>
                                     <img className="approval-img" src={difference.thumbnails.bookThumbnail} alt="thumbnail" />
@@ -137,7 +167,7 @@ const Approvals = ({ params: { ref } }) => {
                                     <img className="approval-img" src={approval.Book.thumbnail} alt="thumbnail" />
                                 </div>)}
 
-                                {(difference.titles) ? (<div className="app-titles">
+                                {(difference.titles) ? (<div className="app-titles app-content">
                                     <h4>Title: {difference.titles.bookTitle}</h4>
                                     <h5> -{'>'} </h5>
                                     <h4>{difference.titles.appTitle}</h4>
@@ -145,7 +175,7 @@ const Approvals = ({ params: { ref } }) => {
                                     <h4>Title: {approval.Book.title}</h4>
                                 </div>) }
 
-                                {(difference.subtitles) ? (<div className="app-subtitles">
+                                {(difference.subtitles) ? (<div className="app-subtitles app-content">
                                     <h5>Subtitle: {difference.subtitles.bookSubtitle + ' -> ' + difference.subtitles.appSubtitle}</h5>
                                 </div>) : null}
 
@@ -155,30 +185,30 @@ const Approvals = ({ params: { ref } }) => {
                                     </h5>
                                 </div>) : null}
 
-                                {(difference.pdfLinks) ? (<div className="app-pdf">
+                                {(difference.pdfLinks) ? (<div className="app-pdf app-content">
                                     <h5>pdf: {difference.pdfLinks.bookPdfLink + ' -> ' + difference.pdfLinks.appPdfLink}</h5>
                                 </div>) : null}
 
-                                {(difference.pageCounts) ? (<div className="app-page">
+                                {(difference.pageCounts) ? (<div className="app-page app-content">
                                     <h5>pages: {difference.pageCounts.bookPageCount + ' -> ' + difference.pageCounts.appPageCount}</h5>
                                 </div>) : null}
 
-                                {(difference.publishYears) ? (<div className="app-year">
+                                {(difference.publishYears) ? (<div className="app-year app-content">
                                     <h5>Year: {difference.publishYears.bookPublishYear + ' -> ' + difference.publishYears.appPublishYear}</h5>
                                 </div>) : null}
 
-                                {(difference.synopsis) ? (<div className="app-synopsis">
+                                {(difference.synopsis) ? (<div className="app-synopsis app-content">
                                     <h5>Synopsis: </h5>
                                     <h5>{difference.synopsis.bookSynopsis}</h5>
                                     <h5> -{'>'} </h5>
                                     <h5>{difference.synopsis.appSynopsis}</h5>
                                 </div>) : null}
 
-                                {(approval.reason) ? (<div className="app-reason">
+                                {(approval.reason) ? (<div className="app-reason app-content">
                                     <h5>Reason: {approval.reason}</h5>
                                 </div>) : null}
 
-                                {(approval.status) ? (<div className="app-status">
+                                {(approval.status) ? (<div className="app-status app-content">
                                     <h5>Status: {approval.status}</h5>
                                 </div>) : null}
 
@@ -188,18 +218,18 @@ const Approvals = ({ params: { ref } }) => {
                                 </div>
                             </div>
                         )
-                    })
+                    }) : <h3>No pending approvals...</h3>
                 }
             </div>
             <h1>Reviewed Approvals</h1>
             <div className='old-approvals'>
                 {
-                    oldApprovals && oldApprovals.map(approval => {
+                    (oldApprovals.length) ? oldApprovals.map((approval, idx) => {
                         const difference = getDifferences(approval);
 
                         return (
-                            <div key={approval.id} className="app-card">
-                                {(difference.thumbnails) ? (<div className='app-images'>
+                            <div key={approval.id} className="app-card" onClick={appCardClick({idx, type: 'old'})}  ref={oldRefs.current[idx]}  >
+                                {(difference.thumbnails) ? (<div className='app-images app-content'>
                                     <img className="approval-img" src={difference.thumbnails.appThumbnail} alt="thumbnail" />
                                     <h5> -{'>'} </h5>
                                     <img className="approval-img" src={difference.thumbnails.bookThumbnail} alt="thumbnail" />
@@ -207,7 +237,7 @@ const Approvals = ({ params: { ref } }) => {
                                     <img className="approval-img" src={approval.Book.thumbnail} alt="thumbnail" />
                                 </div>)}
 
-                                {(difference.titles) ? (<div className="app-titles">
+                                {(difference.titles) ? (<div className="app-titles app-content">
                                     <h4>Title: {difference.titles.bookTitle}</h4>
                                     <h5> -{'>'} </h5>
                                     <h4>{difference.titles.appTitle}</h4>
@@ -215,7 +245,7 @@ const Approvals = ({ params: { ref } }) => {
                                     <h4>Title: {approval.Book.title}</h4>
                                 </div>)}
 
-                                {(difference.subtitles) ? (<div className="app-subtitles">
+                                {(difference.subtitles) ? (<div className="app-subtitles app-content">
                                     <h5>Subtitle: {difference.subtitles.bookSubtitle + ' -> ' + difference.subtitles.appSubtitle}</h5>
                                 </div>) : null}
 
@@ -225,36 +255,36 @@ const Approvals = ({ params: { ref } }) => {
                                     </h5>
                                 </div>) : null}
 
-                                {(difference.pdfLinks) ? (<div className="app-pdf">
+                                {(difference.pdfLinks) ? (<div className="app-pdf app-content">
                                     <h5>pdf: {difference.pdfLinks.bookPdfLink + ' -> ' + difference.pdfLinks.appPdfLink}</h5>
                                 </div>) : null}
 
-                                {(difference.pageCounts) ? (<div className="app-page">
+                                {(difference.pageCounts) ? (<div className="app-page app-content">
                                     <h5>pages: {difference.pageCounts.bookPageCount + ' -> ' + difference.pageCounts.appPageCount}</h5>
                                 </div>) : null}
 
-                                {(difference.publishYears) ? (<div className="app-year">
+                                {(difference.publishYears) ? (<div className="app-year app-content">
                                     <h5>Year: {difference.publishYears.bookPublishYear + ' -> ' + difference.publishYears.appPublishYear}</h5>
                                 </div>) : null}
 
-                                {(difference.synopsis) ? (<div className="app-synopsis">
+                                {(difference.synopsis) ? (<div className="app-synopsis app-content">
                                     <h5>Synopsis: </h5>
                                     <h5>{difference.synopsis.bookSynopsis}</h5>
                                     <h5> -{'>'} </h5>
                                     <h5>{difference.synopsis.appSynopsis}</h5>
                                 </div>) : null}
 
-                                {(approval.reason) ? (<div className="app-reason">
+                                {(approval.reason) ? (<div className="app-reason app-content">
                                     <h5>Reason: {approval.reason}</h5>
                                 </div>) : null}
 
-                                {(approval.status) ? (<div className="app-status">
+                                {(approval.status) ? (<div className="app-status app-content">
                                     <h5>Status: {approval.status}</h5>
                                 </div>) : null}
 
                             </div>
                         )
-                    })
+                    }) : <h3>No reviewed approvals...</h3>
                 }
             </div>
         </div>
