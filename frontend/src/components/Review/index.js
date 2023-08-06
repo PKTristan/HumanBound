@@ -157,6 +157,12 @@ const Review = () => {
         setEditReview(e.target.value);
     }
 
+    useEffect (() => {
+        if (editReview.length > 9) {
+            dispatch(reviewActions.clearErr());
+        }
+    }, [editReview]);
+
 
     return (
         <div className="review-wrapper">
