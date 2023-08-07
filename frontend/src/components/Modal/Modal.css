@@ -78,6 +78,14 @@ p {
     overflow-y: auto;
 }
 
+.modal textarea:hover,
+.modal textarea:focus,
+.modal input:focus,
+.modal input:hover {
+color: #8b0280;
+}
+
+
 .modal input::placeholder {
     color: #666;
 }
