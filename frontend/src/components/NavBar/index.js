@@ -72,7 +72,7 @@ const NavBar = () => {
                             <p>@{currUser.username}</p>
 
                             {(currUser && currUser.admin) ?
-                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={'Approvals'} btnClass={'navbar-btn'} params={{ ref }} />) : null
+                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i class="fa-solid fa-bell"></i>)} btnClass={'navbar-btn'} params={{ ref }} />) : null
                             }
                             <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar-btn'} params={{ ref, isEdit: false }} />
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref }} />

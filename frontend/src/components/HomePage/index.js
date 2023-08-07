@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import * as userActions from '../../store/user';
+import readingFigures from '../../assets/reading-figures.png';
 import Approvals from '../Approvals';
 import LoginForm from '../LoginForm';
 import SignupForm from '../SignupForm';
@@ -10,7 +12,14 @@ import './HomePage.css';
 
 const HomePage = () => {
     const dispatch = useDispatch();
+    const history = useHistory();
     const currUser = useSelector(userActions.selUser);
+
+    const browseBooks = (e) => {
+        e.preventDefault();
+
+        history.push('/books');
+    }
 
     return (
         <div className='home-wrapper' >
@@ -20,6 +29,7 @@ const HomePage = () => {
 
             <div className='intro' >
                 <h3>Find youre next read and join a Circle of friends today!</h3>
+                <img src={readingFigures} alt='drawing of people reading together' />
             </div>
 
             <div className="books">
@@ -42,6 +52,8 @@ const HomePage = () => {
                 <p>
                     Feel free to browse our book collection!
                 </p>
+
+                <div className='home-btn'><button type="button" className='homepage-btn' onClick={browseBooks} >Browse Books</button></div>
             </div>
 
             <div className='circles'>
@@ -52,6 +64,8 @@ const HomePage = () => {
                     discuss your favorite books! If you do not have any friends, and you don't
                     know anyone literate, FEAR NOT! Browse our public circles and join one you find interesting!
                 </p>
+
+                <div className='home-btn'><button type='button' className='homepage-btn' onClick={e => e.preventDefault()} >Browse Circles</button></div>
             </div>
 
             <div className='buttons' >
@@ -59,7 +73,7 @@ const HomePage = () => {
                     (currUser) ? (
                         <>
                             {(currUser.admin) ? (
-                                <InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={'Approvals'} btnClass={'homepage-btn'} params={{ref: null}} />
+                                <InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell">Approvals</i>)} btnClass={'homepage-btn'} params={{ref: null}} />
                             ): null}
 
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" >Logout</i>)} btnClass='homepage-btn' params={{ ref: null }} />
