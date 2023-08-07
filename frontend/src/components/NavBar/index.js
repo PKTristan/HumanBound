@@ -1,8 +1,9 @@
 //frontend components navbar
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { NavLink } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as userActions from "../../store/user";
+import * as bookActions from "../../store/book";
 import { useRef, useState, useEffect } from "react";
 import InterimModal from "../Modal";
 import LoginForm from "../LoginForm";
@@ -15,6 +16,7 @@ import { setDefaultProfImg } from "../../helpers";
 
 
 const NavBar = () => {
+    const dispatch = useDispatch();
     const history = useHistory();
     const ref = useRef(null);
     const currUser = useSelector(userActions.selUser);
@@ -52,6 +54,7 @@ const NavBar = () => {
 
     }, [currUser, setDropdown]);
 
+
     return (
         <div className="navbar">
 
@@ -72,7 +75,7 @@ const NavBar = () => {
                             <p>@{currUser.username}</p>
 
                             {(currUser && currUser.admin) ?
-                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i class="fa-solid fa-bell"></i>)} btnClass={'navbar-btn'} params={{ ref }} />) : null
+                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell"></i>)} btnClass={'navbar-btn'} params={{ ref }} />) : null
                             }
                             <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar-btn'} params={{ ref, isEdit: false }} />
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
@@ -83,8 +86,8 @@ const NavBar = () => {
                             <p>Welcome!</p>
                             <p>Please sign up or login</p>
 
-                            <InterimModal Component={LoginForm} btnTitle='Login' btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
-                            <InterimModal Component={SignupForm} btnTitle="Sign up" btnLabel={(<i className="fa-solid fa-user-plus" />)} btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={LoginForm} btnTitle='Login'  btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={SignupForm} btnTitle="Sign up"  btnLabel={(<i className="fa-solid fa-user-plus" />)} btnClass='navbar-btn' params={{ ref }} />
                         </>)}
 
                     </div>}

@@ -3,6 +3,7 @@ import { csrfFetch } from './csrf';
 const LOAD_USER = 'user/LOAD_USER';
 const DELETE_USER = 'user/DELETE_USER';
 const LOAD_ERR = 'user/LOAD_ERR';
+const CLEAR_ERR = 'user/CLEAR_ERR';
 
 
 const loadUser = (user) => ({
@@ -18,6 +19,10 @@ const loadErr = (err) => ({
 const delUser = (message) => ({
     type: DELETE_USER,
     message
+});
+
+export const clearErr = () => ({
+    type: CLEAR_ERR
 });
 
 export const getUser = () => async (dispatch) => {
@@ -135,6 +140,9 @@ export default function userReducer(state = initialState, action) {
 
         case LOAD_ERR:
             return {...mutState, errors: action.err};
+
+        case CLEAR_ERR:
+            return {...mutState, errors: null};
 
         default:
             return mutState;

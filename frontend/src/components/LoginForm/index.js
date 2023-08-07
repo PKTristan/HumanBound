@@ -69,7 +69,9 @@ export default function LoginForm({setIsOpen, params: {ref}}) {
     //     }
     // }, [user, history]);
 
-
+    useEffect(() => {
+       return () => dispatch(userActions.clearErr());
+    }, []);
 
     return (
         <div className="login-wrapper" ref={ref && ref}>
