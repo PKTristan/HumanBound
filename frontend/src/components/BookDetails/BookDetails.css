@@ -62,6 +62,7 @@
     background-color: #8b0280;
     flex: 1;
     margin: 5px;
+    border: 3px dotted #f7a4f0;
 }
 
 .style2 {
@@ -69,12 +70,20 @@
     display: flex;
     margin: 40px;
     background-color: #f7a4f0;
+    border: 2px dotted #8b0280;
 }
 
 .style3 {
     flex: 1;
     margin: 40px;
     background-color: #fad0f6;
+    border: 1px dotted #f7a4f0;
+    font-weight: bold;
+    font-size: xx-large;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: 5px;
 }
 
 .thumbnail img {
@@ -135,8 +144,9 @@
 
 .write-review textarea:hover,
 .write-review textarea:focus {
-    border: 1px solid #8b0280;
-    background-color: #fad0f6;
+    border: 2px solid #8b0280;
+    background-color: #b78ba0;
+    color: white;
 }
 
 
@@ -170,6 +180,6 @@
 }
 
 .review:hover {
-    border: 2px groove #8b0280;
+    border: 3px groove #8b0280;
     cursor: pointer;
 }

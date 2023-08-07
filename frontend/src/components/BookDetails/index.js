@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams, NavLink } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as bookActions from "../../store/book";
 import * as userActions from "../../store/user";
 import * as reviewActions from "../../store/review";
@@ -15,6 +15,7 @@ const BookDetails = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const { id } = useParams();
+    const ref = useRef();
     const book = useSelector(bookActions.selBook);
     const user = useSelector(userActions.selUser);
     const reviewErr = useSelector(reviewActions.selErr);
@@ -32,6 +33,7 @@ const BookDetails = () => {
                 setReview(`${review}\n`);
             }
             else {
+                if (review.length > 9) ref.current.blur();
                 dispatch(reviewActions.createReview(review, book.id));
                 setReview('');
             }
@@ -113,7 +115,7 @@ const BookDetails = () => {
 
             <div className='book-details'>
                 <div className="top-half" >
-                    <div className='style1'><div className="style2"><div className="style3"></div></div></div>
+                    <div className='style1'><div className="style2"><div className="style3">HUMAN</div></div></div>
                     <div className="thumbnail"><img src={book.thumbnail} alt={book.title} onError={setDefaultImg} /></div>
                     <div className="details" >
                         <h1>{book.title}</h1>
@@ -122,7 +124,7 @@ const BookDetails = () => {
                         <p>published in {book.publishYear}</p>
                         <p>{book.pageCount} pages</p>
                     </div>
-                    <div className='style1'><div className="style2"><div className="style3"></div></div></div>
+                    <div className='style1'><div className="style2"><div className="style3">BOUND</div></div></div>
                 </div>
                 <div className="bottom-half">
                     <div className="synopsis">
@@ -137,7 +139,7 @@ const BookDetails = () => {
                                     {reviewErr ? (
                                         <li>{reviewErr}</li>
                                     ) : null}
-                                    <textarea value={review} onChange={handleReviewChange} onKeyDown={handleDownReview} placeholder="Add a review." />
+                                    <textarea value={review} onChange={handleReviewChange} onKeyDown={handleDownReview} placeholder="Add a review." ref={ref} />
                                 </div>
                             ) : null
                         }

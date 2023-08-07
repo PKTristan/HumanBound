@@ -39,6 +39,8 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
+    border: 2px solid #8b0280;
+    background-color: #8b0280;
 }
 
 

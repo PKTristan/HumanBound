@@ -7,6 +7,7 @@ import InterimModal from '../Modal';
 import Delete from '../Delete';
 import { NavLink, useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import './Review.css';
+import { setDefaultProfImg } from '../../helpers';
 
 
 
@@ -33,7 +34,7 @@ const Review = () => {
 
     const handleDown = (idx) => (e) => {
         let mutArr = Array.from(replies);
-        let mutObj = Object.assign(mutArr[idx]);
+        let mutObj = mutArr[idx] ? Object.assign(mutArr[idx]) : {};
 
         if (e.key === 'Enter') {
             e.preventDefault();
@@ -61,7 +62,7 @@ const Review = () => {
         }
     }
 
-    const handleDownReview =(e) => {
+    const handleDownReview = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
             if (e.shiftKey) {
@@ -69,7 +70,7 @@ const Review = () => {
             }
             else {
                 if (editReview.length > 9) reviewTextareaRef.current.blur();
-                dispatch(reviewActions.updateReview({id: review.id, review: editReview}));
+                dispatch(reviewActions.updateReview({ id: review.id, review: editReview }));
                 dispatch(reviewActions.clearErr());
             }
         }
@@ -157,11 +158,18 @@ const Review = () => {
         setEditReview(e.target.value);
     }
 
-    useEffect (() => {
+    useEffect(() => {
         if (editReview.length > 9) {
             dispatch(reviewActions.clearErr());
         }
     }, [editReview]);
+
+    const style = {
+        color: '#8b0280',
+        textDecoration: 'none',
+        fontWeight: 'bold',
+        padding: '5px'
+    }
 
 
     return (
@@ -171,18 +179,22 @@ const Review = () => {
                     <InterimModal
                         Component={() => (<ul>{
                             replyErr.map(err => <li>{(err === 'Authentication required') ? 'Please log in or sign up.' : err}</li>)}
-                            </ul>)}
+                        </ul>)}
                         isHidden={true}
                         setOpen={true}
                         onClose={[clearReplyErr]}
                     />
                 ) : null
             }
+
             {review && (
+                <>
+                    <div><NavLink to={`/books/${review.bookId}`} style={style} ><i class="fa-solid fa-arrow-left" />Back</NavLink></div>
                 <div className="review">
-                    <NavLink to={`/books/${review.bookId}`}>Back</NavLink>
-                    <img src={review.User.avi} alt={review.User.username} />
-                    <h3>@{review.User.username}</h3>
+                    <div className='user'>
+                        <img src={review.User.avi} alt={review.User.username} onError={setDefaultProfImg} />
+                        <h5>@{review.User.username}</h5>
+                    </div>
                     {(user && (user.id === review.userId || user.admin)) ? (
                         <div className='review-edit' onMouseEnter={onEnter(review.id * -1)} onMouseLeave={onLeave}>
                             {
@@ -195,6 +207,7 @@ const Review = () => {
                                 value={editReview}
                                 onKeyDown={handleDownReview}
                                 onChange={handleRevChange}
+                                spellcheck={false}
                             />
                             <InterimModal Component={Delete} btnClass={'review-delete'} isHidden={isHidden(review.id * -1)} btnLabel='Delete' params={{ id: review.id, itemName: 'review' }} />
                         </div>
@@ -208,33 +221,39 @@ const Review = () => {
                         value={newReply}
                         onKeyDown={handleDown(null)}
                         onChange={handleChange(null)}
+                        spellcheck={false}
                     />
                 </div>
+                </>
             )}
-
-            {(replies.length) ?
-                replies.map((reply, idx) => (
-                    <div key={reply.id} className="reply" onMouseEnter={onEnter(reply.id)} onMouseLeave={onLeave} >
-                        <img src={reply.User.avi} alt={reply.User.username} />
-                        <h4>@{reply.User.username}</h4>
-                        {(user && (user.id === reply.userId || user.admin)) ? (
-                            <div className='reply-edit'>
-                                <textarea
-                                    onBlur={resetEdit}
-                                    ref={replyTextareaRefs.current[idx]}
-                                    className={'editReply'}
-                                    value={reply.reply}
-                                    onKeyDown={handleDown(idx)}
-                                    onChange={handleChange(idx)}
-                                />
-                                <InterimModal Component={Delete} btnClass={'reply-delete'} isHidden={isHidden(reply.id)} btnLabel='Delete' params={{ id: reply.id, itemName: 'reply' }} />
+            <div className='reply-wrapper'>
+                {(replies.length) ?
+                    replies.map((reply, idx) => (
+                        <div key={reply.id} className="reply" onMouseEnter={onEnter(reply.id)} onMouseLeave={onLeave} >
+                            <div className='user'>
+                                <img src={reply.User.avi} alt={reply.User.username} onError={setDefaultProfImg} />
+                                <h5>@{reply.User.username}</h5>
                             </div>
-                        ) : (
-                            <p>{reply.reply}</p>
-                        )}
-                    </div>
-                ))
-                : null}
+                            {(user && (user.id === reply.userId || user.admin)) ? (
+                                <div className='reply-edit'>
+                                    <textarea
+                                        onBlur={resetEdit}
+                                        ref={replyTextareaRefs.current[idx]}
+                                        className={'editReply'}
+                                        value={reply.reply}
+                                        onKeyDown={handleDown(idx)}
+                                        onChange={handleChange(idx)}
+                                        spellcheck={false}
+                                    />
+                                    <InterimModal Component={Delete} btnClass={'reply-delete'} isHidden={isHidden(reply.id)} btnLabel='Delete' params={{ id: reply.id, itemName: 'reply' }} />
+                                </div>
+                            ) : (
+                                <p>{reply.reply}</p>
+                            )}
+                        </div>
+                    ))
+                    : null}
+            </div>
         </div>
     )
 }
