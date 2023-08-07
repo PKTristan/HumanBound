@@ -17,7 +17,7 @@ const BookCard = ({books}) => {
                 <div className="book-card" onClick={handleClick(book.id)} key={book.id}>
                     <img src={book.thumbnail} alt={book.title} onError={setDefaultImg} />
                     <h4 className="book-title">{book.title}</h4>
-                    <p className="book-author">by {(book.authors && Array.isArray(book.authors)) ? book.authors.join(', ') : book.authors}</p>
+                    <h5 className="book-author">by {(book.authors && Array.isArray(book.authors)) ? book.authors.join(', ') : book.authors}</h5>
                     <p className="book-description">{book.synopsis}</p>
                 </div>
             )) : <h1>Hmm, it seems we ran out of books...</h1>}
