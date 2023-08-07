@@ -48,11 +48,24 @@
     margin: 20px;
     padding: 20px;
     background-color: #f7a4f0;
+
+}
+
+.books h3 {
+    margin: 5px;
 }
 
 .books p,
 .circles p {
     color: #8b0280;
+}
+
+.books p {
+    margin: 2px;
+}
+
+.books-list {
+    overflow-y: auto;
 }
 
 .circles {
@@ -94,4 +107,30 @@
     background-color: #fad0f6;
     box-shadow: 3px 3px 1px #8b0280;
     cursor: pointer;
+}
+
+.wrap {
+    overflow: hidden;
+}
+
+.home-book-card {
+    transition: transform 0.25s ease;
+}
+
+
+.home-book-card.paused {
+    transform: translateX(0);
+}
+
+.home-book-card.swipe-center {
+    transform: translateX(0%);
+}
+
+.home-book-card.swipe-right {
+    transform: translateX(100%);
+}
+
+.home-book-card.swipe-left {
+    transition: none;
+    transform: translateX(-100%);
 }

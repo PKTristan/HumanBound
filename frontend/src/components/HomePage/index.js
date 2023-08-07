@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import * as userActions from '../../store/user';
+import * as bookActions from '../../store/book';
 import readingFigures from '../../assets/reading-figures.png';
 import Approvals from '../Approvals';
 import LoginForm from '../LoginForm';
@@ -9,16 +10,80 @@ import SignupForm from '../SignupForm';
 import Logout from '../Logout';
 import InterimModal from '../Modal';
 import './HomePage.css';
+import BookCard from '../BookCards';
+import { getRandomNumber } from '../../helpers';
 
 const HomePage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currUser = useSelector(userActions.selUser);
+    const list = useSelector(bookActions.selBooks);
+
+    const [books, setBooks] = useState([]);
+    const [book, setBook] = useState({});
+    const [swipeDirection, setSwipeDirection] = useState('center');
+    const [hovering, setHovering] = useState(false);
+    const intervalRef = useRef(null);
 
     const browseBooks = (e) => {
         e.preventDefault();
 
         history.push('/books');
+    }
+
+    const setABook = () => {
+        if (books && books.length > 0) {
+            setSwipeDirection('right');
+            const index = getRandomNumber(0, books.length - 1);
+            setTimeout(() => {
+                setSwipeDirection('left');
+                setTimeout(() => {
+                    setBook(books[index]);
+                    setSwipeDirection('center'); // Swipe back to the right after the book has changed
+                }, 250);
+            }, 250);
+        }
+    }
+
+    useEffect(() => {
+        dispatch(bookActions.getBooks({}));
+
+        return () => {
+            dispatch(bookActions.clearBooks());
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (!(book&& book.id)) {
+            setABook();
+        }
+
+        intervalRef.current = setInterval(() => {
+            if (!hovering) {
+                setABook();
+            }
+        }, 5500);
+
+        return () => {
+            clearInterval(intervalRef.current);
+        };
+    }, [books, hovering])
+
+    useEffect(() => {
+        if (list) {
+            setBooks(list.books);
+        }
+    }, [list]);
+
+    const onEnter = (e) => {
+        e.preventDefault();
+        setHovering(true);
+        clearInterval(intervalRef.current);
+    }
+
+    const onLeave = (e) => {
+        e.preventDefault();
+        setHovering(false);
     }
 
     return (
@@ -46,12 +111,22 @@ const HomePage = () => {
                     Also, don't worry about having all the information. HumanBound uses google books
                     to help fill out information for you. Just type into the title section any words
                     that may match your books description, and add authors to the author section to
-                    tighten your search paramters!
+                    tighten your search parameters!
                 </p>
 
                 <p>
                     Feel free to browse our book collection!
                 </p>
+
+                {
+                    (book && book.id) ? (
+                        <div className='wrap' onMouseEnter={onEnter} onMouseLeave={onLeave}>
+                            <div className={`home-book-card swipe-${swipeDirection} ${hovering ? 'paused' : ''}`}>
+                                <BookCard books={[book]} />
+                            </div>
+                        </div>
+                    ) : null
+                }
 
                 <div className='home-btn'><button type="button" className='homepage-btn' onClick={browseBooks} >Browse Books</button></div>
             </div>
@@ -73,15 +148,15 @@ const HomePage = () => {
                     (currUser) ? (
                         <>
                             {(currUser.admin) ? (
-                                <InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell">Approvals</i>)} btnClass={'homepage-btn'} params={{ref: null}} />
-                            ): null}
+                                <InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell">Approvals</i>)} btnClass={'homepage-btn'} params={{ ref: null }} />
+                            ) : null}
 
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" >Logout</i>)} btnClass='homepage-btn' params={{ ref: null }} />
                         </>
                     ) : (
                         <>
-                                <InterimModal Component={LoginForm} btnTitle='Login' btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" >Login</i>)} btnClass='homepage-btn' params={{ ref: null }} />
-                                <InterimModal Component={SignupForm} btnTitle="Sign up" btnLabel={(<i className="fa-solid fa-user-plus" >Sign Up</i>)} btnClass='homepage-btn' params={{ ref: null }} />
+                            <InterimModal Component={LoginForm} btnTitle='Login' btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" >Login</i>)} btnClass='homepage-btn' params={{ ref: null }} />
+                            <InterimModal Component={SignupForm} btnTitle="Sign up" btnLabel={(<i className="fa-solid fa-user-plus" >Sign Up</i>)} btnClass='homepage-btn' params={{ ref: null }} />
                         </>
                     )
                 }
