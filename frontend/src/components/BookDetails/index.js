@@ -122,6 +122,7 @@ const BookDetails = () => {
                         <h2>{book.subtitle}</h2>
                         <h4>by {book.authors.join(', ')}</h4>
                         <p>published in {book.publishYear}</p>
+                        {(book.pdfLink) ? (<a href={book.pdfLink} target="_blank" rel="noopener noreferrer" >PDF Link</a>) : (<p>No PDF Link</p>)}
                         <p>{book.pageCount} pages</p>
                     </div>
                     <div className='style1'><div className="style2"><div className="style3">BOUND</div></div></div>

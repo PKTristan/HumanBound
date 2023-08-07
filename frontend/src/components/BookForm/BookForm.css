@@ -44,6 +44,10 @@
     word-wrap: normal;
 }
 
+.google-book-pdf {
+    font-weight: bold;
+}
+
 .google-book-description {
     margin: 2px;
     margin-bottom: 5px;

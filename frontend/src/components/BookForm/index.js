@@ -31,6 +31,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
     const [reason, setReason] = useState('');
     const [startIndex, setStartIndex] = useState(0);
     const [googleBooks, setGoogleBooks] = useState([]);
+    const [clicked, setClicked] = useState(false);
     const [errors, setErrors] = useState([]);
 
     const maxResults = 40;
@@ -91,7 +92,8 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
             case "title":
                 setTitle(value);
                 setStartIndex(0);
-                searchBook();
+                // searchBook();
+                setClicked(false);
 
                 if (value.length > 50) {
                     mutErr = mutErr.filter(err => err !== "Please provide a title of max 50 characters.");
@@ -105,7 +107,8 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
             case "authors":
                 setAuthors(value);
                 setStartIndex(0);
-                searchBook();
+                // searchBook();
+                setClicked(false);
 
                 if (value.length) {
                     mutErr = mutErr.filter(err => err !== "Please provide 1 or multiple authors.");
@@ -148,24 +151,59 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         setErrors(mutErr);
     }
 
-    const searchBook = async () => {
-        if (isEdit){
-            return false;
-        }
+    // const searchBook = async () => {
+    //     if (isEdit){
+    //         return false;
+    //     }
 
-        const noCommas = authors.split(',').join('+');
-        const authWithPlus = noCommas.split(' ').join('+');
-        const titleWithPlus = title.split(' ').join('+');
+    //     const noCommas = authors.split(',').join('+');
+    //     const authWithPlus = '+inauthor:' + noCommas.split(' ').join('+');
+    //     const titleWithPlus = title.split(' ').join('+');
 
-        const googlyBookys = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${titleWithPlus}+inauthor:${authWithPlus}
-                                            &startIndex=${startIndex}&maxResults=${maxResults}&key=AIzaSyC9LTmu46eFT70VA15ezrGO5yi93Zg6o4I`);
+    //     const url = `https://www.googleapis.com/books/v1/volumes?q=${(title.length) ? titleWithPlus : ''}${(authors.length) ? authWithPlus : ''}&startIndex=${startIndex}&maxResults=${maxResults}&key=AIzaSyC9LTmu46eFT70VA15ezrGO5yi93Zg6o4I`
 
-        const data = await googlyBookys.json();
+    //                                         console.log(url);
+    //     const googlyBookys = await fetch(url);
 
-        if (data.totalItems) {
-            setGoogleBooks(data.items);
-        }
-    };
+    //     const data = await googlyBookys.json();
+
+    //     if (data.totalItems) {
+    //         setGoogleBooks(data.items);
+    //     }
+    // };
+
+    useEffect(() => {
+        const searchBook = async () => {
+            if (isEdit) {
+                return false;
+            }
+
+            if (title.length === 0 && authors.length === 0) {
+                return false;
+            }
+
+            if (clicked) {
+                return false;
+            }
+
+            const noCommas = authors.split(',').join('+');
+            const authWithPlus = '+inauthor:' + noCommas.split(' ').join('+');
+            const titleWithPlus = title.split(' ').join('+');
+
+            const url = `https://www.googleapis.com/books/v1/volumes?q=${(title.length ? titleWithPlus : '')}${authors.length ? authWithPlus : ''}&startIndex=${startIndex}&maxResults=${maxResults}&key=AIzaSyC9LTmu46eFT70VA15ezrGO5yi93Zg6o4I`;
+
+
+            const googlyBookys = await fetch(url);
+            const data = await googlyBookys.json();
+
+            if (data.totalItems) {
+                console.log(data.items)
+                setGoogleBooks(data.items);
+            }
+        };
+
+        searchBook();
+    }, [title, authors, startIndex, maxResults]);
 
     const handleClick = (book) => (e) => {
         e.preventDefault();
@@ -187,7 +225,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         let acsTokenLink = false;
 
         if (book.accessInfo.pdf) {
-            isAvailable = book.accessInfo.pdf;
+            isAvailable = book.accessInfo.pdf.isAvailable;
             acsTokenLink = book.accessInfo.pdf.acsTokenLink;
         }
 
@@ -216,6 +254,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         setThumbnail(bookImageLinks ? bookImageLinks.thumbnail : '');
         setSynopsis(bookSynopsis);
         setGoogleBooks([]);
+        setClicked(true);
     }
 
     useEffect(() => {
@@ -270,12 +309,12 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
             setStartIndex(startIndex + maxResults);
         }
 
-        searchBook();
+        // searchBook();
     }
 
-    useEffect(() => () => {
-        dispatch(bookActions.clearErr());
-    })
+    useEffect(() => {
+        return () => dispatch(bookActions.clearErr());
+    }, []);
 
     return (
         <div className='book-form-wrapper' ref={ref}>
@@ -303,10 +342,11 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
                         <>
                         <div className='google-books'>
                             {googleBooks.map(book => (
-                                <div className='google-book' key={book.id} onClick={handleClick(book)}>
+                                <div className='google-book' key={book.id + book.etag} onClick={handleClick(book)}>
                                     <img src={book.volumeInfo.imageLinks && ((book.volumeInfo.imageLinks.smallThumbnail) || (book.volumeInfo.imageLinks.thumbnail))} alt="book" onError={setDefaultImg} />
                                     <h4 className='google-book-title' >{book.volumeInfo.title}</h4>
                                     <p className='google-book-author' >{(Array.isArray(book.volumeInfo.authors)) ? book.volumeInfo.authors.join(', ') : (book.volumeInfo.authors) ? book.volumeInfo.authors : 'No authors found.'}</p>
+                                    <p className='google-book-pdf' >{(book.accessInfo.pdf.isAvailable && book.accessInfo.pdf.acsTokenLink) ? 'PDF AVAILABLE' : 'No PDF found'}</p>
                                     <p className='google-book-description' >{(book.volumeInfo.description) ? book.volumeInfo.description : 'No description found.'}</p>
                                 </div>
                             ))}

@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import { useState } from "react";
 import './Modal.css';
 
-const InterimModal = ({ Component, btnLabel, btnClass, btnTitle, isHidden, onClose=null, setOpen=false, params }) => {
+const InterimModal = ({ Component, btnLabel, btnClass, btnTitle, isHidden, onClose=null, setOpen=false, params={} }) => {
     const [isOpen, setIsOpen] = useState(setOpen);
 
     const handleOpen = (e) => {

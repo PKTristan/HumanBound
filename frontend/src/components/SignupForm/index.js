@@ -138,6 +138,10 @@ const SignupForm = ({setIsOpen, params: {ref}}) => {
     //     }
     // }, [user, history]);
 
+    useEffect(() => {
+        return () => dispatch(userActions.clearErr());
+    }, []);
+
 
     return (
         <div className="signup-wrapper" ref={ref}>
