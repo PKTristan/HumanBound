@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as userActions from '../../store/user';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
-const SignupForm = ({params: {ref}}) => {
+const SignupForm = ({setIsOpen, params: {ref}}) => {
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -33,7 +33,7 @@ const SignupForm = ({params: {ref}}) => {
             password
         }
 
-        dispatch(userActions.signupUser(user));
+        dispatch(userActions.signupUser(user, setIsOpen));
     }
 
 
@@ -132,11 +132,11 @@ const SignupForm = ({params: {ref}}) => {
     }, [err, setErrors]);
 
 
-    useEffect(() => {
-        if (user && user.id) {
-            history.push("/");
-        }
-    }, [user, history]);
+    // useEffect(() => {
+    //     if (user && user.id) {
+    //         history.push("/");
+    //     }
+    // }, [user, history]);
 
 
     return (

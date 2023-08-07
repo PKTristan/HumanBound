@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 
-export default function LoginForm({params: {ref}}) {
+export default function LoginForm({setIsOpen, params: {ref}}) {
     const dispatch = useDispatch();
     const history = useHistory();
     const [credential, setCredential] = useState("");
@@ -37,21 +37,21 @@ export default function LoginForm({params: {ref}}) {
         e.preventDefault();
         setErrors([]);
 
-        dispatch(userActions.loginUser({ credential, password }));
+        dispatch(userActions.loginUser({ credential, password }, setIsOpen));
     };
 
     const handleDemo1 = async (e) => {
         e.preventDefault();
         setErrors([]);
 
-        dispatch(userActions.loginUser({ credential: "johndoe", password:"password123" }));
+        dispatch(userActions.loginUser({ credential: "johndoe", password: "password123" }, setIsOpen));
     }
 
     const handleDemo2 = (e) => {
         e.preventDefault();
         setErrors([]);
 
-        dispatch(userActions.loginUser({ credential:"janesmith", password:"password456" }));
+        dispatch(userActions.loginUser({ credential: "janesmith", password: "password456" }, setIsOpen));
     }
 
 
@@ -61,16 +61,18 @@ export default function LoginForm({params: {ref}}) {
         }
     }, [err, setErrors]);
 
-    useEffect(() => {
-        if (user && user.id) {
-            history.push("/");
-        }
-    }, [user, history]);
+    // useEffect(() => {
+    //     if (user && user.id) {
+    //         console.log('im here')
+    //         setIsOpen(false);
+    //         history.push("/");
+    //     }
+    // }, [user, history]);
 
 
 
     return (
-        <div className="login-wrapper" ref={ref}>
+        <div className="login-wrapper" ref={ref && ref}>
             <h1>Login</h1>
             <form className="login-form" onSubmit={handleSubmit}>
                 <ul>

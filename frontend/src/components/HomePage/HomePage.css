@@ -1,0 +1,97 @@
+.home-wrapper {
+    display: grid;
+    grid-template-areas:
+        "title title title"
+        "intro intro books"
+        "circles circles books"
+        "buttons buttons books";
+    max-height: 100vh;
+    width: 100%;
+    border: 5px solid #8b0280;
+}
+
+
+.title {
+    grid-area: title;
+    display: flex;
+    justify-content: center;
+}
+
+.title h1 {
+    text-decoration: 5px solid underline #f7a4f0;
+    letter-spacing: 2px;
+    font-weight: bolder;
+    font-size: 32pt;
+}
+
+
+.intro {
+    grid-area: intro;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    border: 5px solid #f7a4f0;
+}
+
+.intro img {
+    width: 100%;
+}
+
+
+.books {
+    grid-area: books;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f7a4f0;
+}
+
+.books p,
+.circles p {
+    color: #8b0280;
+}
+
+.circles {
+    grid-area: circles;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f7a4f0;
+}
+
+.buttons {
+    grid-area: buttons;
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    padding: 20px;
+    border: 5px solid #f7a4f0;
+}
+
+.home-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.homepage-btn {
+    border: none;
+    background-color: #b78ba0;
+    margin: 0px 10px;
+    padding: 20px;
+    color: #8b0280;
+    font-weight: bold;
+}
+
+.homepage-btn:hover {
+    border: 2px solid #8b0280;
+    background-color: #fad0f6;
+    box-shadow: 3px 3px 1px #8b0280;
+    cursor: pointer;
+}

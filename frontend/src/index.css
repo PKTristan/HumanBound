@@ -47,6 +47,7 @@ input:focus {
     color: white;
 }
 
+
 textarea:hover::placeholder,
 textarea:focus::placeholder,
 input:hover::placeholder,
