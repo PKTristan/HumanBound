@@ -50,9 +50,21 @@
     background-color: #f7a4f0;
 }
 
+.books h3 {
+    margin: 5px;
+}
+
 .books p,
 .circles p {
     color: #8b0280;
+}
+
+.books p {
+    margin: 2px;
+}
+
+.books-list {
+    overflow-y: auto;
 }
 
 .circles {

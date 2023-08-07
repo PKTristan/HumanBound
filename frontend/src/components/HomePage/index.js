@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory} from 'react-router-dom/cjs/react-router-dom.min';
 import * as userActions from '../../store/user';
+import * as bookActions from '../../store/book';
 import readingFigures from '../../assets/reading-figures.png';
 import Approvals from '../Approvals';
 import LoginForm from '../LoginForm';
@@ -9,17 +10,54 @@ import SignupForm from '../SignupForm';
 import Logout from '../Logout';
 import InterimModal from '../Modal';
 import './HomePage.css';
+import BookCard from '../BookCards';
+import { getRandomNumber } from '../../helpers';
 
 const HomePage = () => {
     const dispatch = useDispatch();
     const history = useHistory();
     const currUser = useSelector(userActions.selUser);
+    const list = useSelector(bookActions.selBooks);
+
+    const [books, setBooks] = useState([]);
+    const [book, setBook] = useState({});
 
     const browseBooks = (e) => {
         e.preventDefault();
 
         history.push('/books');
     }
+
+    const setABook = () => {
+        if (books && books.length > 0) {
+            const index = getRandomNumber(0, books.length - 1);
+            setBook(books[index]);
+        }
+    }
+
+    useEffect(() => {
+        dispatch(bookActions.getBooks({}));
+
+        return () => {
+            dispatch(bookActions.clearBooks());
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        setABook();
+
+        const interval = setInterval(() => {
+            setABook();
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [books])
+
+    useEffect(() => {
+        if (list) {
+            setBooks(list.books);
+        }
+    }, [list]);
 
     return (
         <div className='home-wrapper' >
@@ -46,12 +84,18 @@ const HomePage = () => {
                     Also, don't worry about having all the information. HumanBound uses google books
                     to help fill out information for you. Just type into the title section any words
                     that may match your books description, and add authors to the author section to
-                    tighten your search paramters!
+                    tighten your search parameters!
                 </p>
 
                 <p>
                     Feel free to browse our book collection!
                 </p>
+
+                {
+                    (book && book.id) ? (
+                        <BookCard books={[book]} />
+                    ) : null
+                }
 
                 <div className='home-btn'><button type="button" className='homepage-btn' onClick={browseBooks} >Browse Books</button></div>
             </div>
