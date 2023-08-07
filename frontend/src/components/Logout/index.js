@@ -16,6 +16,7 @@ const Logout = ({params: {ref}, setIsOpen}) => {
         e.preventDefault();
 
         dispatch(userActions.logout());
+        setIsOpen(false);
     };
 
     const handleNo = (e) => {
@@ -36,7 +37,7 @@ const Logout = ({params: {ref}, setIsOpen}) => {
 
 
     return (
-        <div className='logout-confirmation' ref={ref}>
+        <div className='logout-confirmation' ref={ref && ref}>
             <h1>Confirm Logout</h1>
             <p> Are you sure you want to logout?</p>
             <button className='yes' onClick={handleYes}>Yes</button>

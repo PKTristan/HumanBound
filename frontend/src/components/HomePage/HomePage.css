@@ -1,0 +1,49 @@
+.home-wrapper {
+    display: grid;
+    grid-template-areas:
+        "title title title"
+        "intro intro books"
+        "circles circles books"
+        "buttons buttons books";
+    max-height: 100vh;
+    width: 100%;
+}
+
+
+.title {
+    grid-area: title;
+    display: flex;
+    justify-content: center;
+}
+
+
+.intro {
+    grid-area: intro;
+    display: flex;
+    justify-content: center;
+}
+
+
+.books {
+    grid-area: books;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+}
+
+.circles {
+    grid-area: circles;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    padding: 20px;
+}
+
+.buttons {
+    grid-area: buttons;
+    display: flex;
+    justify-content: center;
+}

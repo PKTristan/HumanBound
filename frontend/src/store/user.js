@@ -39,7 +39,7 @@ export const getUser = () => async (dispatch) => {
     return response;
 };
 
-export const signupUser = (user) => async (dispatch) => {
+export const signupUser = (user, setIsOpen) => async (dispatch) => {
     const response = await csrfFetch('/api/users', {
         method: 'POST',
         body: JSON.stringify(user)
@@ -54,7 +54,9 @@ export const signupUser = (user) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-
+        if(setIsOpen) {
+            setIsOpen(false);
+        }
         dispatch(loadUser(data.user));
     }
 
@@ -63,7 +65,7 @@ export const signupUser = (user) => async (dispatch) => {
 };
 
 
-export const loginUser = (body) => async (dispatch) => {
+export const loginUser = (body, setIsOpen=null) => async (dispatch) => {
     const response = await csrfFetch("/api/session", {
         method: "POST",
         body: JSON.stringify(body),
@@ -77,7 +79,9 @@ export const loginUser = (body) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-
+        if (setIsOpen) {
+            setIsOpen(false);
+        }
         dispatch(loadUser(data.user));
     }
 

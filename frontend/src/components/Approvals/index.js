@@ -150,7 +150,7 @@ const Approvals = ({ params: { ref } }) => {
 
 
     return (
-        <div className="approvals" ref={ref}>
+        <div className="approvals" ref={ref && ref}>
             <h1>Pending Approvals</h1>
             <div className='new-approvals'>
                 {
