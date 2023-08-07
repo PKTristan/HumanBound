@@ -48,6 +48,7 @@
     margin: 20px;
     padding: 20px;
     background-color: #f7a4f0;
+
 }
 
 .books h3 {
@@ -106,4 +107,25 @@
     background-color: #fad0f6;
     box-shadow: 3px 3px 1px #8b0280;
     cursor: pointer;
+}
+
+.wrap {
+    overflow: hidden;
+}
+
+.home-book-card {
+    transition: transform 0.5s ease;
+}
+
+
+.home-book-card.paused {
+    transition: none;
+}
+
+.home-book-card.swipe-center {
+    transform: translateX(0%);
+}
+
+.home-book-card.swipe-right {
+    transform: translateX(100%);
 }

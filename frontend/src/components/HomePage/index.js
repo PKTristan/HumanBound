@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory} from 'react-router-dom/cjs/react-router-dom.min';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import * as userActions from '../../store/user';
 import * as bookActions from '../../store/book';
 import readingFigures from '../../assets/reading-figures.png';
@@ -21,6 +21,9 @@ const HomePage = () => {
 
     const [books, setBooks] = useState([]);
     const [book, setBook] = useState({});
+    const [swipeDirection, setSwipeDirection] = useState('center');
+    const [hovering, setHovering] = useState(false);
+    const intervalRef = useRef(null);
 
     const browseBooks = (e) => {
         e.preventDefault();
@@ -30,8 +33,12 @@ const HomePage = () => {
 
     const setABook = () => {
         if (books && books.length > 0) {
+            setSwipeDirection('right');
             const index = getRandomNumber(0, books.length - 1);
-            setBook(books[index]);
+            setTimeout(() => {
+                setBook(books[index]);
+                setSwipeDirection('center'); // Swipe back to the right after the book has changed
+            }, 500);
         }
     }
 
@@ -44,20 +51,37 @@ const HomePage = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        setABook();
-
-        const interval = setInterval(() => {
+        if (!hovering) {
             setABook();
+        }
+
+        intervalRef.current = setInterval(() => {
+            if (!hovering) {
+                setABook();
+            }
         }, 5000);
 
-        return () => clearInterval(interval);
-    }, [books])
+        return () => {
+            clearInterval(intervalRef.current);
+        };
+    }, [books, hovering])
 
     useEffect(() => {
         if (list) {
             setBooks(list.books);
         }
     }, [list]);
+
+    const onEnter = (e) => {
+        e.preventDefault();
+        setHovering(true);
+        clearInterval(intervalRef.current);
+    }
+
+    const onLeave = (e) => {
+        e.preventDefault();
+        setHovering(false);
+    }
 
     return (
         <div className='home-wrapper' >
@@ -93,7 +117,11 @@ const HomePage = () => {
 
                 {
                     (book && book.id) ? (
-                        <BookCard books={[book]} />
+                        <div className='wrap' onMouseEnter={onEnter} onMouseLeave={onLeave}>
+                            <div className={`home-book-card swipe-${swipeDirection} ${hovering ? 'paused' : ''}`}>
+                                <BookCard books={[book]} />
+                            </div>
+                        </div>
                     ) : null
                 }
 
@@ -117,15 +145,15 @@ const HomePage = () => {
                     (currUser) ? (
                         <>
                             {(currUser.admin) ? (
-                                <InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell">Approvals</i>)} btnClass={'homepage-btn'} params={{ref: null}} />
-                            ): null}
+                                <InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell">Approvals</i>)} btnClass={'homepage-btn'} params={{ ref: null }} />
+                            ) : null}
 
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" >Logout</i>)} btnClass='homepage-btn' params={{ ref: null }} />
                         </>
                     ) : (
                         <>
-                                <InterimModal Component={LoginForm} btnTitle='Login' btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" >Login</i>)} btnClass='homepage-btn' params={{ ref: null }} />
-                                <InterimModal Component={SignupForm} btnTitle="Sign up" btnLabel={(<i className="fa-solid fa-user-plus" >Sign Up</i>)} btnClass='homepage-btn' params={{ ref: null }} />
+                            <InterimModal Component={LoginForm} btnTitle='Login' btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" >Login</i>)} btnClass='homepage-btn' params={{ ref: null }} />
+                            <InterimModal Component={SignupForm} btnTitle="Sign up" btnLabel={(<i className="fa-solid fa-user-plus" >Sign Up</i>)} btnClass='homepage-btn' params={{ ref: null }} />
                         </>
                     )
                 }
