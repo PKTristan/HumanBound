@@ -114,12 +114,12 @@
 }
 
 .home-book-card {
-    transition: transform 0.5s ease;
+    transition: transform 0.25s ease;
 }
 
 
 .home-book-card.paused {
-    transition: none;
+    transform: translateX(0);
 }
 
 .home-book-card.swipe-center {
@@ -128,4 +128,9 @@
 
 .home-book-card.swipe-right {
     transform: translateX(100%);
+}
+
+.home-book-card.swipe-left {
+    transition: none;
+    transform: translateX(-100%);
 }

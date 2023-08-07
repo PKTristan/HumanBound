@@ -36,9 +36,12 @@ const HomePage = () => {
             setSwipeDirection('right');
             const index = getRandomNumber(0, books.length - 1);
             setTimeout(() => {
-                setBook(books[index]);
-                setSwipeDirection('center'); // Swipe back to the right after the book has changed
-            }, 500);
+                setSwipeDirection('left');
+                setTimeout(() => {
+                    setBook(books[index]);
+                    setSwipeDirection('center'); // Swipe back to the right after the book has changed
+                }, 250);
+            }, 250);
         }
     }
 
@@ -51,7 +54,7 @@ const HomePage = () => {
     }, [dispatch]);
 
     useEffect(() => {
-        if (!hovering) {
+        if (!(book&& book.id)) {
             setABook();
         }
 
@@ -59,7 +62,7 @@ const HomePage = () => {
             if (!hovering) {
                 setABook();
             }
-        }, 5000);
+        }, 5500);
 
         return () => {
             clearInterval(intervalRef.current);
