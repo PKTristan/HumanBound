@@ -122,12 +122,12 @@ const BookDetails = () => {
 
                     <div className='style1'><div className="style2"><div className="style3">
                         <div className="details" >
-                            <h1>{book.title}</h1>
-                            <h2>{book.subtitle}</h2>
-                            <h4>by {book.authors.join(', ')}</h4>
-                            <p>published in {book.publishYear}</p>
-                            {(book.pdfLink) ? (<a href={book.pdfLink} target="_blank" rel="noopener noreferrer" >PDF Link</a>) : (<p>No PDF Link</p>)}
-                            <p>{book.pageCount} pages</p>
+                            <h1 className='content'>{book.title}</h1>
+                            <h2 className='content'>{book.subtitle}</h2>
+                            <h4 className='content'>by {book.authors.join(', ')}</h4>
+                            <p className='content'>published in {book.publishYear}</p>
+                            {(book.pdfLink) ? (<a href={book.pdfLink} target="_blank" rel="noopener noreferrer" className='content' >PDF Link</a>) : (<p>No PDF Link</p>)}
+                            <p className='content'>{book.pageCount} pages</p>
                         </div>
                     </div></div></div>
                 </div>
