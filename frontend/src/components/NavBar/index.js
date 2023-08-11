@@ -75,10 +75,10 @@ const NavBar = () => {
                             <p>@{currUser.username}</p>
 
                             {(currUser && currUser.admin) ?
-                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell"></i>)} btnClass={'navbar-btn'} params={{ ref }} />) : null
+                                (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell"></i>)} btnClass={'navbar-btn'} params={{ ref, setDropdown }} />) : null
                             }
-                            <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar-btn'} params={{ ref, isEdit: false }} />
-                            <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar-btn'} params={{ ref, isEdit: false, setDropdown }} />
+                            <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref, setDropdown }} />
                         </>
                         )}
 
@@ -86,8 +86,8 @@ const NavBar = () => {
                             <p>Welcome!</p>
                             <p>Please sign up or login</p>
 
-                            <InterimModal Component={LoginForm} btnTitle='Login'  btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" />)} btnClass='navbar-btn' params={{ ref }} />
-                            <InterimModal Component={SignupForm} btnTitle="Sign up"  btnLabel={(<i className="fa-solid fa-user-plus" />)} btnClass='navbar-btn' params={{ ref }} />
+                            <InterimModal Component={LoginForm} btnTitle='Login'  btnLabel={(<i className="fa-solid fa-arrow-right-to-bracket" />)} btnClass='navbar-btn' params={{ ref, setDropdown }} />
+                            <InterimModal Component={SignupForm} btnTitle="Sign up"  btnLabel={(<i className="fa-solid fa-user-plus" />)} btnClass='navbar-btn' params={{ ref, setDropdown }} />
                         </>)}
 
                     </div>}

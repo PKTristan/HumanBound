@@ -10,7 +10,7 @@ import { isValidUrl, setDefaultImg } from '../../helpers';
 import './BookForm.css';
 
 
-const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen}) => {
+const BookForm = ({params: {ref, isEdit, book: info, setAppMessage, setDropdown}, setIsOpen}) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const bookMsg = useSelector(bookActions.selMsg);
@@ -277,6 +277,9 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage}, setIsOpen})
         if (bookMsg) {
             const id = bookMsg;
             setIsOpen(false);
+            if (setDropdown !== null) {
+                setDropdown(false);
+            }
             history.push(`/books/${id}`);
             dispatch(bookActions.clearMsg());
         }
