@@ -277,7 +277,7 @@ const BookForm = ({params: {ref, isEdit, book: info, setAppMessage, setDropdown}
         if (bookMsg) {
             const id = bookMsg;
             setIsOpen(false);
-            if (setDropdown !== null) {
+            if (setDropdown) {
                 setDropdown(false);
             }
             history.push(`/books/${id}`);
