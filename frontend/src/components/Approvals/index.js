@@ -36,9 +36,17 @@ const Approvals = ({ params: { ref } }) => {
                 publishYear: ((difference.publishYears) ? approval.publishYear : approval.Book.publishYear),
                 pageCount: ((difference.pageCounts) ? approval.pageCount : approval.Book.pageCount),
                 synopsis: ((difference.synopsis) ? approval.synopsis : approval.Book.synopsis),
-                pdfLink: ((difference.pdfLinks) ? approval.pdfLink : approval.Book.pdfLink),
                 thumbnail: ((difference.thumbnails) ? approval.thumbnail : approval.Book.thumbnail),
             };
+
+            if (difference.pdfLinks) {
+                bookEdit.pdfLink = approval.pdfLink;
+            }
+            else if (approval.Book.pdfLink) {
+                bookEdit.pdfLink = approval.Book.pdfLink;
+            }
+
+            
 
             dispatch(bookActions.editBook({book: bookEdit, id: approval.bookId}));
             dispatch(approvalActions.approve(approval.id));
