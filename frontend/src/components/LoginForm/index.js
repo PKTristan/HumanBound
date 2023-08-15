@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Redirect } from "react-router-dom";
 
 
-export default function LoginForm({setIsOpen, params: {ref}}) {
+export default function LoginForm({setIsOpen, params: {ref, setDropdown}}) {
     const dispatch = useDispatch();
     const history = useHistory();
     const [credential, setCredential] = useState("");
