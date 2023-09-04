@@ -5,6 +5,7 @@ import booksReducer from "./book";
 import approvalsReducer from "./approval";
 import reviewsReducer from "./review";
 import repliesReducer from "./reply";
+import circlesReducer from "./circle";
 
 const rootReducer = combineReducers({
   // add reducer functions here
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   book: booksReducer,
   approval: approvalsReducer,
   review: reviewsReducer,
-  reply: repliesReducer
+  reply: repliesReducer,
+  circle: circlesReducer
 });
 
 let enhancer;

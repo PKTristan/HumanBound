@@ -29,7 +29,7 @@ const loadErr = (err) => ({
     type: LOAD_ERR,
     err
 });
-const clearErr = () => ({
+export const clearErr = () => ({
     type: CLEAR_ERR
 });
 
@@ -102,7 +102,7 @@ export const updateCircle = (circle) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-        dispatch(loadCircle(data));
+        dispatch(getCircle(circle.id));
     }
 
     return response;
@@ -121,8 +121,56 @@ export const deleteCircle = (id) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-        dispatch(clearCircle());
+        dispatch(loadMsg(data));
     }
 
     return response;
 }
+
+
+//selectors
+
+export const selCircles = (state) => state.circle.list;
+export const selCircle = (state) => state.circle.details;
+export const selMsg = (state) => state.circle.message;
+export const selErr = (state) => state.circle.errors;
+
+
+const initialState = { list: null, details: null, errors: null, message: null };
+
+
+const circlesReducer = (state=initialState, action) => {
+    let mutState = Object.assign(state);
+
+    switch(action.type) {
+        case LOAD_CIRCLES:
+            return {...mutState, list: action.circles};
+
+        case LOAD_CIRCLE:
+            return {...mutState, details: action.circle};
+
+        case LOAD_ERR:
+            return {...mutState, errors: action.err};
+
+        case CLEAR_ERR:
+            return {...mutState, errors: null};
+
+        case CLEAR_CIRCLE:
+            return {...mutState, details: null};
+
+        case CLEAR_CIRCLES:
+            return {...mutState, list: null};
+
+        case LOAD_MSG:
+            return {...mutState, message: action.msg};
+
+        case CLEAR_MSG:
+            return {...mutState, message: null};
+
+        default:
+            return {...mutState};
+    }
+}
+
+
+export default circlesReducer;
