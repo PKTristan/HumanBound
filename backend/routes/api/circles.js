@@ -87,9 +87,9 @@ router.get('/', async (req, res, next) => {
         attributes: {
             include: [
                 [
-                    Sequelize.literal(
+                    sequelize.literal(
                         `(SELECT COUNT(*) FROM ${(options.schema) ? `"${options.schema}"."Members"` : `"Members"`
-                } WHERE "Members"."circleId" = "Circle"."id" AND "Members"."status" IN ('member', 'host'))`
+                } WHERE "Members"."circleId" = "Circle"."id" AND ("Members"."status" = 'host' OR "Members"."status" = 'member'))`
                     ),
                     'memberCount'
                 ]
