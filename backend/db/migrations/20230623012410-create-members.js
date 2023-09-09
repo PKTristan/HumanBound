@@ -39,7 +39,7 @@ module.exports = {
       },
       status: {
         allowNull: false,
-        type: Sequelize.ENUM('pending', 'approved', 'host')
+        type: Sequelize.ENUM('pending', 'member', 'host')
       },
       createdAt: {
         allowNull: false,
