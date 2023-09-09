@@ -2,18 +2,18 @@ const express = require('express')
 const router = express.Router();
 
 const { restoreUser, requireAuth } = require('../../utils/auth');
-const { addId } = require('../../utils/reference.js');
+const { addId, getLikeOperator } = require('../../utils/reference.js');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const messagesRouter = require('./messages.js');
 const membersRouter = require('./members.js');
 
-const { Circle, User, Book, Message, PrevBook, Member } = require('../../db/models');
+const { Circle, User, Book, Message, PrevBook, Member, sequelize, Sequelize } = require('../../db/models');
 
-
-router.use('/:id/messages', addId, messagesRouter);
-
-router.use('/:id/members', addId, membersRouter);
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+    options.schema = process.env.SCHEMA; // schema in options
+};
 
 
 const editPermission = async (req, res, next) => {
@@ -69,7 +69,10 @@ const deletePermission = async (req, res, next) => {
 
 //get all circles
 router.get('/', async (req, res, next) => {
-    const circles = await Circle.findAll({
+    const { name } = req.query;
+
+
+    const queryOptions = {
         include: [
             {
                 model: User,
@@ -77,10 +80,31 @@ router.get('/', async (req, res, next) => {
             },
             {
                 model: Book,
-                attributes: ['id', 'title', 'thumbnail']
-            }
-        ]
-    }).catch(err => next(err));
+                attributes: ['id', 'title', 'thumbnail', 'synopsis', 'authors']
+            },
+        ],
+        where: {},
+        attributes: {
+            include: [
+                [
+                    Sequelize.literal(
+                        `(SELECT COUNT(*) FROM ${(options.schema) ? `"${options.schema}"."Members"` : `"Members"`
+                } WHERE "Members"."circleId" = "Circle"."id" AND "Members"."status" IN ('member', 'host'))`
+                    ),
+                    'memberCount'
+                ]
+            ]
+        }
+    };
+
+    if (name) {
+        queryOptions.where.name = {
+            [getLikeOperator()]: `%${name}%`
+        }
+    }
+
+
+    const circles = await Circle.findAll(queryOptions).catch(err => next(err));
 
     if (!circles || !circles.length) {
         const err = new Error('No circles found');
@@ -93,6 +117,11 @@ router.get('/', async (req, res, next) => {
     return res.json({ circles });
 });
 
+
+
+router.use('/:id/messages', addId, messagesRouter);
+
+router.use('/:id/members', addId, membersRouter);
 
 
 //gte all users circles
@@ -151,13 +180,6 @@ router.get('/:id', restoreUser, requireAuth, async (req, res, next) => {
                 include: {
                     model: Book,
                     attributes: ['id', 'title', 'thumbnail']
-                }
-            },
-            {
-                model: Message,
-                include: {
-                    model: User,
-                    attributes: ['id', 'username', 'avi']
                 }
             }
         ]

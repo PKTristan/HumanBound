@@ -31,6 +31,12 @@ const HomePage = () => {
         history.push('/books');
     }
 
+    const browseCircles = (e) => {
+        e.preventDefault();
+
+        history.push('/circles');
+    }
+
     const setABook = () => {
         if (books && books.length > 0) {
             setSwipeDirection('right');
@@ -140,7 +146,7 @@ const HomePage = () => {
                     know anyone literate, FEAR NOT! Browse our public circles and join one you find interesting!
                 </p>
 
-                <div className='home-btn'><button type='button' className='homepage-btn' onClick={e => e.preventDefault()} >Browse Circles</button></div>
+                <div className='home-btn'><button type='button' className='homepage-btn' onClick={browseCircles} >Browse Circles</button></div>
             </div>
 
             <div className='buttons' >
