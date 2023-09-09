@@ -6,6 +6,8 @@ const LOAD_CIRCLE = 'circle/LOAD_CIRCLE';
 const CLEAR_CIRCLE = 'circle/CLEAR_CIRCLE';
 const LOAD_ERR = 'circle/LOAD_CIRCLE';
 const CLEAR_ERR = 'circle/CLEAR_ERR';
+const LOAD_MSG = 'circle/LOAD_MSG';
+const CLEAR_MSG = 'circle/CLEAR_MSG';
 
 const loadCircle = (circle) => ({
     type: LOAD_CIRCLE,
@@ -31,6 +33,15 @@ const loadErr = (err) => ({
 });
 export const clearErr = () => ({
     type: CLEAR_ERR
+});
+
+const loadMsg = (msg) => ({
+    type: LOAD_MSG,
+    msg
+});
+
+export const clearMsg = () => ({
+    type: CLEAR_MSG,
 });
 
 

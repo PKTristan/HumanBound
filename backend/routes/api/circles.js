@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router();
 
 const { restoreUser, requireAuth } = require('../../utils/auth');
-const { addId } = require('../../utils/reference.js');
+const { addId, getLikeOperator } = require('../../utils/reference.js');
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const messagesRouter = require('./messages.js');
@@ -69,7 +69,9 @@ const deletePermission = async (req, res, next) => {
 
 //get all circles
 router.get('/', async (req, res, next) => {
-    const circles = await Circle.findAll({
+    const { name, creator } = req.query;
+
+    const queryOptions = {
         include: [
             {
                 model: User,
@@ -77,10 +79,25 @@ router.get('/', async (req, res, next) => {
             },
             {
                 model: Book,
-                attributes: ['id', 'title', 'thumbnail']
+                attributes: ['id', 'title', 'thumbnail', 'synopsis', 'authors']
             }
-        ]
-    }).catch(err => next(err));
+        ],
+        where: {},
+    };
+
+    if (name) {
+        queryOptions.where.name = {
+            [getLikeOperator()]: `${name}`
+        }
+    }
+
+    if (creator) {
+        queryOptions.where.creator = {
+            [getLikeOperator()]: `${creator}`
+        }
+    }
+
+    const circles = await Circle.findAll(queryOptions).catch(err => next(err));
 
     if (!circles || !circles.length) {
         const err = new Error('No circles found');

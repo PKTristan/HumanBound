@@ -1,0 +1,13 @@
+
+
+.circle-card {
+    position: relative;
+}
+
+.pop-up {
+    position: absolute;
+
+    top: calc(50vh - 200px);
+    left: calc(50vw - 80px);
+    z-index: 2;
+}
