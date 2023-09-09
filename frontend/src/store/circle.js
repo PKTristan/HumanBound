@@ -4,7 +4,7 @@ const LOAD_CIRCLES = 'circle/LOAD_CIRCLES';
 const CLEAR_CIRCLES = 'circle/CLEAR_CIRCLES';
 const LOAD_CIRCLE = 'circle/LOAD_CIRCLE';
 const CLEAR_CIRCLE = 'circle/CLEAR_CIRCLE';
-const LOAD_ERR = 'circle/LOAD_CIRCLE';
+const LOAD_ERR = 'circle/LOAD_ERR';
 const CLEAR_ERR = 'circle/CLEAR_ERR';
 const LOAD_MSG = 'circle/LOAD_MSG';
 const CLEAR_MSG = 'circle/CLEAR_MSG';
@@ -31,6 +31,7 @@ const loadErr = (err) => ({
     type: LOAD_ERR,
     err
 });
+
 export const clearErr = () => ({
     type: CLEAR_ERR
 });
@@ -45,8 +46,20 @@ export const clearMsg = () => ({
 });
 
 
-export const getCircles = () => async (dispatch) => {
-    const response = await csrfFetch('/api/circles').catch(async (res) => {
+export const getCircles = ({ name }) => async (dispatch) => {
+    let url = '/api/circles';
+
+
+    if (name) {
+        const queryParams = new URLSearchParams();
+
+        if (name)
+            queryParams.append('name', name);
+
+        url += `/?${queryParams.toString()}`;
+    }
+
+    const response = await csrfFetch(url).catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
             const err = Object.values(data.errors);
@@ -63,7 +76,7 @@ export const getCircles = () => async (dispatch) => {
 }
 
 export const getCircle = (id) => async (dispatch) => {
-    const response = csrfFetch(`/api/circles/${id}`).catch(async (res) => {
+    const response = await csrfFetch(`/api/circles/${id}`).catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
             const err = Object.values(data.errors);
@@ -93,7 +106,9 @@ export const createCircle = (circle) => async (dispatch) => {
 
     if (response && response.ok) {
         const data = await response.json();
-        dispatch(loadCircle(data));
+        dispatch(clearErr());
+
+        dispatch(loadMsg(data.circle.id));
     }
 
     return response;

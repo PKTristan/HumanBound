@@ -7,6 +7,7 @@ import reviewsReducer from "./review";
 import repliesReducer from "./reply";
 import circlesReducer from "./circle";
 import messagesReducer from "./reply";
+import memberReducer from "./member";
 
 const rootReducer = combineReducers({
   // add reducer functions here
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   review: reviewsReducer,
   reply: repliesReducer,
   circle: circlesReducer,
-  message: messagesReducer
+  message: messagesReducer,
+  member: memberReducer
 });
 
 let enhancer;

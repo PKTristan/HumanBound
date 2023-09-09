@@ -9,9 +9,10 @@ const CircleList = () => {
     const circlesList = useSelector(circleActions.selCircles);
 
     const [circles, setCircles] = useState([]);
+    const [name, setName] = useState('');
 
     useEffect(() => {
-        dispatch(circleActions.getCircles());
+        dispatch(circleActions.getCircles({}));
     }, [dispatch]);
 
     useEffect(() => {
@@ -20,12 +21,32 @@ const CircleList = () => {
         }
     }, [circlesList]);
 
+    const handleChange = (e) => {
+        e.preventDefault();
+
+        const { className, value } = e.target;
+
+        const cName = className.slice(7);
+
+        switch (cName) {
+            case "name":
+                setName(value);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        dispatch(circleActions.getCircles({ name }));
+    }, [name]);
+
     return (
     <div className='circle-list'>
         <h1>HumanBound Circles</h1>
 
-        <input type='text' className='search name' placeholder="Search by name" />
-        <input type='text' className='search creator' placeholder="Search by creator" />
+        <input type='text' className='search name' placeholder="Search by name" onChange={handleChange} value={name} />
 
         <CircleCard circles={circles} />
     </div>

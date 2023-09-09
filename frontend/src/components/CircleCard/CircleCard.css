@@ -1,13 +1,21 @@
 
 
 .circle-card {
-    position: relative;
 }
 
-.pop-up {
+.pop-up-book {
     position: absolute;
 
-    top: calc(50vh - 200px);
-    left: calc(50vw - 80px);
+    top: calc(50vh - 223px);
+    left: calc(50vw - 93px);
+    z-index: 2;
+}
+
+
+.pop-up-circle{
+    position: absolute;
+
+    top: calc(50vh);
+    left: calc(50vw);
     z-index: 2;
 }

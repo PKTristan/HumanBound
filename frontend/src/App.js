@@ -11,6 +11,7 @@ import BookDetails from './components/BookDetails';
 import Review from './components/Review';
 import HomePage from './components/HomePage';
 import CircleList from './components/CircleList';
+import CirclePage from './components/CirclePage';
 
 const { Route, Switch } = require('react-router-dom');
 
@@ -42,6 +43,9 @@ function App() {
         </Route>
         <Route exact path='/circles' >
           <CircleList />
+        </Route>
+        <Route exact path='/circles/:id' >
+          <CirclePage />
         </Route>
       </Switch>
     </div>

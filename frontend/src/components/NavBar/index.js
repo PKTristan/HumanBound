@@ -10,6 +10,7 @@ import LoginForm from "../LoginForm";
 import Logout from "../Logout";
 import SignupForm from "../SignupForm";
 import BookForm from "../BookForm";
+import CircleForm from "../CircleForm";
 import './NavBar.css';
 import Approvals from "../Approvals";
 import { setDefaultProfImg } from "../../helpers";
@@ -30,9 +31,9 @@ const NavBar = () => {
         setDropdown(!dropdown);
     };
 
-    const handleBooks = (e) => {
+    const handleNav = (str) => (e) => {
         e.preventDefault();
-        history.push('/books');
+        history.push(`/${str}`);
     }
 
     useEffect(() => {
@@ -59,8 +60,9 @@ const NavBar = () => {
         <div className="navbar">
 
             <div className="navbar-buttons" >
-                <button type='button' className='navbar-btn' onClick={() => { history.push('/'); }} title="Home"><i className="fa-solid fa-house" /></button>
-                <button type='button' className='navbar-btn' onClick={handleBooks} title="Books"><i className="fa-solid fa-book" /></button>
+                <button type='button' className='navbar-btn' onClick={handleNav('')} title="Home"><i className="fa-solid fa-house" /></button>
+                <button type='button' className='navbar-btn' onClick={handleNav('books')} title="Books"><i className="fa-solid fa-book" /></button>
+                <button type='button' className="navbar-btn" onClick={handleNav('circles')} title="Circles"><i className="fa-solid fa-circle" /></button>
             </div>
 
             <div className="prof-btn-div" ref={ref}>
@@ -78,6 +80,7 @@ const NavBar = () => {
                                 (<InterimModal Component={Approvals} btnTitle='Approvals' btnLabel={(<i className="fa-solid fa-bell"></i>)} btnClass={'navbar-btn'} params={{ ref, setDropdown }} />) : null
                             }
                             <InterimModal Component={BookForm} btnTitle="Add Book" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-book" /></>)} btnClass={'navbar-btn'} params={{ ref, isEdit: false, setDropdown }} />
+                            <InterimModal Component={CircleForm} btnTitle="Add Circle" btnLabel={(<><i className="fa-solid fa-plus" /> <i className="fa-solid fa-circle" /></>)} btnClass={'navbar-btn'} params={{ ref, setDropdown }} />
                             <InterimModal Component={Logout} btnTitle="Logout" btnLabel={(<i className="fa-solid fa-arrow-right-from-bracket" />)} btnClass='navbar-btn' params={{ ref, setDropdown }} />
                         </>
                         )}

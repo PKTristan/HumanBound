@@ -108,6 +108,26 @@ router.get('/', restoreUser, requireAuth, async (req, res, next) => {
     return res.json({ members });
 });
 
+router.get('/my', restoreUser, requireAuth, async (req, res, next) => {
+    const { id: userId } = req.user;
+
+    const memberships = await Member.findAll({
+        where: {
+            userId
+        }
+    }).catch(err => next(err));
+
+    if (!memberships || !memberships.length) {
+        const err = new Error('No memberships found');
+        err.title = 'No memberships found';
+        err.status = 404;
+        err.errors = { memberships: 'No memberships found' };
+        return next(err);
+    }
+
+    return res.json({ memberships });
+});
+
 
 // create a membership request
 router.post('/', restoreUser, requireAuth, async (req, res, next) => {

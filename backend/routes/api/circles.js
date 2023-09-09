@@ -8,12 +8,12 @@ const { handleValidationErrors } = require('../../utils/validation');
 const messagesRouter = require('./messages.js');
 const membersRouter = require('./members.js');
 
-const { Circle, User, Book, Message, PrevBook, Member } = require('../../db/models');
+const { Circle, User, Book, Message, PrevBook, Member, sequelize, Sequelize } = require('../../db/models');
 
-
-router.use('/:id/messages', addId, messagesRouter);
-
-router.use('/:id/members', addId, membersRouter);
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+    options.schema = process.env.SCHEMA; // schema in options
+};
 
 
 const editPermission = async (req, res, next) => {
@@ -69,7 +69,8 @@ const deletePermission = async (req, res, next) => {
 
 //get all circles
 router.get('/', async (req, res, next) => {
-    const { name, creator } = req.query;
+    const { name } = req.query;
+
 
     const queryOptions = {
         include: [
@@ -80,22 +81,27 @@ router.get('/', async (req, res, next) => {
             {
                 model: Book,
                 attributes: ['id', 'title', 'thumbnail', 'synopsis', 'authors']
-            }
+            },
         ],
         where: {},
+        attributes: {
+            include: [
+                [
+                    Sequelize.literal(
+                        `(SELECT COUNT(*) FROM Members WHERE Members.circleId = Circle.id AND Members.status IN ('member', 'host'))`
+                    ),
+                    'memberCount'
+                ]
+            ]
+        }
     };
 
     if (name) {
         queryOptions.where.name = {
-            [getLikeOperator()]: `${name}`
+            [getLikeOperator()]: `%${name}%`
         }
     }
 
-    if (creator) {
-        queryOptions.where.creator = {
-            [getLikeOperator()]: `${creator}`
-        }
-    }
 
     const circles = await Circle.findAll(queryOptions).catch(err => next(err));
 
@@ -110,6 +116,11 @@ router.get('/', async (req, res, next) => {
     return res.json({ circles });
 });
 
+
+
+router.use('/:id/messages', addId, messagesRouter);
+
+router.use('/:id/members', addId, membersRouter);
 
 
 //gte all users circles
