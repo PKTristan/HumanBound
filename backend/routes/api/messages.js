@@ -7,7 +7,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { Op } = require('sequelize');
 
-const { Message, Circle, Member } = require('../../db/models');
+const { Message, Circle, Member, User } = require('../../db/models');
 
 const editDelPermissions = async (req, res, next) => {
     const { id } = req.params;
@@ -56,6 +56,37 @@ const validateMessage = [
 
         handleValidationErrors
 ];
+
+router.get('/', restoreUser, requireAuth, async (req, res, next) => {
+    const { id: userId, admin } = req.user;
+    const {id: circleId} = req.body;
+
+
+    const [member] = await Member.findAll({ where: { circleId, userId } }).catch(err => next(err));
+
+    if (!admin && (!member || member.status === 'pending')) {
+        const err = new Error('No permission to view members of this group');
+        err.title = 'No permission to view members of this group';
+        err.status = 403;
+        err.errors = { member: 'No permission to view members of this group' };
+        return next(err);
+    }
+
+    const messages = await Message.findAll({
+        include: {
+            model: User,
+            attributes: ['id', 'username', 'avi']
+        },
+        where: {
+            circleId
+        },
+        order: [
+            ['createdAt', 'ASC']
+        ]
+    }).catch(err => next(err));
+
+    return res.json({messages});
+});
 
 //post a message in a circle
 router.post('/', restoreUser, requireAuth, validateMessage, async (req, res, next) => {

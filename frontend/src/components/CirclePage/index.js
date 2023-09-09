@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import Draggable from "react-draggable";
 
 import * as circleActions from "../../store/circle";
+import * as messageActions from "../../store/message";
 import BookCard from "../BookCards";
 import Members from "../Members";
-
+import Messages from "../Messages";
 
 const CirclePage = () => {
     const dispatch = useDispatch();
@@ -14,21 +15,31 @@ const CirclePage = () => {
     const { id } = useParams();
 
     const circleDetails = useSelector(circleActions.selCircle);
+    const msgList = useSelector(messageActions.selMessages);
 
     const [circle, setCircle] = useState({});
+    const [messages, setMessages] = useState([]);
 
     useEffect(() => {
         dispatch(circleActions.getCircle(id));
+        dispatch(messageActions.getMessages(id));
     }, [dispatch, id]);
 
     useEffect(() => {
         if (circleDetails) {
             setCircle(circleDetails.circle);
         }
-        else {
-            console.log(circleDetails);
-        }
     }, [circleDetails]);
+
+    useEffect(() => {
+        if (msgList) {
+            setMessages(msgList);
+        }
+        else {
+            console.log(msgList);
+        }
+    }, [msgList]);
+
 
     return (
         <div className='circle-page'>
@@ -65,7 +76,7 @@ const CirclePage = () => {
                     >
                         <div className="messages-dragger">
                             <p className="messages-handle">drag from here</p>
-                            <h2>messages</h2>
+                            <Messages circleId={id} messages={messages}/>
                         </div>
                     </Draggable>
 

@@ -180,13 +180,6 @@ router.get('/:id', restoreUser, requireAuth, async (req, res, next) => {
                     model: Book,
                     attributes: ['id', 'title', 'thumbnail']
                 }
-            },
-            {
-                model: Message,
-                include: {
-                    model: User,
-                    attributes: ['id', 'username', 'avi']
-                }
             }
         ]
     }).catch(err => next(err));
