@@ -64,14 +64,33 @@ export const getMemberships = () => async (dispatch) => {
     return response;
 }
 
+export const getMembers = (circleId) => async (dispatch) => {
+    const response = await csrfFetch(`/api/circles/${circleId}/members`).catch(async (res) => {
+        const data = await res.json();
+        if (data && data.errors) {
+            const err = Object.values(data.errors);
+            dispatch(loadErr(err));
+        }
+    });
+
+    if (response && response.ok) {
+        const data = await response.json();
+        dispatch(loadMembers(data.members));
+    }
+
+    return response;
+}
+
 
 //selectors
+export const selMembers = (state) => state.member.members;
 export const selMemberships = (state) => state.member.memberships;
 export const selErr = (state) => state.member.err;
 export const selMsg = (state) => state.member.msg;
 
 
 const initialState = {
+    members: null,
     memberships: null,
     err: null,
     msg: null
@@ -82,10 +101,10 @@ const memberReducer = (state=initialState, action) => {
 
     switch(action.type) {
         case LOAD_MEMBERS:
-            return {...mutState, memberships: action.members};
+            return {...mutState, members: action.members};
 
         case CLEAR_MEMBERS:
-            return {...mutState, memberships: null};
+            return {...mutState, members: null};
 
         case LOAD_MEMBERSHIPS:
             return {...mutState, memberships: action.memberships};

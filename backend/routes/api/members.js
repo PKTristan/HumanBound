@@ -77,7 +77,7 @@ router.get('/', restoreUser, requireAuth, async (req, res, next) => {
     const { id } = req.body;
     const { id: userId, admin } = req.user;
 
-    const [member] = await findAll({ where: { circleId: id, userId } }).catch(err => next(err));
+    const [member] = await Member.findAll({ where: { circleId: id, userId } }).catch(err => next(err));
 
     if (!admin && (!member || member.status === 'pending')) {
         const err = new Error('No permission to view members of this group');

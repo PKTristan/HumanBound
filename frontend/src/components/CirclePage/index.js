@@ -5,6 +5,7 @@ import Draggable from "react-draggable";
 
 import * as circleActions from "../../store/circle";
 import BookCard from "../BookCards";
+import Members from "../Members";
 
 
 const CirclePage = () => {
@@ -53,7 +54,7 @@ const CirclePage = () => {
                     >
                         <div className="members-dragger">
                             <p className="members-handle">drag from here</p>
-                            <h2>members</h2>
+                            <Members circleId={id} />
                         </div>
                     </Draggable>
 
