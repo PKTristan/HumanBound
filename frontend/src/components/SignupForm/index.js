@@ -108,11 +108,9 @@ const SignupForm = ({setIsOpen, params: {ref}}) => {
 
             case 'avi':
                 setAvi(value);
-                if (!isValidUrl(value)) {
+                mutErr = mutErr.filter(err => err !== 'Avatar must be a valid image url');
+                if (value.length > 0 && !isValidUrl(value)) {
                     mutErr.push('Avatar must be a valid image url');
-                }
-                else {
-                    mutErr = mutErr.filter(err => err !== 'Avatar must be a valid image url');
                 }
                 break;
 
