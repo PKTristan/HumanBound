@@ -99,9 +99,9 @@ const CircleForm = ({params: {ref, setDropdown}, setIsOpen}) => {
             </ul>
             <form className='circle-form' onSubmit={handleSubmit}>
                 <input type="text" placeholder='Circle Name' className="name" value={name} onChange={handleChange} />
-                <input type="text" placeholder='Author' className="author" value={author} onChange={handleChange} />
                 <input type="text" placeholder='Title' className="title" value={title} onChange={handleChange} />
-                <div>
+                <input type="text" placeholder='Author' className="author" value={author} onChange={handleChange} />
+                <div className='books-list'>
                     {(books.length > 0) ? (<BookCard books={books} customClick={handleClick} />) : null}
                 </div>
                 <button type='submit'>Create Circle</button>

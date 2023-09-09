@@ -8,6 +8,7 @@ import * as messageActions from "../../store/message";
 import BookCard from "../BookCards";
 import Members from "../Members";
 import Messages from "../Messages";
+import './CirclePage.css';
 
 const CirclePage = () => {
     const dispatch = useDispatch();
@@ -35,9 +36,6 @@ const CirclePage = () => {
         if (msgList) {
             setMessages(msgList);
         }
-        else {
-            console.log(msgList);
-        }
     }, [msgList]);
 
 
@@ -49,6 +47,7 @@ const CirclePage = () => {
                 <>
                     <h1>{circle.name}</h1>
                     <h4>hosted by {circle.User.username}</h4>
+                    <div className='drag-area'>
                     <Draggable
                         axis="both"
                         handle=".book-handle"
@@ -79,6 +78,7 @@ const CirclePage = () => {
                             <Messages circleId={id} messages={messages}/>
                         </div>
                     </Draggable>
+                    </div>
 
                     </>
             )}

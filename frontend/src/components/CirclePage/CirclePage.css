@@ -1,0 +1,54 @@
+.circle-page {
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        align-items: center;
+}
+
+.drag-area {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.book-handle,
+.members-handle,
+.messages-handle {
+    margin: 0px 5px;
+    background-color: #f7a4f0;
+    cursor: grab;
+}
+
+.book-dragger,
+.members-dragger,
+.messages-dragger {
+    margin: 10px;
+}
+
+.user img {
+    margin: 2px;
+}
+
+.scrollable {
+    overflow-y: scroll;
+    max-height: calc(100vh - 65vh);
+}
+
+button {
+        margin: 8px 0px;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            color: #8b0280;
+            font-weight: bold;
+            font-size: small;
+            background-color: #fad0f6;
+}
+
+button:hover {
+        color: #fad0f6;
+            background-color: #8b0280;
+}
+
+

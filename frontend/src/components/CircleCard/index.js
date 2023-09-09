@@ -1,13 +1,17 @@
 import BookCard from "../BookCards";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import * as circleActions from "../../store/circle";
 import * as memberActions from "../../store/member";
+import * as userActions from "../../store/user";
 import './CircleCard.css';
 
 const CircleCard = ({ circles }) => {
     const dispatch = useDispatch();
+    const history = useHistory();
 
+    const user = useSelector(userActions.selUser);
     const memberships = useSelector(memberActions.selMemberships);
     const fetchErr = useSelector(circleActions.selErr);
 
@@ -52,10 +56,14 @@ const CircleCard = ({ circles }) => {
 
         if (id === null) {
             setMemMsg('');
+        }else if (user.admin) {
+            history.push(`/circles/${id}`);
         } else if (memTable[id] === undefined) {
             setMemMsg('nonmember');
         } else if (memTable[id] === 'pending') {
             setMemMsg('pending');
+        } else if (memTable[id].length > 0) {
+            history.push(`/circles/${id}`);
         }
     }
 

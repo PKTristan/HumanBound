@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as circleActions from "../../store/circle";
 import CircleCard from "../CircleCard";
 
+import './CircleList.css';
+
 const CircleList = () => {
     const dispatch = useDispatch();
 
